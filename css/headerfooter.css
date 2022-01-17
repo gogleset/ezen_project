@@ -15,22 +15,22 @@
     z-index: 10000;
 }
 /* header의 로고 아이콘 부분입니다. */
-.header_icon {
+.header-icon {
     display: inline-block;
     height: 45px;
     width: 45px;
     margin: 2.5px 10px;
-    background-image: url(../img/headerfooter/dessert39_simbol2.png);
+    background-image: url(../img/headerfooter/btn_logo.png);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
 }
 /* 시멘틱 요소(제목)입니다. */
-.header_icon h1 {
+.header-icon h1 {
     text-indent: 10000px;
 }
 /* 햄버거 탭 부분입니다. */
-.header_tab {
+.header-tab {
     display: inline-block;
     height: 45px;
     width: 45px;
@@ -58,11 +58,11 @@
     line-height: 23px;
 }
 /* 푸터 로고 부분입니다. */
-.footer_icon {
+.footer-icon {
     margin: auto;
     height: 45px;
     width: 45px;
-    background-image: url(../img/headerfooter/dessert39_simbol2.png);
+    background-image: url(../img/headerfooter/btn_logo.png);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
