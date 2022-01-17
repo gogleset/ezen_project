@@ -21,6 +21,10 @@
 
     <!-- 폰트어썸 -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- join.css-->
     <link rel="stylesheet" href="../css/join.css">
 </head>
@@ -32,7 +36,7 @@
         <!-- 아이디-->
         <div class="form-group">
             <label for="user_id" class="labeltag">아이디</label>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="text" name="user_id" id="user_id" class="form-control" placeholder="아이디 입력" />
             </div>
         </div>
@@ -40,7 +44,7 @@
         <!-- 이메일-->
         <div class="form-group">
             <label for="email" class="labeltag">이메일</label>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="email" name="email" id="email" class="form-control" placeholder="이메일 입력" />
             </div>
         </div>
@@ -48,10 +52,10 @@
         <!-- 비밀번호-->
         <div class="form-group">
             <label for="user_pw" class="labeltag">비밀번호</label>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="password" name="user_pw" id="user_pw" class="form-control" placeholder="비밀번호 입력" />
             </div>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="password" name="user_pw_re" id="user_pw_re" class="form-control" placeholder="비밀번호 재입력" />
             </div>
         </div>
@@ -59,7 +63,7 @@
         <!-- 이름-->
         <div class="form-group">
             <label for="user_name" class="labeltag">이름</label>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="text" name="user_name" id="user_name" class="form-control" />
             </div>
         </div>
@@ -67,7 +71,7 @@
         <!-- 연락처-->
         <div class="form-group">
             <label for="tel" class="labeltag">연락처</label>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="tel" name="tel" id="tel" class="form-control" placeholder="010-0000-0000" />
             </div>
         </div>
@@ -76,21 +80,21 @@
         <div class="form-group">
             <label for="postcode" class="labeltag">주소지</label>
             <div class="flex">
-                <div class="col-md-10">
+                <div class="input-100">
                     <input type="text" name="postcode" id="postcode" class="form-control justify" placeholder="우편번호" readonly/>
                 </div>
-                <div class="col-md-10">
+                <div class="input-100">
                     <button type="button" onclick="sample3_execDaumPostcode()" class="form-control">우편번호찾기</button>
                 </div>
             </div>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="text" name="address" id="address" class="form-control" placeholder="주소" readonly/>
             </div>
             <div class="flex">
-                <div class="col-md-10">
+                <div class="input-100">
                     <input type="text" name="detailAddress" id="detailAddress" class="form-control justify" placeholder="상세주소" />
                 </div>
-                <div class="col-md-10">
+                <div class="input-100">
                     <input type="text" name="extraAddress" id="extraAddress" class="form-control" placeholder="참고항목" readonly />
                 </div>
             </div>
@@ -102,7 +106,7 @@
         <!-- 생년월일-->
         <div class="form-group">
             <label class="labeltag">생년월일</label>
-            <div class="col-md-10">
+            <div class="input-100">
                 <input type="date" name="user_date" id="user_date" class="form-control" />
             </div>
         </div>
@@ -118,10 +122,7 @@
             </div>
         </div>
     </form>
-    <!-- sweetalert-->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- 다음 주소지-->
+    <!-- 카카오 다음 주소지-->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
     <!-- 유효성 검사-->
@@ -229,7 +230,7 @@
                 return false;
             }
 
-            //비밃번호 유효성 검사
+            //비밀번호 유효성 검사
             if (!regexHelper.value("#user_pw", "비밀번호를 입력하세요.")) {
                 return false;
             }
@@ -283,7 +284,11 @@
             Swal.fire({
                 text: "회원가입을 환영합니다.",
                 icon: 'success',
-                confirmButtonText: '확인' //넘어갈 페이지 설정해야됨
+                confirmButtonText: '확인'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.href = ""; //넘어갈 페이지 설정해야됨
+                }
             });
         });
     </script>
