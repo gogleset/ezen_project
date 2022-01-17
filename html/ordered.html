@@ -1,9 +1,9 @@
-<!-- @Filename: index.html
+<!-- @Filename: ordered.html
 @Author: 최진 (choij2494@gmail.com)
-@description: HTML common apply it.
+@description: ordered HTML structure.
 
 
-사용자 페이지의 공통으로 적용될 html 구조 파일입니다.  -->
+cart html 구조 파일입니다.  -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,22 +16,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-
     <!-- 폰트어썸 -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-
-    <!--  -->
+    <!-- CSS 참조 파일 -->
     <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/headerfooter.css">
     <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/ordered.css">
 </head>
 
 <body>
     <!-- 전체 콘테이너입니다 -->
     <div class="container">
         <!-- 상단 헤더를 표시합니다 -->
-        <header class="header clearfix">
+        <header class="header">
             <a href="#">
                 <!-- 상단 로고 부분입니다. -->
                 <div class="header-icon pull-left">
@@ -47,12 +46,34 @@
         </header>
         <!-- 내용부분입니다. -->
         <section class="content">
-            <!-- 사이드바 부분입니다(왼쪽) -->
-            <nav></nav>
             <!-- 내용 안쪽부분입니다. -->
-            <article></article>
-            <!-- 사이드바 부분입니다(오른쪽) -->
-            <aside></aside>
+            <article>
+                <!-- 제목 -->
+                <h1 class="order-title">주문내역</h1>
+                <!-- 박스 부분 -->
+                <a href="#">
+                    <!-- 값이 없다면 숨겨질 주문목록 박스입니다. -->
+                    <div class="order-box clearfix">
+                        <!-- 박스 안 내용 부분입니다. -->
+                        <img class="pull-left" src="../img/icon_null.png" alt="주문내역">
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">주문번호 :&nbsp;</p>
+                            <p class="order-number">123123123123122131231231231233121312312321321213213</p>
+                        </div>
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">주문날짜 :&nbsp;</p>
+                            <p class="order-date">123123123123122131231231231233121312312321312</p>
+                        </div>
+                        <div class="order-list pull-left">
+                            <p class="order-prod pull-left">상품명 :&nbsp;</p>
+                            <p class="order-product">1231231231231221312312312312312331213123123123322132123</p>
+                        </div>
+                    </div>
+                </a>
+                <!-- 값이 없다면 나올 로고 이미지의 부분입니다. -->
+                <div class="order-article-logo">
+                </div>
+            </article>
         </section>
         <!-- 푸터부분입니다. -->
         <footer class="footer">
@@ -71,6 +92,18 @@
         </footer>
     </div>
     
+
+    <script>
+        // 값을 가져올 데이터 베이스가 필요합니다. 값을 가져오면 실행합니다.
+        // (async () => {
+        //     try{
+        //         const data = await post 
+        //     }
+        //     catch(e){
+        //         console.log(e);
+        //     }
+        // })
+    </script>
 </body>
 
 </html>

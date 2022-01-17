@@ -1,0 +1,73 @@
+/* 
+@Filename: ordered.css
+@Author: 최진 (choij2494@gmail.com)
+@description: The file to be used in the ordered.html file.
+*/
+@charset "utf-8";
+
+/* 제목입니다. */
+.order-title {
+  display: inline-block;
+  text-indent: 15px;
+  margin-bottom: 20px;
+  font-size: 25px;
+}
+/* 주문 목록 박스입니다. */
+.order-box {
+  display: block;
+  margin: auto;
+  width: 95%;
+  height: 160px;
+  background-color: rgb(245, 245, 245);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+/* 주문 목록의 박스 이미지입니다. */
+.order-box img {
+  display: block;
+  height: 100%;
+  max-width: 25%;
+}
+/* 주문목록 */
+.order-list {
+  width: 72%;
+  padding: 18px 0px;
+  margin-left: 10px;
+}
+/* 주문번호, 주문날짜, 상품명의 박스입니다.  */
+.order-list-in {
+  display: block;
+  max-width: 25%;
+}
+.order-prod {
+  display: block;
+  max-width: 17%;
+}
+.order-product {
+  max-width: 83%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 주문번호, 주문날짜입니다. */
+.order-number,
+.order-date {
+  width: 78%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 주문목록의 값이 없을경우 표시할 이미지 박스입니다. */
+.order-article-logo {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  margin-top: 200px;
+  background-image: url(../img/icon_null.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+}
