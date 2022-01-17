@@ -1,0 +1,64 @@
+/* 
+@Filename: common.css
+@Author: choi_jin (choij2494@gmail.com)
+@description: CSS common apply it.
+*/
+
+/* 사용자 페이지의 공통으로 적용될 CSS 파일입니다. */
+@charset "utf-8";
+
+/* 브라우저 전체 넓이 및 높이 설정 */
+.container {
+  width: 100%;
+  min-height: 910px;
+  font-size: 20px;
+
+  font-family: "Noto Sans KR Bold", sans-serif;
+  /* line-height: 1.5; */
+  letter-spacing: -0.03em;
+
+  position: relative;
+}
+
+/* 최소 높이 */
+.min-height {
+  min-height: 490px;
+}
+
+/* 좌로 정렬 */
+.pull-left {
+  float: left;
+}
+
+/* 우로 정렬 */
+.pull-right {
+  float: right;
+}
+
+/* 마감제 */
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+
+/* 마진 오토 */
+.div-center {
+  margin: auto;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+address {
+  font-style: normal;
+}
+.title {
+  display: inline-block;
+  text-indent: 15px;
+  margin-bottom: 20px;
+  font-size: 25px;
+}

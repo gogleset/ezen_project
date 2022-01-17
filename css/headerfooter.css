@@ -1,0 +1,87 @@
+/* 
+@Filename: headerfooter.css
+@Author: choi_jin (choij2494@gmail.com)
+@description: CSS common apply it.
+*/
+
+/* 사용자 페이지의 공통으로 적용될 헤더 푸터 CSS 파일입니다. */
+
+/* 헤더를 감싸는 부분입니다. */
+.header {
+    position: fixed;
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    z-index: 10000;
+}
+/* header의 로고 아이콘 부분입니다. */
+.header_icon {
+    display: inline-block;
+    height: 45px;
+    width: 45px;
+    margin: 2.5px 10px;
+    background-image: url(../img/headerfooter/dessert39_simbol2.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+/* 시멘틱 요소(제목)입니다. */
+.header_icon h1 {
+    text-indent: 10000px;
+}
+/* 햄버거 탭 부분입니다. */
+.header_tab {
+    display: inline-block;
+    height: 45px;
+    width: 45px;
+    margin: 2.5px 10px;
+}
+
+.fa-bars {
+    display: block;
+    margin-left: 13px;
+    margin-top: 12px;
+}
+/* 헤더 끝 */
+
+
+
+/* 푸터를 감싸는 부분입니다. */
+.footer {
+    margin-top: 65px;
+    width: 100%;
+    height: 240px;
+    background-color: white;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 23px;
+}
+/* 푸터 로고 부분입니다. */
+.footer_icon {
+    margin: auto;
+    height: 45px;
+    width: 45px;
+    background-image: url(../img/headerfooter/dessert39_simbol2.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    margin-bottom: 10px;
+}
+
+/* 푸터의 콘텍트 부분입니다. */
+.contact {
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+/* 푸터 끝 */
+
+
+/* 내용부분입니다. */
+.content {
+    padding-top:80px;
+    height: 650px;
+    width: 100%;
+}
