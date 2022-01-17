@@ -1,0 +1,22 @@
+{
+  "name": "ezen_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gogleset/ezen_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gogleset/ezen_project/issues"
+  },
+  "homepage": "https://github.com/gogleset/ezen_project#readme",
+  "dependencies": {
+    "sweetalert2": "^11.3.5"
+  }
+}
