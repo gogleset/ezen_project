@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/gogleset/ezen_project#readme",
   "dependencies": {
-    "@sweetalert2/theme-minimal": "^5.0.8",
     "sweetalert2": "^11.3.5"
   }
 }
