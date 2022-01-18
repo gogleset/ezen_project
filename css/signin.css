@@ -1,0 +1,83 @@
+/* 
+@Filename: signin.css
+@Author: dajung_lim (dazoo0221@gmail.com)
+@description: CSS signin apply it.
+*/
+
+/* 전체
+-------------------------*/
+.content{
+  width: 95%;
+  padding-top: 160px;
+  margin: auto;
+}
+
+/* top 영역
+  -------------------------*/
+.top{
+    height: 190px;
+    width: inherit;
+    margin-left: auto;
+}
+.top .img-box{
+    width: 104px;
+    height: auto;
+}
+.top .img-box img{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.top .txt-box{
+    height: 57px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.top .txt-box .tit {
+  font-size : 1.2em;
+  margin-bottom: 10px;
+}
+
+.top .txt-box .sub-tit{
+  font-size: 0.7em;
+}
+
+/* form-wrap 영역
+  -------------------------*/
+
+.form-wrap{
+    display: block;
+    height: 210px;
+    padding: 50px 0;
+}
+
+.form-wrap input{
+  display: block;
+  width: 230px;
+  padding: 10px;
+  margin: 10px auto;
+}
+
+.form-wrap button{
+  border: none;
+  background-color: #fff;
+  font-size: 0.7em;
+  padding: 10px 0;
+  margin: auto;
+  display: block;
+}
+
+.form-wrap .util-menu a{
+  width: 230px;
+  height: 15px;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  font-size: 0.7em;
+  padding: 10px;
+  margin: auto;
+  margin-top: 10px;
+  border-radius: 3px;
+  display: block;
+}

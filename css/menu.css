@@ -1,0 +1,74 @@
+/* 
+@Filename: menu.css
+@Author: dajung_lim (dazoo0221@gmail.com)
+@description: CSS menu apply it.
+*/
+
+
+/* 전체 영역 최소 높이 설정 */
+.container{
+    min-height: 910px;
+}
+
+/* menu-top 영역 
+-------------------------*/
+.menu-top{
+    padding: 25px 0;
+    margin-top: 30px;
+    height: 140px;
+}
+
+.img-box{
+    height: 120px;
+    weight: 120px;
+    margin: auto;
+}
+
+.img-box a{
+    height: 140px;
+    weight: 100%;
+}
+
+.img-box img{
+    display: block;
+    height: 120px;
+    margin: auto;
+}
+
+.menu-top .tit h1{
+    text-align: center;
+}
+
+/* menu-line 영역
+-------------------------*/
+
+.menu-line {
+    display: block;
+    weight: 100%;
+    height: 7px;
+    background-color: #f0f0f0;
+}
+
+/* menu-list 영역
+-------------------------*/
+.menu-list {
+    padding-top: 25px;
+    padding-left: 15px;
+}
+
+.menu1, .menu2, .menu3, .menu4 {
+    margin-bottom:35px ;
+}
+
+.menu-list .title{
+    display: block;
+    font-weight: bold;
+}
+
+a{
+    display: block;
+    height: 30px;
+    padding: 0 15px;
+    line-height: 35px;
+    font-size: 0.7em;
+}

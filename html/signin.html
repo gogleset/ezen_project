@@ -1,0 +1,135 @@
+<!-- 
+@Filename: signin.html
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: signin HTML
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>signin</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- CSS 참조 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/signin.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <div class="cont-wrap">
+                <div class="top div-center">
+                    <div class="img-box div-center">
+                        <img src="../img/dessert39_simbol2.png" alt="">
+                    </div>
+                    <div class="txt-box">
+                        <h1 class="tit">당신만의 디저트</h1>
+                        <h3 class="sub-tit">DESSERT40으로 경험해보세요</h3>
+                    </div>
+                </div>
+                <div class="form-wrap">
+                    <form action="" id="signin-form">
+                        <div class="input-box">
+                            <input type="text" name="userid" id="userid" placeholder="아이디">
+                            <input type="password" name="userpw" id="userpw" placeholder="비밀번호">
+                            <button type="submit" class="btn-signin-btn" id="signin-btn">로그인하기</button>
+                        </div>
+                        <div class="util-menu">
+                            <a href="#" class="join-box">회원가입하기</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- 푸터부분입니다. -->
+        <footer class="footer">
+            <!-- 푸터 아이콘입니다 -->
+            <div class="footer-icon">
+            </div>
+            <!-- 주소지 및 정보입니다. -->
+            <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
+            <address>Address | 서울특별시 강남구 w타워</address>
+            <p>Customer Service | 0000-0000</p>
+            <p>Business Lisense | 12312-123-12</p>
+
+            <p class="contact">Contact us</p>
+            <p>ezenprojectUS!@contacts.co.kr</p>
+            <p class="copyright">Copyright &copy; 2021 Dessert40 all Right Reserved</p>
+        </footer>
+    </div>
+
+    <script type="text/javascript">
+        document.querySelector("#signin-form").addEventListener("submit", e => {
+            e.preventDefault();
+
+            //userid에서 받아올 값
+            const userid = document.getElementById("userid").value;
+
+            //userpw에서 받아올 값
+            const userpw = document.getElementById("userpw").value;
+
+            if (userid == "userid" && userpw == "12345678") {
+                Swal.fire({
+                    text: '로그인 성공',
+                    confirmButtonText: 'success'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.href = ""  // 향후 로그인 성공 시 메인 페이지로 연결
+                    }
+                });
+
+            } else {
+                Swal.fire({
+                    text: '아이디 또는 비밀번호가 일치하지 않습니다.',
+                    icon: 'error'
+                });
+            }
+
+
+            // 아이디, 비밀번호 알림 따로 구분
+
+            /* else if (userid !== "userid" && userpw == "12345678") {
+                Swal.fire({
+                    text:'아이디가 일치하지 않습니다.',
+                    icon:'error'
+                });
+
+            }            
+            else if (userid == "userid" && userpw !== "12345678") {
+                Swal.fire({
+                    text:'비밀번호가 일치하지 않습니다.',
+                    icon:'error'
+                });
+
+            } else {
+                Swal.fire({
+                    text: '아이디와 비밀번호를 확인 후 다시 시도해주세요',
+                    icon:'error'
+                 });
+            } */
+
+        })
+
+    </script>
+</body>
+
+</html>
