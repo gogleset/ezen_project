@@ -1,0 +1,319 @@
+<!-- @Filename: cart.html
+@Author: 최진 (choij2494@gmail.com)
+@description: cart HTML structure.
+
+
+cart 페이지의 적용될 html 구조 파일입니다.  -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!--  -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/cart.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <header class="header">
+            <a href="#">
+                <!-- 상단 로고 부분입니다. -->
+                <div class="header-icon pull-left">
+                    <h1>logo</h1>
+                </div>
+            </a>
+            <!-- 상단 탭 메뉴를 표시합니다 -->
+            <a href="#">
+                <div class="header-tab pull-right">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </a>
+        </header>
+
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <!-- 내용 안쪽부분입니다. -->
+            <div class="inner-content min-height">
+                <!-- 제목부분입니다. -->
+                <h1 class="cart-title title">나의 장바구니</h1>
+                <!-- 제목 안쪽 미결제 항목부분입니다. -->
+                <div class="cart-sub-title">
+                    <span class="unpaid-count">미결제항목(0개)</span>
+                    <input type="button" class="btn-cancle-01-on pull-right" value="선택 상품 삭제">
+                </div>
+
+
+
+                <!-- 장바구니 목록을 카운트합니다. -->
+                <div class="box-cart-content">
+
+                    <div class="box-cart div-center clearfix">
+                        <!-- 상품이미지 부분입니다. -->
+                        <a href="#">
+                            <img class="pull-left" src="." alt="#">
+                        </a>
+                        <!-- 상품 정보 부분입니다. -->
+                        <div class="box-cart-inner pull-left">
+                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
+                            <span class="box-cart-prod pull-left">상품명:</span>
+                            <span class="box-cart-prod-name">~~~</span>
+                            <span id="boxCartMoney" class="box-cart-money pull-right">2222원</span>
+                            <input type="button" class="btn-plus-01-on pull-right" value="+">
+                            <span class="cart-count">1</span>
+                            <input type="button" class="btn-minus-01-on pull-right" value="–">
+                        </div>
+                    </div>
+                    <div class="box-cart div-center clearfix">
+                        <!-- 상품이미지 부분입니다. -->
+                        <a href="#">
+                            <img class="pull-left" src="." alt="#">
+                        </a>
+                        <!-- 상품 정보 부분입니다. -->
+                        <div class="box-cart-inner pull-left">
+                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
+                            <span class="box-cart-prod pull-left">상품명:</span>
+                            <span class="box-cart-prod-name">~~~</span>
+                            <span id="boxCartMoney" class="box-cart-money pull-right">2222원</span>
+                            <input type="button" class="btn-plus-01-on pull-right" value="+">
+                            <span class="cart-count">1</span>
+                            <input type="button" class="btn-minus-01-on pull-right" value="–">
+                        </div>
+                    </div>
+                    <div class="box-cart div-center clearfix">
+                        <!-- 상품이미지 부분입니다. -->
+                        <a href="#">
+                            <img class="pull-left" src="." alt="#">
+                        </a>
+                        <!-- 상품 정보 부분입니다. -->
+                        <div class="box-cart-inner pull-left">
+                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
+                            <span class="box-cart-prod pull-left">상품명:</span>
+                            <span class="box-cart-prod-name">~~~</span>
+                            <span id="boxCartMoney" class="box-cart-money pull-right">2222원</span>
+                            <input type="button" class="btn-plus-01-on pull-right" value="+">
+                            <span class="cart-count">1</span>
+                            <input type="button" class="btn-minus-01-on pull-right" value="–">
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- 값이 없다면 나올 로고입니다. -->
+                <div class="not-value-logo">
+                </div>
+            </div>
+
+
+            <!-- 장바구니 합계 부분입니다. -->
+            <div class="box-cart-total">
+                <h2>장바구니 합계</h2>
+                <hr>
+                <!-- 갯수 박스들 입니다. -->
+                <div class="box-total">
+                    <span class="prod-total">전체 상품 개수</span>
+                    <span class="prod-total-number pull-right">0개</span>
+                </div>
+                <hr>
+                <div class="box-total">
+                    <span class="money-total">상품 금액</span>
+                    <span class="money-total-number pull-right">0원</span>
+                </div>
+                <hr>
+                <div class="box-total">
+                    <span class="paid-money">결제 금액</span>
+                    <span class="paid-money-number pull-right">0원</span>
+                </div>
+                <hr style="margin-bottom: 0;">
+                <!-- 결제 버튼 박스입니다. -->
+                <form action="" name="cart-total" method="">
+                    <input type="submit" value="00000원 결제하기" class="btn-common btn-cart-submit">
+                </form>
+            </div>
+        </section>
+    </div>
+    <script>
+        // box-cart가 있는지 없는지 감지하는 변수
+        // let content = document.querySelector(".inner-content .box-cart");
+        // // 상품 목록 박스입니다.
+        // let boxMoney = document.querySelectorAll(".box-cart-money");
+        // // 미결제항목 부분입니다.
+        // let unpaidCount = document.querySelector(".unpaid-count").innerHTML;
+        // // 로고 표시입니다.
+        // let logo = document.querySelector(".not-value-logo");
+        // // 상품 플러스 버튼입니다.
+        // let btnPlus = document.querySelectorAll(".btn-plus-01-on");
+        // // 상품 마이너스 버튼입니다.
+        // let btnMinus = document.querySelectorAll(".btn-minus-01-on");
+        // // 상품 갯수 입니다.
+        // let countProdNum = document.querySelectorAll(".cart-count");
+        // // 상품의 총 갯수입니다.
+        // let count = 0;
+        // // 상품의 총 금액입니다.
+        // let money = 0;
+        // console.log(countProdNum);
+        // box-cart가 없다면
+        if (content == null) {
+            // 클래스 display-on을 추가합니다.
+            // logo.classList.add('display-on');
+            // // 클래스 display-off를 삭제합니다.
+            // logo.classList.remove('display-off');
+
+            // box-cart가 있다면 
+        } else {
+            // box-cart-content의 자식 갯수를 파악합니다.
+            // let contentCount = document.querySelector(".box-cart-content").childElementCount;
+            // // console.log(contentCount);
+            // // 미결제항목의 갯수 파악하여 동적으로 문자열을 바꿉니다.
+            // let unpaidCounting = unpaidCount.replace(unpaidCount.substring(unpaidCount.indexOf("(")), `(${contentCount}개)`);
+            // // 바꾼 문자열을 출력시킵니다.
+            // document.querySelector(".unpaid-count").innerHTML = unpaidCounting
+
+
+            // // logo를 삭제합니다.
+            // logo.classList.remove('display-on');
+            // logo.classList.add('display-off');
+
+            // // 상품 금액입니다.
+            // let cartMoney = document.querySelectorAll(".box-cart-money");
+            // // 총 합산한 금액입니다.
+            // let totalMoney = document.querySelector(".money-total-number");
+            // // 총 결제할 금액입니다.
+            // let payMoney = document.querySelector(".paid-money-number");
+            // // 총 전체 상품 개수 입니다.
+            // let totalProdNum = document.querySelector(".prod-total-number");
+
+            // 선택상품삭제 버튼을 눌렀을 시 실행될 이벤트 함수입니다.
+            document.querySelector(".btn-cancle-01-on").addEventListener("click", (e) => {
+                // count = 0;
+                // let check = document.querySelectorAll("input[name=check]:checked");
+
+
+
+                // totalProdNum.innerHTML = count + "개";
+                // // check를 검사합니다.
+                // check.forEach((v) => {
+                //     // console.log(v);
+                //     // box-cart를 지웁니다.
+                //     // console.log(v.closest(".box-cart"));
+                //     v.closest(".box-cart").remove();
+                // });
+
+                // // 상품목록이 없다면
+                // content = document.querySelector(".inner-content .box-cart");
+                // if (content == null) {
+                //     console.log(1);
+                //     // 클래스 display-on을 추가합니다.
+                //     logo.classList.add('display-on');
+                //     // 클래스 display-off를 삭제합니다.
+                //     logo.classList.remove('display-off');
+                // }
+                // // box-cart-content의 자식 갯수를 파악합니다.
+                // contentCount = document.querySelector(".box-cart-content").childElementCount;
+                // console.log(contentCount);
+                // // 미결제항목의 갯수 파악하여 동적으로 문자열을 바꿉니다.
+                // let unpaidCounting = unpaidCount.replace(unpaidCount.substring(unpaidCount.indexOf("(")), `(${contentCount}개)`);
+                // // 바꾼 문자열을 출력시킵니다.
+                // document.querySelector(".unpaid-count").innerHTML = unpaidCounting;
+
+
+                // countProdNum.forEach((v) => {
+                //     // count = 0;
+                //     console.log(v.innerHTML);
+                //     // count += parseInt(v.innerHTML);
+                //     // console.log(count)
+                //     console.log(v);
+                // })
+
+            })
+            // 선택상품삭제 끝
+
+            // 상품 추가/삭제버튼 이벤트입니다.
+            btnPlus.forEach((v) => {
+                v.addEventListener("click", (e) => {
+                    // // 상품 개수를 0으로 초기화 시킵니다.
+                    // console.log(v.nextElementSibling);
+                    // // 상품개수를 숫자로 추출하여 증가 시키는 코드
+                    // let prodNum = Number(v.nextElementSibling.innerHTML);
+                    // let moneySum = parseInt(v.previousElementSibling.innerHTML);
+                    // console.log(moneySum);
+                    // prodNum++;
+                    // money = prodNum * moneySum;
+                    // // console.log(money);
+                    // v.nextElementSibling.innerHTML = prodNum;
+                    // // 상품의 갯수를 파악합니다.
+                    // count++
+                    // console.log(count);
+
+                    // totalProdNum.innerHTML = count + "개";
+                })
+            })
+            btnMinus.forEach((v) => {
+                v.addEventListener("click", (e) => {
+                    // let prodNum = Number(v.previousElementSibling.innerHTML);
+                    // prodNum--;
+                    // count--;
+                    // console.log(btnMinus.length);
+                    // console.log(count)
+                    // // count가 마이너스 버튼의 개수 + 1 보다 작다면 카운트를 마이너스 버튼 + 1로 맞추기
+                    // if (count < btnMinus.length + 1) {
+                    //     count = btnMinus.length;
+                    //     console.log(count);
+                    // }
+                    // v.previousElementSibling.innerHTML = prodNum;
+                    // if (v.previousElementSibling.innerHTML < 2) {
+                    //     v.previousElementSibling.innerHTML = 1;
+                    // }
+
+                    // totalProdNum.innerHTML = count + "개";
+                })
+            })
+            // 상품 개수를 확인합니다.
+            // countProdNum.forEach((v) => {
+            //     let count = 0;
+            //     console.log(v.innerHTML);
+            //     // 상품 하나하나의 갯수를 파악합니다.
+            //     count = Number(v.innerHTML);
+            //     totalCount += Number(v.innerHTML);
+            //     console.log(count);
+            //     let callMoney = parseInt(v.previousElementSibling.previousElementSibling.innerHTML);
+            //     console.log(callMoney);
+            //     money += count * callMoney;
+            //     console.log(money);
+
+            // })
+            // countProdNum.forEach((v) => {
+            //     console.log(v.innerHTML);
+            //     console.log(count)
+            // })
+
+
+
+
+
+            // console.log(count);
+            // // 장바구니 합계 부분입니다.
+            // totalProdNum.innerHTML = count + "개";
+            // totalMoney.innerHTML = money + "원";
+            // payMoney.innerHTML = parseInt(money + (money / 100)) + "원";
+
+        }
+    </script>
+</body>
+
+</html>

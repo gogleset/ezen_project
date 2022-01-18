@@ -59,15 +59,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-/* 주문목록의 값이 없을경우 표시할 이미지 박스입니다. */
-.order-article-logo {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  margin-top: 200px;
-  background-image: url(../img/icon_null.png);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center center;
-}

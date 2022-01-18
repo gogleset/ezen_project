@@ -10,7 +10,7 @@
 /* 브라우저 전체 넓이 및 높이 설정 */
 .container {
   width: 100%;
-  min-height: 910px;
+  
   font-size: 20px;
 
   font-family: "Noto Sans KR Bold", sans-serif;
@@ -24,6 +24,7 @@
 .min-height {
   min-height: 490px;
 }
+
 
 /* 좌로 정렬 */
 .pull-left {
@@ -42,24 +43,44 @@
   clear: both;
   float: none;
 }
-
 /* 마진 오토 */
 .div-center {
   margin: auto;
 }
-
-a {
-  text-decoration: none;
-  color: black;
+/* 숨겨진 요소를 보이게 합니다. */
+.display-on{
+  display: block;
+}
+/* 보이는 요소를 숨깁니다. */
+.display-off{
+  display: none;
 }
 
-address {
-  font-style: normal;
-}
-
+/* 제목의 타이틀에 주는 값입니다. */
 .title {
   display: inline-block;
   text-indent: 15px;
   margin-bottom: 20px;
   font-size: 25px;
+}
+/* 목록의 값이 없을경우 표시할 이미지 박스입니다. */
+.not-value-logo {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  margin-top: 200px;
+  background-image: url(../img/icon_null.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+}
+/* 공통적으로 들어갈 버튼입니다. */
+.btn-common{
+  padding:15px 0px;
+  background-color: black;
+  color: white;
+  text-align:center;
+  font-size: 20px;
+  border-radius: 3px;
+  border: 1px solid white;
 }
