@@ -1,0 +1,141 @@
+<!--
+ * @filename  : goods_detail.html
+ * @author    : 정한슬 (seul5106@gmail.com)
+ * @description : 상품상세정보 html
+ * 
+ * 
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- CSS 참조 파일 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/goods_detail.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <header class="header">
+            <a href="#">
+                <!-- 상단 로고 부분입니다. -->
+                <div class="header-icon pull-left">
+                    <h1>logo</h1>
+                </div>
+            </a>
+            <!-- 상단 탭 메뉴를 표시합니다 -->
+            <a href="#">
+                <div class="header-tab pull-right">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </a>
+        </header>
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <div class="img-100">
+                <img src="http://placehold.it/360x300" alt="상품이미지" />
+            </div>
+            <div class="form-group">
+                <h1>상품명</h1>
+                <div class="ex-description">
+                    부가설명
+                </div>
+                <div class="total-price">
+                    <h2>00000원</h2>
+                </div>
+                <hr/>
+            </div>
+
+            <div class="flex">
+                <button type="button" class="basket" id="addBasket">장바구니에 추가</button>
+                <button type="button" class="order" id="addOrder">주문</button>
+            </div>
+
+            <div class="form-group">
+                <h2 class="detail-form">영양정보</h2>
+                <hr/>
+                <div class="detail">
+                    총 내용량 : ---g 100g당 1회 제공 칼로리 : ---kcal 100g당 (% : 1일 영양성분기준치에 대한 비율) - 나트륨 : ---mg / --% · 당류 : -g /-% · 포화지방 : -g / --% · 단백질 : -g / --%
+                </div>
+
+                <h2 class="detail-form">알레르기 정보</h2>
+                <hr/>
+                <div class="detail">
+                    밀,우유,대두, 쇠고기 함유
+                </div>
+            </div>
+
+            <div class="form-group">
+                <h2 class="another-dessert">Another dessert</h2>
+                <div class="product-flex">
+                    <div class="product-img">
+                        <img src="http://placehold.it/130x130" alt="랜덤상품이미지" />
+                        <div class="product-name">상품명</div>
+                    </div>
+                    <div class="product-img">
+                        <img src="http://placehold.it/130x130" alt="랜덤상품이미지" />
+                        <div class="product-name">상품명</div>
+                    </div>
+                    <div class="product-img">
+                        <img src="http://placehold.it/130x130" alt="랜덤상품이미지" />
+                        <div class="product-name">상품명</div>
+                    </div>
+                    <div class="product-img">
+                        <img src="http://placehold.it/130x130" alt="랜덤상품이미지" />
+                        <div class="product-name">상품명</div>
+                    </div>
+                    <div class="product-img">
+                        <img src="http://placehold.it/130x130" alt="랜덤상품이미지" />
+                        <div class="product-name">상품명</div>
+                    </div>
+                    <div class="product-img">
+                        <img src="http://placehold.it/130x130" alt="랜덤상품이미지" />
+                        <div class="product-name">상품명</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 푸터부분입니다. -->
+        <footer class="footer">
+            <!-- 푸터 아이콘입니다 -->
+            <div class="footer-icon">
+            </div>
+            <!-- 주소지 및 정보입니다. -->
+            <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
+            <address>Address | 서울특별시 강남구 w타워</address>
+            <p>Customer Service | 0000-0000</p>
+            <p>Business Lisense | 12312-123-12</p>
+
+            <p class="contact">Contact us</p>
+            <p>ezenprojectUS!@contacts.co.kr</p>
+            <p class="copyright">Copyright &copy; 2021 Dessert40 all Right Reserved</p>
+        </footer>
+    </div>
+
+
+    <script>
+        document.querySelector("#addBasket").addEventListener("click", () => {
+
+        });
+
+        document.querySelector("#addOrder").addEventListener("click", () => {
+
+        });
+    </script>
+</body>
+
+</html>

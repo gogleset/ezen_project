@@ -1,0 +1,121 @@
+/* 
+@Filename: goods_detail.css
+@Author: 정한슬 (seul5106@gmail.com)
+@description: 상품상세목록css
+*/
+
+.content {
+    height: auto;
+}
+
+
+/*이미지 비율 유지*/
+
+.img-100 img {
+    width: 100%;
+}
+
+
+/*상품정보 패딩*/
+
+.form-group {
+    padding: 0 10px;
+}
+
+
+/*상품명*/
+
+h1 {
+    font-size: 36px;
+    padding: 15px 0;
+}
+
+
+/*부가설명*/
+
+.ex-description {
+    width: 100%;
+    padding: 0 2px;
+    font-size: 18px;
+    word-wrap: break-word;
+    min-height: 120px;
+}
+
+
+/*총 결제금액*/
+
+.total-price {
+    font-size: 18px;
+    text-align: right;
+    padding-bottom: 5px;
+}
+
+
+/*장바구니&주문버튼*/
+
+.flex {
+    display: flex;
+    justify-content: center;
+}
+
+.flex button {
+    width: 160px;
+    height: 50px;
+    font-size: 17px;
+    font-weight: bold;
+    margin: 5px 15px;
+    border-radius: 6px;
+}
+
+.basket {
+    border: 0px;
+}
+
+.order {
+    background-color: #000;
+    color: #eee;
+}
+
+
+/*영양정보&알레르기정보*/
+
+.detail-form {
+    padding-top: 50px;
+    font-size: 18px;
+}
+
+.detail {
+    color: rgb(133, 133, 133);
+    font-size: 16px;
+    line-height: 30px;
+}
+
+
+/*랜덤 상품 이미지*/
+
+.another-dessert {
+    padding-top: 60px;
+    padding-bottom: 50px;
+    font-size: 30px;
+}
+
+.product-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-img {
+    padding: 7px;
+    flex: 1 1 40%;
+}
+
+.product-img img {
+    width: 100%;
+}
+
+.product-name {
+    text-align: center;
+    font-size: 16px;
+    padding-top: 15px;
+    padding-bottom: 30px;
+}
