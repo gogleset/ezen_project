@@ -1,0 +1,57 @@
+/* 
+@Filename: event.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: CSS event apply it.
+*/
+
+/* 내용 wrap 영역 */
+.wrap{
+    width: 95%;
+    margin: auto;
+    max-width: 1100px;
+}
+
+/* title 영역 */
+.title h3{
+    font-size: 0.7em;
+    padding-top: 10px;
+}
+
+
+/* event 게시영역  */
+.event-wrap{
+    width: 100%;
+
+}
+
+/* event 단일  설정영역*/
+.list-item{
+    width: 100%;
+    height: 120px;
+    margin: 10px 0;
+}
+
+/* event 배너 이미지 설정영역 */
+.list-item img{
+    width: 90%;
+    height: 90%;
+    display: block;
+    object-fit: cover;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 21px -4px #666666de;
+}
+
+.non-event{
+    width: 200px;
+    height:300px;
+    margin: 50px auto;
+}
+
+.non-event img{
+    width: 90%;
+}
+
+.displaynone{
+    display: none;
+}

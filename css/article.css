@@ -1,0 +1,80 @@
+/* 
+@Filename: article.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: CSS article apply it.
+*/
+
+/* 내용 wrap 영역 */
+.content {
+  width: 95%;
+  margin: auto;
+  max-width: 1100px;
+}
+
+/* 사용자 게시물 배경 설정 */
+.show-user {
+  min-height: 200px;
+  width: 95%;
+  margin: 10px auto;
+  background-color: rgba(204, 204, 204, 0.281);
+}
+
+/* 관리자 게시물 배경 설정 */
+.show-admin {
+  min-height: 200px;
+  width: 95%;
+  margin: 10px auto;
+  background-color: rgba(204, 204, 204, 0.281);
+}
+
+.displaynone {
+  display: none;
+}
+
+/* 게시판 내부 여백 설정 */
+dl {
+  padding: 10px;
+}
+
+/* 게시글 (제목) 설정 */
+dl dt {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 9px;
+}
+
+/* 게시글 (본문) 설정 */
+dl dd {
+  font-size: 0.8em;
+  margin-bottom: 25px;
+  margin-left: 5px;
+}
+
+/* 삭제 버튼 영역 */
+.btn-delete {
+    margin-right: 6px;
+    width: 50px;
+    height: 25px;
+    background-color: #222;
+    color: #fff;
+    border-radius: 5px;
+}
+
+/* 관리자 게시글 없을 경우 보여줄 이미지 설정 */
+.non-answer {
+  width: 30%;
+  margin: 50px auto;
+}
+
+.non-answer img {
+  width: 95%;
+  margin: auto;
+  display: block;
+}
+
+.non-answer span {
+  font-size: 1.2em;
+  font-weight: bold;
+  display: block; /* 블럭인데 텍스트 얼라인 센터가 왜 먹지..? */
+  text-align: center;
+}

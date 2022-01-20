@@ -1,0 +1,54 @@
+/* 
+@Filename: write.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: CSS write apply it.
+*/
+
+/* 내용 전체 */
+.content .wrap{
+    margin: auto;
+    width: 95%;
+    max-width: 360px;
+}
+  
+  /* 카테고리 title 설정 */
+.title h1 {
+    font-size: 1.4em;
+}
+
+  
+/* 제목 input 영역 */
+#form-wrap #title{
+    width: 320px;
+    height: 30px;
+    margin: 10px auto;
+    display: flex;
+}
+/* 문의 input 영역 */
+#form-wrap #desc {
+    width: 320px;
+    min-height: 300px;
+    margin:5px auto;
+    display: flex;
+    
+}
+/*  문의 input 제목 영역 */
+#form-wrap .sub-tit {
+    margin-top: 30px;
+    display: block;
+    margin-left: 7px;
+    font-size: 0.7em;
+    font-weight: bold;
+}
+
+/* 저장 버튼 영역 */
+#form-wrap .btn-wrap #btn {
+    margin-right: 6px;
+    width: 100px;
+    height: 30px;
+    margin-top: 20px;
+    background-color: #222;
+    color: #fff;
+    border-radius: 5px;
+    padding: 4px;
+}

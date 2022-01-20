@@ -1,0 +1,56 @@
+/* 
+@Filename: qa.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: CSS qa apply it.
+*/
+
+/* 내용 wrap 영역 */
+.wrap{
+    width: 95%;
+    margin: auto;
+    max-width: 1100px;
+}
+
+.record{
+    width: 100%;
+    margin: auto;
+    text-indent: 5px;
+}
+
+.record a{
+    width: 100%;
+}
+
+.summary{
+    width: 265px;
+}
+
+/* 버튼 공통속성 */
+.btn{
+    padding: 3px 11px;
+    font-size: 0.6em;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.897);
+    border-radius: 5px;
+    margin-top: 8px;
+}
+
+/* 글쓰기 버튼에만 별도 적용*/
+.content .wrap div span{
+    display: block;
+    padding: 7px 10px;
+}
+
+.list-tit{
+    font-size: 0.9em;
+}
+
+.list-date{
+    font-size: 0.7em;
+    margin: 10px 0;
+}
+
+li{
+    border-bottom: 2px solid #ccc;
+}
