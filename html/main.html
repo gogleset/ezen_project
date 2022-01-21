@@ -90,7 +90,10 @@
     <!-- menus 데이터와 query parameter를 이용해서 메뉴명 등록하기 -->
     <script>
         const searchParams = new URLSearchParams(decodeURI(window.location.search));
-        const menuId = parseInt(searchParams.get("menu"));
+       
+        // 사용자가 메인 페이지 진입시엔 케이크&티라미슈 상품 노출
+        // 만약 다른 상품이 보고싶다면 메뉴 탭을 눌러 다른 카테고리로 이동
+        const menuId = (searchParams.get("menu") !== null) ? parseInt(searchParams.get("menu")) : 1;
         const menuName = menus[menuId];
         console.log(menuName);
 
