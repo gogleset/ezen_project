@@ -1,0 +1,59 @@
+/* 
+@Filename: home.css
+@Author: 최진 (choij2494@gmail.com)
+@description: CSS common apply it.
+*/
+
+/* home CSS 파일입니다. */
+
+/* 이벤트 박스가 들어갈 영역입니다. */
+.box-home-event {
+  width: 95%;
+  height: 180px;
+  background-color: rgb(53, 77, 99);
+  margin-bottom: 50px;
+}
+/* 케이크 & 티라미수(메뉴명) 영역입니다. */
+.sub-title-dessert {
+  margin-top: -15px;
+  display: block;
+}
+/* 디저트 이미지가 들어갈 영역입니다.(큰틀) */
+.box-dessert {
+  width: 95%;
+  height: 210px;
+  background-color: firebrick;
+}
+
+/* 스위퍼 영역을 재조정합니다. */
+.swiper {
+  width: 100%;
+  height: 100%;
+  background-color: antiquewhite;
+}
+.swiper-slide {
+  height: 100%;
+  background-color: aqua;
+}
+.box-slider-inner {
+  display: block;
+  height: 70%;
+  width: 300px;
+  background-color: rgb(100, 100, 100);
+  margin: 0 auto;
+  margin-top: 20px;
+}
+.slide-inner {
+  display: block;
+  width: 38%;
+  height: 100%;
+  background-color: #fff;
+}
+.slide-inner:first-child{
+    margin-left:8.5%;
+    margin-right: 10px;
+}
+.slide-inner:last-child{
+    margin-left:10px;
+    margin-right: 8.5%;
+}

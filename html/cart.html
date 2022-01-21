@@ -181,6 +181,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             </div>
         </section>
     </div>
+    <script src="../js/number_utils.js"></script>
     <script>
         // box-cart가 있는지 없는지 감지하는 변수입니다.
         let content = document.querySelector(".inner-content .box-cart");
@@ -217,7 +218,6 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             logo.classList.add('display-on');
             // // 클래스 display-off를 삭제합니다.
             logo.classList.remove('display-off');
-
             // 상품목록이 있다면 
         } else {
             // box-cart-content의 자식 갯수를 파악합니다.
@@ -256,7 +256,6 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 // // 상품목록이 없다면
                 content = document.querySelector(".inner-content .box-cart");
                 if (content == null) {
-
                     // 클래스 display-on을 추가합니다.
                     logo.classList.add('display-on');
                     // 클래스 display-off를 삭제합니다.
@@ -327,8 +326,8 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 console.log(money);
                 // 장바구니 합계에 출력됩니다.
                 totalProdNum.innerHTML = count + "개";
-                totalMoney.innerHTML = money + "원";
-                payMoney.innerHTML = parseInt(money + (money / 100)) + "원";
+                totalMoney.innerHTML = formatPrice(money)+"원";
+                payMoney.innerHTML = formatPrice(parseInt(money + (money / 100))) + "원";
                 // 서버로 보낼 가격입니다.
                 submitMoney.setAttribute("value", `${parseInt(money + (money / 100))}원 결제하기`)
             }

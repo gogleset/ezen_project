@@ -1,0 +1,352 @@
+<!--
+ * @filename  : modification.html
+ * @author    : 최진 (choij2494@gmail.com)
+ * @description : modification html structure
+ * 
+ * 
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/modification.css">
+</head>
+
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <header class="header clearfix">
+            <a href="#">
+                <!-- 상단 로고 부분입니다. -->
+                <div class="header-icon pull-left">
+                    <h1>logo</h1>
+                </div>
+            </a>
+            <!-- 상단 탭 메뉴를 표시합니다 -->
+            <a href="#">
+                <div class="header-tab pull-right">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </a>
+        </header>
+        
+        <!-- 내용부분입니다. -->
+        <form class="content box-modification-inner div-center" name="join_form" id="join_form">
+            <h1>회원정보 수정</h1>
+
+            <!-- 아이디-->
+            <div class="form-group">
+                <label for="user_id" class="labeltag">아이디</label>
+                <div class="input-100">
+                    <input type="text" name="user_id" id="user_id" class="form-control" placeholder="아이디 입력" />
+                </div>
+            </div>
+
+            <!-- 이메일-->
+            <div class="form-group">
+                <label for="email" class="labeltag">이메일</label>
+                <div class="input-100">
+                    <input type="email" name="email" id="email" class="form-control" placeholder="이메일 입력" />
+                </div>
+            </div>
+
+            <!-- 비밀번호-->
+            <div class="form-group">
+                <label for="user_pw" class="labeltag">비밀번호</label>
+                <div class="input-100">
+                    <input type="password" name="user_pw" id="user_pw" class="form-control" placeholder="비밀번호 입력" />
+                </div>
+                <div class="input-100">
+                    <input type="password" name="user_pw_re" id="user_pw_re" class="form-control"
+                        placeholder="비밀번호 재입력" />
+                </div>
+            </div>
+
+            <!-- 이름-->
+            <div class="form-group">
+                <label for="user_name" class="labeltag">이름</label>
+                <div class="input-100">
+                    <input type="text" name="user_name" id="user_name" class="form-control" />
+                </div>
+            </div>
+
+            <!-- 연락처-->
+            <div class="form-group">
+                <label for="tel" class="labeltag">연락처</label>
+                <div class="input-100">
+                    <input type="tel" name="tel" id="tel" class="form-control" placeholder="010-0000-0000" />
+                </div>
+            </div>
+
+            <!-- 주소지-->
+            <div class="form-group">
+                <label for="postcode" class="labeltag">주소지</label>
+                <div class="flex">
+                    <div class="input-100">
+                        <input type="text" name="postcode" id="postcode" class="form-control justify" placeholder="우편번호"
+                            readonly />
+                    </div>
+                    <div class="input-100">
+                        <button type="button" onclick="sample3_execDaumPostcode()" class="form-control">우편번호찾기</button>
+                    </div>
+                </div>
+                <div class="input-100">
+                    <input type="text" name="address" id="address" class="form-control" placeholder="주소" readonly />
+                </div>
+                <div class="flex">
+                    <div class="input-100">
+                        <input type="text" name="detailAddress" id="detailAddress" class="form-control justify"
+                            placeholder="상세주소" />
+                    </div>
+                    <div class="input-100">
+                        <input type="text" name="extraAddress" id="extraAddress" class="form-control" placeholder="참고항목"
+                            readonly />
+                    </div>
+                </div>
+                <div id="wrap">
+                    <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap"
+                        style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1"
+                        onclick="foldDaumPostcode()" alt="접기 버튼">
+                </div>
+            </div>
+
+            <!-- 생년월일-->
+            <div class="form-group">
+                <label class="labeltag">생년월일</label>
+                <div class="input-100">
+                    <input type="date" name="user_date" id="user_date" class="form-control" />
+                </div>
+            </div>
+
+            <!-- 이용약관&개인정보취급방침-->
+            <div class="form-group">
+                <div class="text-center">
+                    <button type="submit">회원정보 수정하기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+    </section>
+    <!-- 푸터부분입니다. -->
+    <footer class="footer">
+        <!-- 푸터 아이콘입니다 -->
+        <div class="footer-icon">
+        </div>
+        <!-- 주소지 및 정보입니다. -->
+        <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
+        <address>Address | 서울특별시 강남구 w타워</address>
+        <p>Customer Service | 0000-0000</p>
+        <p>Business Lisense | 12312-123-12</p>
+
+        <p class="contact">Contact us</p>
+        <p>ezenprojectUS!@contacts.co.kr</p>
+        <p class="copyright">Copyright &copy; 2021 Dessert40 all Right Reserved</p>
+    </footer>
+    </div>
+    <!-- 카카오 다음 주소지-->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <!-- 유효성 검사-->
+    <script src="../js/regex_helper.js"></script>
+    <script>
+        // 우편번호 찾기 찾기 화면을 넣을 element
+        var element_wrap = document.getElementById('wrap');
+
+        function foldDaumPostcode() {
+            // iframe을 넣은 element를 안보이게 한다.
+            element_wrap.style.display = 'none';
+        }
+
+        function sample3_execDaumPostcode() {
+            // 현재 scroll 위치를 저장해놓는다.
+            var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                    var addr = ''; // 주소 변수
+                    var extraAddr = ''; // 참고항목 변수
+
+                    //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                        addr = data.roadAddress;
+                    } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                        addr = data.jibunAddress;
+                    }
+
+                    // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                    if (data.userSelectedType === 'R') {
+                        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        // 건물명이 있고, 공동주택일 경우 추가한다.
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        // 조합된 참고항목을 해당 필드에 넣는다.
+                        document.getElementById("extraAddress").value = extraAddr;
+
+                    } else {
+                        document.getElementById("extraAddress").value = '';
+                    }
+
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('postcode').value = data.zonecode;
+                    document.getElementById("address").value = addr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById("detailAddress").focus();
+
+                    // iframe을 넣은 element를 안보이게 한다.
+                    // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
+                    element_wrap.style.display = 'none';
+
+                    // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
+                    document.body.scrollTop = currentScroll;
+                },
+                // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
+                onresize: function (size) {
+                    element_wrap.style.height = size.height + 'px';
+                },
+                width: '100%',
+                height: '100%'
+            }).embed(element_wrap);
+
+            // iframe을 넣은 element를 보이게 한다.
+            element_wrap.style.display = 'block';
+        }
+    </script>
+    <script type="text/javascript">
+        document.querySelector("#join_form").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const regexHelper = new RegexHelper();
+
+            //아이디 유효성 검사
+            if (!regexHelper.value("#user_id", "아이디를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.min_length("#user_id", 4, "아이디는 최소 4자 이상 입력 가능합니다.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#user_id", 20, "아이디는 최대 20자 까지만 입력 가능합니다.")) {
+                return false;
+            }
+            if (!regexHelper.eng_num("#user_id", "아이디는 영어와 숫자 조합만 입력 가능합니다.")) {
+                return false;
+            }
+
+            //이메일 유효성 검사
+            if (!regexHelper.value("#email", "이메일을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.email("#email", "이메일 주소가 잘못되었습니다.")) {
+                return false;
+            }
+
+            //비밀번호 유효성 검사
+            if (!regexHelper.value("#user_pw", "비밀번호를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.min_length("#user_pw", 4, "비밀번호는 최소 4자 이상 입력 가능합니다.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#user_pw", 20, "비밀번호는 최대 20자 까지만 입력 가능합니다.")) {
+                return false;
+            }
+            if (!regexHelper.compare_to("#user_pw", "#user_pw_re", "비밀번호 확인이 잘못되었습니다.")) {
+                return false;
+            }
+
+            //이름 유효성 검사
+            if (!regexHelper.value("#user_name", "이름을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.min_length("#user_name", 2, "이름은 최소 2자 이상 입력 가능합니다.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#user_name", 20, "이름은 최대 20자 까지만 입력 가능합니다.")) {
+                return false;
+            }
+            if (!regexHelper.kor("#user_name", "이름은 한글만 입력 가능합니다.")) {
+                return false;
+            }
+
+            //연락처 유효성 검사
+            if (!regexHelper.value("#tel", "연락처를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.phone("#tel", "연락처가 잘못되었습니다.")) {
+                return false;
+            }
+
+            //우편번호 유효성 검사
+            if (!regexHelper.value("#postcode", "우편번호를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.value("#address", "주소를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.value("#detailAddress", "상세주소를 입력하세요.")) {
+                return false;
+            }
+
+            //생년월일 유효성 검사
+            if (!regexHelper.value("#user_date", "생년월일을 선택해주세요.")) {
+                return false;
+            }
+            Swal.fire({
+                text: "회원가입을 환영합니다.",
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.href = ""; //넘어갈 페이지 설정해야됨
+                }
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+</body>
+
+</html>

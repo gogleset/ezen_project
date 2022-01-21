@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/admin/layout.css">
+</head>
+
+<body>
+    <!-- 헤더 영역입니다. -->
+    <div class="container">
+        <div class="header">
+            <h2 class="pull-left admin-title">dessert40 관리시스템</h2>
+            <button class="btn btn-danger pull-right admin-logout" id="logout" type="button">Logout</button>
+            <span class="pull-right admin-username" id="username">정임최</span>
+            <span class="pull-right admin-login">Login :&nbsp;</span>
+        </div>
+    </div>
+    <!-- 메뉴바의 색상 테마 지정 -->
+    <div class="navbar navbar-inverse">
+        <!-- 메뉴의 영역 -->
+        <div class="container">
+            <!-- nav바와 container만 쓰면 위에 고정된 레이아웃만 나옴-->
+            <!-- 로고 -->
+
+            <!-- 헤더 및 검정 바 영역입니다. -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <!-- 회원정보 및 다른 버튼입니다. -->
+                <button class="btn btn-default pull-left nav-btn" type="button">회원정보</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">상품관리</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">주문관리</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">이벤트</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">QnA관리</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-header">
+            <h3 class="content-title pull-left">회원정보</h3>
+            <span class="content-sub-title pull-right">홈-회원정보</span>
+        </div>
+    </div>
+    <form class="container">
+        <div class="setting-container">
+            <div class="admin-box-setting">
+                <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
+                <button class="btn btn-primary pull-left btn-admin-setting" id="logout" type="button">검색</button>
+                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">삭제</button>
+            </div>
+        </div>
+    </form>
+    <div class="container">
+        <table class="table table-bordered table-hover table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>고객명</th>
+                    <th>아이디</th>
+                    <th>이메일 주소</th>
+                    <th>휴대폰 번호</th>
+                    <th>주소</th>
+                    <th>가입일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                </tr>
+                <tr>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                </tr>
+                <tr>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

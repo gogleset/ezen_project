@@ -1,0 +1,132 @@
+/* 
+@Filename: modification.css
+@Author: 최진 (seul5106@gmail.com)
+@description:  The file to be used in the modification.html file.
+*/
+.box-modification-inner{
+    width: 95%;
+    height: 900px;
+    margin-bottom: 10px;
+}
+.form-group:after {
+    content: "";
+    display: block;
+    clear: both;
+    float: none;
+}
+.form-group {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.form-group:last-child {
+    padding-top: 50px;
+}
+
+h1 {
+    padding: 0 0;
+    font-size: 24px;
+}
+
+.labeltag {
+    width: 100%;
+    display: flex;
+    float: left;
+    font-size: 16px;
+    padding-top: 7px;
+    padding-bottom: 2px;
+}
+
+.input-100 {
+    width: 100%;
+    padding: 5px 0;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    height: 30px;
+    padding: 5px 0;
+    font-size: 14px;
+    border: 1px solid rgb(175, 175, 175);
+}
+
+.text-center {
+    text-align: center;
+}
+
+
+/* input태그 css. */
+
+input {
+    border-radius: 6px;
+    text-indent: 3px;
+}
+
+input:focus {
+    outline: 1px solid rgb(20, 20, 20);
+}
+
+#tel::-webkit-input-placeholder {
+    text-align: center;
+}
+
+
+/* 정렬css. */
+
+.flex {
+    width: 100%;
+    display: flex;
+}
+
+.justify {
+    width: 95%;
+    justify-content: space-between;
+}
+
+.flex-justify-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.flex-justify-center a {
+    padding-top: 7px;
+    margin: 0 20px;
+}
+
+
+/* 버튼css. */
+
+button {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    color: #eee;
+    background: #000;
+    border-radius: 6px;
+    border: #000;
+}
+
+button:active {
+    background-color: rgb(85, 85, 85);
+}
+
+
+/* 우편번호 찾기 버튼. */
+
+.input-100 button {
+    height: 42px;
+}
+
+
+/* 주소지. */
+
+#wrap {
+    display: none;
+    border: 1px solid;
+    width: 100%;
+    height: 300px;
+    margin: 5px 0;
+    position: relative;
+}

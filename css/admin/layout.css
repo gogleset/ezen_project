@@ -1,0 +1,80 @@
+/* 
+@Filename: layout.css
+@Author: 최진 (choij2494@gmail.com)
+@description: The file to be used in the index.html file.
+*/
+
+@charset "utf-8";
+
+.container {
+  font-family: "Noto Sans KR Bold", sans-serif;
+}
+/* 헤더입니다. */
+.header {
+  height: 50px;
+  width: 100%;
+}
+
+.admin-title,
+.admin-logout,
+.admin-username,
+.admin-login {
+  display: inline-block;
+}
+/* dessert40 관리시스템 */
+.admin-title {
+  margin-top: 9px;
+}
+/* 로그아웃버튼 */
+.admin-logout {
+  margin-top: 9px;
+}
+/* 로그인 유저, Login: */
+.admin-username,
+.admin-login {
+  margin-top: 17px;
+}
+.admin-username {
+  margin-right: 10px;
+}
+/* 회원정보, 상품관리, 주문관리, 이벤트, QnA관리 버튼입니다.*/
+.nav-btn {
+  margin-top: 6px;
+  margin-right: 10px;
+}
+.nav-btn:first-child {
+  margin-left: -10px;
+}
+/* 회원정보 제목입니다. */
+.content-title {
+  margin-top: -6px;
+}
+/* 홈-회원정보 영역입니다. */
+.content-sub-title {
+  margin-top: -2px;
+}
+
+.setting-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 50px;
+}
+.admin-box-setting {
+  /* border-radius: 5px; */
+  width: 100%;
+  height: 100%;
+  background-color: rgb(228, 224, 217);
+}
+
+.admin-searchbar {
+  display: inline-block;
+  margin-top: 8px;
+  margin-right: 10px;
+  margin-left: 5px;
+  width: 25%;
+}
+.btn-admin-setting {
+  display: inline-block;
+  margin-top: 8px;
+  margin-right: 10px;
+}
