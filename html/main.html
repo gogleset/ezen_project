@@ -90,7 +90,7 @@
     <!-- menus 데이터와 query parameter를 이용해서 메뉴명 등록하기 -->
     <script>
         const searchParams = new URLSearchParams(decodeURI(window.location.search));
-        const menuId = parseInt(searchParams.get("menus"));
+        const menuId = parseInt(searchParams.get("menu"));
         const menuName = menus[menuId];
         console.log(menuName);
 
