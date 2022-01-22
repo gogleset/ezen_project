@@ -5,3 +5,4 @@ const menus = {
   4: "쿠키&파이",
   5: "베이커리",
 };
+console.log(menus[1]);

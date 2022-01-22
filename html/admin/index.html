@@ -1,3 +1,9 @@
+<!--
+    @Filename: layout.css
+    @Author: 최진 (choij2494@gmail.com)
+    @description: The file to be used in the admin-index.html file.
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,13 +52,14 @@
             </div>
         </div>
     </div>
-
+    <!-- 서브 타이틀 영역입니다. -->
     <div class="container">
         <div class="content-header">
             <h3 class="content-title pull-left">회원정보</h3>
             <span class="content-sub-title pull-right">홈-회원정보</span>
         </div>
     </div>
+    <!-- 검색과 삭제를 감싸는 영역입니다. -->
     <form class="container">
         <div class="setting-container">
             <div class="admin-box-setting">
@@ -62,7 +69,8 @@
             </div>
         </div>
     </form>
-    <div class="container">
+    <!-- 데이터 테이블 영역입니다. -->
+    <div class="container table-container">
         <table class="table table-bordered table-hover table-condensed table-striped">
             <thead>
                 <tr>
@@ -99,11 +107,37 @@
                     <td>내용1</td>
                     <td>내용1</td>
                 </tr>
+                <tr>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                    <td>내용1</td>
+                </tr>
             </tbody>
         </table>
     </div>
+    <!-- 페이지 네이션 영역입니다. -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
 
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>

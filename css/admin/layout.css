@@ -1,11 +1,26 @@
 /* 
 @Filename: layout.css
 @Author: 최진 (choij2494@gmail.com)
-@description: The file to be used in the index.html file.
+@description: The file to be used in the admin-index.html file.
 */
 
 @charset "utf-8";
 
+/* 마진 오토 */
+.div-center {
+  display: block;
+  margin: auto;
+}
+/* 숨겨진 요소를 보이게 합니다. */
+.display-on{
+  display: block;
+}
+/* 보이는 요소를 숨깁니다. */
+.display-off{
+  display: none;
+}
+/* 보이는 요소 */
+/* 요소 부모 계층에서의 공통적으로 적용될 속성입니다. */
 .container {
   font-family: "Noto Sans KR Bold", sans-serif;
 }
@@ -37,6 +52,7 @@
 .admin-username {
   margin-right: 10px;
 }
+
 /* 회원정보, 상품관리, 주문관리, 이벤트, QnA관리 버튼입니다.*/
 .nav-btn {
   margin-top: 6px;
@@ -45,7 +61,7 @@
 .nav-btn:first-child {
   margin-left: -10px;
 }
-/* 회원정보 제목입니다. */
+/* 서브 제목입니다. */
 .content-title {
   margin-top: -6px;
 }
@@ -54,18 +70,20 @@
   margin-top: -2px;
 }
 
+/* 검색과 버튼들의 회색 영역 박스입니다. */
 .setting-container {
   max-width: 1200px;
   margin: 0 auto;
   height: 50px;
 }
+/*  */
 .admin-box-setting {
   /* border-radius: 5px; */
   width: 100%;
   height: 100%;
   background-color: rgb(228, 224, 217);
 }
-
+/* 검색 텍스트 바 버튼입니다. */
 .admin-searchbar {
   display: inline-block;
   margin-top: 8px;
@@ -73,8 +91,24 @@
   margin-left: 5px;
   width: 25%;
 }
+/* 검색 버튼과 삭제 버튼입니다. */
 .btn-admin-setting {
   display: inline-block;
   margin-top: 8px;
   margin-right: 10px;
+}
+
+/* 테이블 표시 영역입니다. */
+.table-container{
+  height: 600px;
+  /* background-color: yellowgreen; */
+}
+/* 페이지네이션 영역입니다. */
+.pagination{
+  display: block;
+  text-align: center;
+}
+.pagination > li > a{
+  float: none;
+  margin-left: -5px;
 }
