@@ -1,80 +1,101 @@
-/* 
-@Filename: main.css
-@Author: 임다정 (dazoo0221@gmail.com)
-@description: CSS main apply it.
-*/
 
-/* 내용 부분 전체 */
-.wrap{
-    width: 95%;
-    margin: auto;
+/* 이벤트 배너 영역  */
+.event-box{
+  width: 95%;
+  height: 200px;
+  margin: 30px auto;
+  background-color: teal;
+}
+
+/* 컨텐츠 영역 여백 조정 */
+.menu-wrap {
+  width: 95%;
+  height: auto;
+  margin: 40px auto;
+}
+
+.menu-wrap:first-child {
+  margin-top: -40px;
+}
+
+/* 카테고리명 설정 */
+
+.menu-title{
+  font-size: 0.9em;
+  font-weight: bold;
+  position: relative;
+}
+
+.menu-title::before{
+  content: '';
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  display: block;
+  width: 100%;
+  height: 30%;
+  background-color: #c0c0c0;
+}
+
+/* 스위퍼 전체 영역 */
+.swiper-container{
+  width: 100%;
+  margin: 20px 0;
+}
+
+/* 스위퍼 페이지 1개 영역 크기 설정 */
+.swiper-slide{
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  /* pagination과의 여백*/
+  margin-bottom: 15px;
+}
+
+/* pagination 하단 이동 */
+
+.swiper-pagination {
+  top: auto !important;
+ /*  width: 95% !important; */
+  justify-content: center !important;
 }
 
 
-
-/* 타이틀 영역 */
-.title h3{
-    padding-top: 10px;
-    font-size: 0.8em;
+/* pagination bar 색 변경 */
+.swiper-pagination-progressbar-fill {
+  background-color: black !important;
 }
 
 
-/* menu-wrap 영역 입니다 */
-.menu-wrap{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 15px 0;
+/* 이미지가 들어갈 박스 영역 */
+.inner-box {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
 }
 
-
-/* product 영역입니다 */
-.product{
-    padding: 8px;
-    width: 42%;
-    height: 250px;
-    margin: 4px;
-    border-radius:10px;
-    box-shadow: 0 0 21px -4px #C4C4C4;
+/* 이미지 사이즈 */
+.swiper-slide img{
+  display: block;
+  width: 90%;
+  margin: auto;
+  border-radius: 50%;
+  background-color: #f3f4f5;
+  flex: 1;
 }
 
-.product .frame{
-    width: 130px;
-    height: 130px;
-    margin: 15px auto;
-    background-color: #ccc;
+/* 메뉴 글자 사이즈 */
+.swiper-slide span{
+  display: block;
+  line-height: 35px;
+  font-size: 0.7em;
+  text-align: center;
+  flex: 1;
 }
-
-.product .frame img{
-    height: 100%;
-    text-align: center;
-}
-
-.product .txt{
-    margin-top: 20px;
-}
-
-.product .txt span{
-    display: block;
-    width: 100px;
-    height: 16px;
-    font-size: 0.7em;
-    text-align: center;
-    margin: auto;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.product button{
-    margin: auto;
-    display: block;
-    color: #000;
-    font-size: 0.6em;
-    padding: 4px 6px;
-    border-radius: 15px;
-    border: 2px  solid #000;
-    background-color: #fff;
-}
-
 
 

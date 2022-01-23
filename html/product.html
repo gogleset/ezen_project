@@ -1,0 +1,142 @@
+<!-- 
+@Filename: main.html
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: main HTML
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+    <title>main</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- CSS 참조 -->
+    <link rel="stylesheet" href="../css/common.css" />
+    <link rel="stylesheet" href="../css/headerfooter.css" />
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/product.css" />
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <header class="header clearfix">
+            <a href="#">
+                <!-- 상단 로고 부분입니다. -->
+                <div class="header-icon pull-left">
+                    <h1>logo</h1>
+                </div>
+            </a>
+            <!-- 상단 탭 메뉴를 표시합니다 -->
+            <a href="./menu.html">
+                <div class="header-tab pull-right">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </a>
+        </header>
+
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <div class="wrap">
+                <div class="title">
+                    <h1>Dessert40 Menu</h1>
+                    <h3 id="menu-name">메뉴명</h3>
+                </div>
+                <div class="menu-wrap">
+                    <!-- <div class="product">
+              <div class="frame">
+                <img src="" alt="" />
+              </div>
+              <div class="txt">
+                <span>상품명:</span>
+                <span>0,000원</span>
+              </div>
+              <button class="btn-detail">자세히보기</button>
+            </div> -->
+                </div>
+        </section>
+
+        <!-- 푸터부분입니다. -->
+        <footer class="footer">
+            <!-- 푸터 아이콘입니다 -->
+            <div class="footer-icon"></div>
+            <!-- 주소지 및 정보입니다. -->
+            <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
+            <address>Address | 서울특별시 강남구 w타워</address>
+            <p>Customer Service | 0000-0000</p>
+            <p>Business Lisense | 12312-123-12</p>
+
+            <p class="contact">Contact us</p>
+            <p>ezenprojectUS!@contacts.co.kr</p>
+            <p class="copyright">
+                Copyright &copy; 2021 Dessert40 all Right Reserved
+            </p>
+        </footer>
+    </div>
+
+    <!-- menus 데이터 불러오기 -->
+    <script type="text/javascript" src="../fake_data/menus.js"></script>
+    <!-- menus 데이터와 query parameter를 이용해서 메뉴명 등록하기 -->
+    <script>
+        const searchParams = new URLSearchParams(decodeURI(window.location.search));
+
+        // 사용자가 메인 페이지 진입시엔 케이크&티라미슈 상품 노출
+        // 만약 다른 상품이 보고싶다면 메뉴 탭을 눌러 다른 카테고리로 이동
+        const menuId = (searchParams.get("menu") !== null) ? parseInt(searchParams.get("menu")) : 1;
+        const menuName = menus[menuId];
+        console.log(menuName);
+
+        document.querySelector("#menu-name").innerText = menuName;
+    </script>
+
+    <!-- 가격 이쁘게 보여주는 함수 가져오기 -->
+    <script type="text/javascript" src="../js/number_utils.js"></script>
+    <!-- menuItems 데이터 불러오기 -->
+    <script type="text/javascript" src="../fake_data/menu_items.js"></script>
+    <script>
+        // menuId에 해당하는 items 불러오기
+        const items = menuItems[menuId];
+
+        // 해당 items 출력하기
+        const target = document.querySelector(".menu-wrap");
+
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+
+            // 가격 3자리마다 , 찍어주기
+            const localePrice = formatPrice(item.price);
+
+            const element = document.createElement("div");
+            element.classList.add("product");
+
+            element.innerHTML = `<div class="frame">
+            <img src="${item.image}" alt="" />
+        </div>
+        <div class="txt">
+            <span>상품명:${item.name}</span>
+            <span>${localePrice}원</span>
+        </div>
+        <button class="btn-detail">자세히보기</button>`;
+            target.appendChild(element);
+
+            // 자세히보기 버튼 눌렀을 때 동작
+            const detailBtn = element.querySelector("button");
+            detailBtn.addEventListener("click", (e) => {
+                window.location.href = `./goods_detail.html?menu=${menuId}&itemId=${i}`;
+            });
+        };
+    </script>
+</body>
+
+</html>

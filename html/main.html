@@ -1,30 +1,29 @@
-<!-- 
-@Filename: main.html
-@Author: 임다정 (dazoo0221@gmail.com)
-@description: main HTML
- -->
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
-    <title>main</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
     <!-- 웹폰트(한글) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 
     <!-- 폰트어썸 -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <!-- CSS 참조 -->
-    <link rel="stylesheet" href="../css/common.css" />
-    <link rel="stylesheet" href="../css/headerfooter.css" />
-    <link rel="stylesheet" href="../css/reset.css" />
-    <link rel="stylesheet" href="../css/main.css" />
+
+    <!--swiper.js   -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <!-- css 참조 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/main.css">
+
 </head>
 
 <body>
@@ -39,103 +38,151 @@
                 </div>
             </a>
             <!-- 상단 탭 메뉴를 표시합니다 -->
-            <a href="./menu.html">
+            <a href="#">
                 <div class="header-tab pull-right">
                     <i class="fas fa-bars"></i>
                 </div>
             </a>
         </header>
-
         <!-- 내용부분입니다. -->
-        <section class="content">
+        <section class="content box-home-section">
             <div class="wrap">
-                <div class="title">
-                    <h1>Dessert40 Menu</h1>
-                    <h3 id="menu-name">메뉴명</h3>
+                <!-- 제목부분입니다. -->
+                <h2 class="title">Event</h2>
+                <div class="event-box"></div>
+                <div class="box-home-event div-center">
                 </div>
-                <div class="menu-wrap">
-                    <!-- <div class="product">
-              <div class="frame">
-                <img src="" alt="" />
-              </div>
-              <div class="txt">
-                <span>상품명:</span>
-                <span>0,000원</span>
-              </div>
-              <button class="btn-detail">자세히보기</button>
-            </div> -->
+                <!-- 상품설명 부분입니다. -->
+                <h2 class="title">Dessert40 Menu</h2>
+
+                <!-- 상품 이미지 영역 -->
+                <div id="menu-container">
+                    <div class="menu-wrap div-center">
+                        <!-- 메뉴 카테고리 -->
+                        <span class="menu-title"></span>
+                        <div class="swiper swiper-container">
+                            <ul class="swiper-wrapper">
+                                <!--<li class="swiper-slide">
+                                    <img src="${}" alt="">
+                                    <span id="menu-name">
+                                        ${}
+                                    </span>
+                                </li> -->
+                            </ul>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
                 </div>
-        </section>
+            </div>
+    </div>
+    </section>
+    <!-- 푸터부분입니다. -->
+    <footer class="footer">
+        <!-- 푸터 아이콘입니다 -->
+        <div class="footer-icon">
+        </div>
+        <!-- 주소지 및 정보입니다. -->
+        <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
+        <address>Address | 서울특별시 강남구 w타워</address>
+        <p>Customer Service | 0000-0000</p>
+        <p>Business Lisense | 12312-123-12</p>
 
-        <!-- 푸터부분입니다. -->
-        <footer class="footer">
-            <!-- 푸터 아이콘입니다 -->
-            <div class="footer-icon"></div>
-            <!-- 주소지 및 정보입니다. -->
-            <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
-            <address>Address | 서울특별시 강남구 w타워</address>
-            <p>Customer Service | 0000-0000</p>
-            <p>Business Lisense | 12312-123-12</p>
-
-            <p class="contact">Contact us</p>
-            <p>ezenprojectUS!@contacts.co.kr</p>
-            <p class="copyright">
-                Copyright &copy; 2021 Dessert40 all Right Reserved
-            </p>
-        </footer>
+        <p class="contact">Contact us</p>
+        <p>ezenprojectUS!@contacts.co.kr</p>
+        <p class="copyright">Copyright &copy; 2021 Dessert40 all Right Reserved</p>
+    </footer>
     </div>
 
-    <!-- menus 데이터 불러오기 -->
-    <script type="text/javascript" src="../fake_data/menus.js"></script>
-    <!-- menus 데이터와 query parameter를 이용해서 메뉴명 등록하기 -->
-    <script>
-        const searchParams = new URLSearchParams(decodeURI(window.location.search));
-       
-        // 사용자가 메인 페이지 진입시엔 케이크&티라미슈 상품 노출
-        // 만약 다른 상품이 보고싶다면 메뉴 탭을 눌러 다른 카테고리로 이동
-        const menuId = (searchParams.get("menu") !== null) ? parseInt(searchParams.get("menu")) : 1;
-        const menuName = menus[menuId];
-        console.log(menuName);
-
-        document.querySelector("#menu-name").innerText = menuName;
-    </script>
-
-    <!-- 가격 이쁘게 보여주는 함수 가져오기 -->
-    <script type="text/javascript" src="../js/number_utils.js"></script>
-    <!-- menuItems 데이터 불러오기 -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!--      menuItems 데이터 불러오기 -->
     <script type="text/javascript" src="../fake_data/menu_items.js"></script>
+    <!--      menus 데이터 불러오기 -->
+    <script src="../fake_data/menus.js"></script>
     <script>
-        // menuId에 해당하는 items 불러오기
-        const items = menuItems[menuId];
+        const menuContainer = document.querySelector("#menu-container");
+        for (let menuId in menus) {
+            // 임시로 만든 div에 menu-wrap을 넣음
+            const template = document.createElement("div");
+            template.innerHTML = `<div class="menu-wrap div-center">
+                <span class="menu-title">${menus[menuId]}</span>
+                <div class="swiper-${menuId} swiper-container">
+                    <div class="swiper-wrapper">
 
-        // 해당 items 출력하기
-        const target = document.querySelector(".menu-wrap");
+                    </div>
+                    <div class="swiper-pagination swiper-pagination-${menuId}"></div>
+                </div>
+            </div>`;
 
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
+            // menu-wrap만 사용할거니까 firstChild로 꺼냄
+            const menuWrapElement = template.firstChild;
 
-            // 가격 3자리마다 , 찍어주기
-            const localePrice = formatPrice(item.price);
+            // items 출력
+            const items = menuItems[menuId];
+            const target = menuWrapElement.querySelector(".swiper-wrapper");
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const element = document.createElement("div");
+                element.classList.add("swiper-slide")
+                element.innerHTML = `
+                    <div class="slide-inner">
+                        <img src="${item.image}" alt=""><span><h3>${item.name}</h3></span>
+                    </div>`;
+                target.appendChild(element);
+            };
 
-            const element = document.createElement("div");
-            element.classList.add("product");
+            menuContainer.appendChild(menuWrapElement);
 
-            element.innerHTML = `<div class="frame">
-            <img src="${item.image}" alt="" />
-        </div>
-        <div class="txt">
-            <span>상품명:${item.name}</span>
-            <span>${localePrice}원</span>
-        </div>
-        <button class="btn-detail">자세히보기</button>`;
-            target.appendChild(element);
+            var swiper = new Swiper(`.swiper-${menuId}`, {
+                //기본 셋팅 
+                slidesPerView: 'auto', // 한 슬라이드에 보여줄 갯수
+                //방향 셋팅 vertical 수직, horizontal 수평 설정이 없으면 수평 
+                direction: 'horizontal',
+                //한번에 보여지는 페이지 숫자 
+                slidesPerView: 2,
+                //페이지와 페이지 사이의 간격 
+                spaceBetween: 15,
+                //드레그 기능 true 사용가능 false 사용불가 
+                debugger: true,
+                //마우스 휠기능 true 사용가능 false 사용불가 
+                mousewheel: true,
+                //반복 기능 true 사용가능 false 사용불가 
+                /* loop: true, */
+                //선택된 슬라이드를 중심으로 true 사용가능 false 사용불가 djqt 
+                centeredSlides: false,
+                // 페이지 전환효과 slidesPerView효과와 같이 사용 불가 
+                // effect: 'fade', 
+                //자동 스크를링 
+                /*autoplay: {
+                    //시간 1000 이 1초 
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },*/
 
-            // 자세히보기 버튼 눌렀을 때 동작
-            const detailBtn = element.querySelector("button");
-            detailBtn.addEventListener("click", (e) => {
-                window.location.href = `./goods_detail.html?menu=${menuId}&itemId=${i}`;
+                //페이징 
+                pagination: {
+                    //페이지 기능 
+                    el: `.swiper-pagination-${menuId}`,
+                    //클릭 가능여부 
+                    clickable: false,
+                    dynamicBullets: true,
+                    type: "progressbar",
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 4,
+                        spaceBetween: 40,
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 50,
+                    },
+                },
             });
-        };
+        }
     </script>
 </body>
 
