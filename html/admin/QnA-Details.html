@@ -1,0 +1,113 @@
+<!--
+    @Filename: layout.css
+    @Author: 최진 (choij2494@gmail.com)
+    @description: The file to be used in the admin-index.html file.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/admin/layout.css">
+    <link rel="stylesheet" href="../../css/admin/QnA-Details.css">
+</head>
+
+<body>
+    <!-- 헤더 영역입니다. -->
+    <div class="container">
+        <div class="header">
+            <h2 class="pull-left admin-title">dessert40 관리시스템</h2>
+            <button class="btn btn-danger pull-right admin-logout" id="logout" type="button">Logout</button>
+            <span class="pull-right admin-username" id="username">정임최</span>
+            <span class="pull-right admin-login">Login :&nbsp;</span>
+        </div>
+    </div>
+    <!-- 메뉴바의 색상 테마 지정 -->
+    <div class="navbar navbar-inverse">
+        <!-- 메뉴의 영역 -->
+        <div class="container">
+
+            <!-- 헤더 및 검정 바 영역입니다. -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <!-- 회원정보 및 다른 버튼입니다. -->
+                <button class="btn btn-default pull-left nav-btn" type="button">회원정보</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">상품관리</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">주문관리</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">이벤트</button>
+                <button class="btn btn-default pull-left nav-btn" type="button">QnA관리</button>
+            </div>
+        </div>
+    </div>
+    <!-- 서브 타이틀 영역입니다. -->
+    <div class="container">
+        <div class="content-header">
+            <h3 class="content-title pull-left">QnA 상세</h3>
+            <span class="content-sub-title pull-right">홈-QnA-QnA상세</span>
+        </div>
+    </div>
+    <!-- 문의내용, 답변 영역입니다. -->
+    <div class="container">
+        <div class="content-header">
+            <h4 class="qna-details-title">문의 내용</h4>
+            <div class="qna-details-title-content">
+                <!-- 최대 문자수 2500자?? 정해야된다. -->
+                <span> tempore nulla dicta, nemo ipsam? Laborum exercitationem harum esse perspiciatis id?
+
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores quidem officiis debitis
+                    accusantium vel eius, quia fugiat, deserunt laudantium facilis praesentium animi excepturi numquam?
+                    Dolorum nostrum magni fuga ipsa dignissimos?
+                </span>
+            </div>
+            <h4 class="qna-details-answer">답변</h4>
+            <form>
+                <textarea class="qna-details-answer-content" placeholder="답변을 적어주세요"></textarea>
+                <button type="button" id="qnaSave" class="btn btn-primary btn-qna-decision pull-right">등록</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- 스위트 알럿 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelector('#qnaSave').addEventListener('click', (e) => {
+            Swal.fire({
+                title: '답변을 등록하시겠습니까?',
+                text: "등록하시면 수정하실 수 없습니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '등록',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('등록이 완료되었습니다.','', 'success').then((result) => {
+                        if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
+                    })
+                }
+
+            });
+        })
+    </script>
+
+</body>
+
+</html>

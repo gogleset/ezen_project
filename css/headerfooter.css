@@ -82,6 +82,6 @@
 /* 내용부분입니다. */
 .content {
     padding-top:80px;
-    height: 650px;
+    min-height: 650px;
     width: 100%;
 }

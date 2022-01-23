@@ -1,0 +1,20 @@
+/* 
+@Filename: QnA-Details.css
+@Author: 최진 (choij2494@gmail.com)
+@description: The file to be used in the admin-QnA-Details.html file.
+*/
+
+.qna-details-title-content,.qna-details-answer-content{
+    display: block;
+    width: 100%;
+    min-height: 150px;
+    padding:10px;
+    border: 1px solid rgb(153, 153, 153);
+    border-radius:3px;
+}
+.qna-details-answer-content{
+    resize: none;
+}
+.btn-qna-decision{
+    margin-top:10px;
+}

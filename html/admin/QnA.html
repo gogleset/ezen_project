@@ -53,8 +53,8 @@
     <!-- 서브 타이틀 영역입니다. -->
     <div class="container">
         <div class="content-header">
-            <h3 class="content-title pull-left">회원정보</h3>
-            <span class="content-sub-title pull-right">홈-회원정보</span>
+            <h3 class="content-title pull-left">QnA</h3>
+            <span class="content-sub-title pull-right">홈-QnA</span>
         </div>
     </div>
     <!-- 검색과 삭제를 감싸는 영역입니다. -->
@@ -63,56 +63,31 @@
             <div class="admin-box-setting">
                 <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
                 <button class="btn btn-primary pull-left btn-admin-setting" id="logout" type="button">검색</button>
-                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">삭제</button>
             </div>
         </div>
     </form>
     <!-- 데이터 테이블 영역입니다. -->
     <div class="container table-container">
-        <table class="table table-bordered table-hover table-condensed table-striped">
+        <table class="table table-bordered table-hover table-condensed table-striped text-center">
             <thead>
                 <tr>
-                    <th>고객명</th>
-                    <th>아이디</th>
-                    <th>이메일 주소</th>
-                    <th>휴대폰 번호</th>
-                    <th>주소</th>
-                    <th>가입일</th>
+                    <th class="qna-content-header col-xs-6 text-center">내용</th>
+                    <th class="qna-date-header col-xs-2 text-center">답변 상태</th>
+                    <th class="qna-writer-header col-xs-2 text-center">작성자</th>
+                    <th class="qna-date-header col-xs-2 text-center">작성일</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td class="qna-content table-short-discription"><a href="#">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, voluptatibus sint aliquid sapiente et ullam repudiandae accusamus ex unde in asperiores eum harum deleniti perferendis tempora nostrum quos molestias explicabo!
+                    </a></td>
+                    <td class="qna-status">미등록</td>
+                    <td class="qna-writer">adasd;</td>
+                    <td class="qna-date">2012-02-03</td>
                 </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+                
+                
             </tbody>
         </table>
     </div>

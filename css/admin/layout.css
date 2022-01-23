@@ -19,6 +19,13 @@
 .display-off{
   display: none;
 }
+/* 테이블에서 말줄임표 표시입니다.(1줄) */
+.table-short-discription{
+  overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 0;
+}
 /* 보이는 요소 */
 /* 요소 부모 계층에서의 공통적으로 적용될 속성입니다. */
 .container {
