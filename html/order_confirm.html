@@ -1,0 +1,147 @@
+<!--
+ * @filename  : order_confirm.html
+ * @author    : 정한슬 (seul5106@gmail.com)
+ * @description : 주문확인(결제완료) html
+ * 
+ * 
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>Document</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- 구글 마테리얼 아이콘 -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- CSS 참조 파일 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/cart.css">
+    <link rel="stylesheet" href="../css/order_confirm.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <header class="header">
+            <a href="#">
+                <!-- 상단 로고 부분입니다. -->
+                <div class="header-icon pull-left">
+                    <h1>logo</h1>
+                </div>
+            </a>
+            <!-- 상단 탭 메뉴를 표시합니다 -->
+            <a href="#">
+                <div class="header-tab pull-right">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </a>
+        </header>
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <!-- 내용 안쪽부분입니다. -->
+            <div class="inner-content min-height">
+                <!-- 제목부분입니다. -->
+                <h1 class="cart-title title">주문이 완료되었습니다!</h1>
+                <!-- 제목 안쪽 미결제 항목부분입니다. -->
+                <div class="cart-sub-title">
+                    <span class="unpaid-count">상품 정보 확인</span>
+
+                </div>
+
+                <!-- 장바구니 목록을 카운트합니다. -->
+                <div class="box-cart-content">
+
+                    <div class="box-cart div-center clearfix">
+                        <!-- 상품이미지 부분입니다. -->
+                        <a href="#">
+                            <img class="pull-left" src="." alt="#">
+                        </a>
+                        <!-- 상품 정보 부분입니다. -->
+                        <div class="box-cart-inner pull-left">
+                            <span class="box-cart-prod pull-left">상품명:</span>
+                            <span class="box-cart-prod-name">ddddddddddddddddddddddddddddddddd</span>
+                            <span class="box-cart-money pull-right">100000원</span>
+                            <span class="cart-count-name">상품갯수:</span>
+                            <span class="cart-count">1</span>
+
+                        </div>
+                    </div>
+                    <div class="box-cart div-center clearfix">
+                        <!-- 상품이미지 부분입니다. -->
+                        <a href="#">
+                            <img class="pull-left" src="." alt="#">
+                        </a>
+                        <!-- 상품 정보 부분입니다. -->
+                        <div class="box-cart-inner pull-left">
+                            <span class="box-cart-prod pull-left">상품명:</span>
+                            <span class="box-cart-prod-name">~~~</span>
+                            <span class="box-cart-money pull-right">2원</span>
+                            <span class="cart-count-name">상품갯수:</span>
+                            <span class="cart-count">2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="delivery-confirm">
+                    <h2>배송 정보 확인</h2>
+                    <hr>
+                    <div class="delivery-info-name">
+                        <div class="delivery-form">
+                            <span class="text-indent">주문자 전화번호:</span>
+                            <span class="flex-grow">000-0000-0000</span>
+                        </div>
+                        <div class="delivery-form">
+                            <span class="text-indent">주문자 이름:</span>
+                            <span class="flex-grow">홍길동</span>
+                        </div>
+                        <div class="delivery-form">
+                            <span class="text-indent">주문자 주소:</span>
+                            <span class="flex-grow">서울 특별시 00구 00동 00번지 000아파트 000동 000호</span>
+                        </div>
+                        <div class="delivery-form">
+                            <span class="text-indent">주문자 이메일 주소:</span>
+                            <span class="flex-grow">ezen@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 결제 합계 부분입니다. -->
+            <div class="box-cart-total">
+                <h2>결제 합계</h2>
+                <hr>
+                <!-- 갯수 박스들 입니다. -->
+                <div class="box-total">
+                    <span class="prod-total">전체 상품 개수</span>
+                    <span class="prod-total-number pull-right">0개</span>
+                </div>
+                <hr>
+                <div class="box-total">
+                    <span class="money-total">상품 금액</span>
+                    <span class="money-total-number pull-right">0원</span>
+                </div>
+                <hr>
+                <div class="box-total">
+                    <span class="paid-money">결제 금액</span>
+                    <span class="paid-money-number pull-right">0원</span>
+                </div>
+                <hr style="margin-bottom: 0;">
+            </div>
+        </section>
+</body>
+
+</html>
