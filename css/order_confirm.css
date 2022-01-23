@@ -1,0 +1,83 @@
+/* 
+@Filename: order_confirm.css
+@Author: 정한슬 (seul5106@gmail.com)
+@description: 주문확인(결제완료)css
+*/
+
+
+/* 원래있던 cart.css 기본 참조하고 css수정해서 위치만 바꿈*/
+
+.unpaid-count {
+    font-weight: bold;
+}
+
+.box-cart-prod {
+    width: 49%;
+    margin: 0;
+    margin-top: 5px;
+}
+
+.box-cart-money {
+    text-align: right;
+    width: 49%;
+    margin: 0;
+    position: absolute;
+    bottom: 125px;
+    right: 5px;
+}
+
+.cart-count {
+    position: absolute;
+    left: 60px;
+    bottom: 39px;
+}
+
+.box-cart-prod-name {
+    display: block;
+    word-break: break-word;
+    width: 59%;
+}
+
+.cart-count-name {
+    font-size: 15px;
+    position: absolute;
+    top: 90px;
+}
+
+
+/* 배송정보*/
+
+.delivery-confirm {
+    position: relative;
+    margin-top: 50px;
+}
+
+.delivery-confirm h2 {
+    text-indent: 10px;
+}
+
+.delivery-confirm span {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.delivery-info-name {
+    margin: 0;
+    width: 100%;
+}
+
+.delivery-form {
+    width: 100%;
+    display: flex;
+}
+
+.text-indent {
+    flex-shrink: 0;
+    width: 140px;
+    text-indent: 10px;
+}
+
+.flex-grow {
+    color: rgb(88, 88, 88);
+    flex-grow: 1;
+}
