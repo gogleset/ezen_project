@@ -62,13 +62,13 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 <!-- 장바구니 목록을 카운트합니다. -->
                 <div class="box-cart-content">
 
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
+                    <!-- <div class="box-cart div-center clearfix"> -->
+                    <!-- 상품이미지 부분입니다. -->
+                    <!-- <a href="#">
                             <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
+                        </a> -->
+                    <!-- 상품 정보 부분입니다. -->
+                    <!-- <div class="box-cart-inner pull-left">
                             <input type="checkbox" class="check-prod pull-right" name="check" value="1">
                             <span class="box-cart-prod pull-left">상품명:</span>
                             <span class="box-cart-prod-name">~~~</span>
@@ -77,73 +77,10 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                             <span class="cart-count">1</span>
                             <input type="button" class="btn-minus-01-on pull-right" value="–">
                         </div>
-                    </div>
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
-                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">~~~</span>
-                            <span class="box-cart-money pull-right">2원</span>
-                            <input type="button" class="btn-plus-01-on pull-right" value="+">
-                            <span class="cart-count">2</span>
-                            <input type="button" class="btn-minus-01-on pull-right" value="–">
-                        </div>
-                    </div>
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
-                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">~~~</span>
-                            <span class="box-cart-money pull-right">3원</span>
-                            <input type="button" class="btn-plus-01-on pull-right" value="+">
-                            <span class="cart-count">3</span>
-                            <input type="button" class="btn-minus-01-on pull-right" value="–">
-                        </div>
-                    </div>
+                    </div> -->
 
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
-                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">~~~</span>
-                            <span class="box-cart-money pull-right">4원</span>
-                            <input type="button" class="btn-plus-01-on pull-right" value="+">
-                            <span class="cart-count">4</span>
-                            <input type="button" class="btn-minus-01-on pull-right" value="–">
-                        </div>
-                    </div>
 
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
-                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">~~~</span>
-                            <span class="box-cart-money pull-right">1000원</span>
-                            <input type="button" class="btn-plus-01-on pull-right" value="+">
-                            <span class="cart-count">5</span>
-                            <input type="button" class="btn-minus-01-on pull-right" value="–">
-                        </div>
-                    </div>
+
 
 
                 </div>
@@ -182,7 +119,29 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
         </section>
     </div>
     <script src="../js/number_utils.js"></script>
+    <script src="../fake_data/menu_items.js"></script>
     <script>
+        menuItems[1].forEach((v) => {
+            console.log(v);
+            let innerBox = document.querySelector(".box-cart-content")
+            innerBox.innerHTML += `
+            <div class="box-cart div-center clearfix">
+                        <a href="#">
+                            <img class="pull-left" src="${v.image}" alt="#">
+                        </a>
+                        <div class="box-cart-inner pull-left">
+                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
+                            <span class="box-cart-prod pull-left">상품명:</span>
+                            <span class="box-cart-prod-name">${v.name}</span>
+                            <span class="box-cart-money pull-right">${v.price}원</span>
+                            <input type="button" class="btn-plus-01-on pull-right" value="+">
+                            <span class="cart-count">1</span>
+                            <input type="button" class="btn-minus-01-on pull-right" value="–">
+                        </div>
+                    </div>
+                        `
+        });
+        
         // box-cart가 있는지 없는지 감지하는 변수입니다.
         let content = document.querySelector(".inner-content .box-cart");
         // // 상품 목록 박스입니다.
@@ -212,14 +171,18 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
 
 
 
+
+
         // 상품목록이 없다면
         if (content == null) {
+            console.log(1);
             // 클래스 display-on을 추가합니다.
             logo.classList.add('display-on');
             // // 클래스 display-off를 삭제합니다.
             logo.classList.remove('display-off');
             // 상품목록이 있다면 
         } else {
+            console.log(2);
             // box-cart-content의 자식 갯수를 파악합니다.
             let contentCount = document.querySelector(".box-cart-content").childElementCount;
             // console.log(contentCount);
@@ -326,7 +289,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 console.log(money);
                 // 장바구니 합계에 출력됩니다.
                 totalProdNum.innerHTML = count + "개";
-                totalMoney.innerHTML = formatPrice(money)+"원";
+                totalMoney.innerHTML = formatPrice(money) + "원";
                 payMoney.innerHTML = formatPrice(parseInt(money + (money / 100))) + "원";
                 // 서버로 보낼 가격입니다.
                 submitMoney.setAttribute("value", `${parseInt(money + (money / 100))}원 결제하기`)
