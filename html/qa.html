@@ -1,0 +1,190 @@
+<!-- 
+@Filename: qa.html
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: qa HTML
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>qa</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- CSS 참조 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/qa.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <!-- 상단 헤더를 표시합니다 -->
+        <header class="header clearfix">
+            <a href="#">
+                <!-- 상단 로고 부분입니다. -->
+                <div class="header-icon pull-left">
+                    <h1>logo</h1>
+                </div>
+            </a>
+            <!-- 상단 탭 메뉴를 표시합니다 -->
+            <a href="#">
+                <div class="header-tab pull-right">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </a>
+        </header>
+
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <div class="wrap clearfix">
+                <div class="title pull-left">
+                    <h1>나의 QnA</h1>
+                </div>
+                <div>
+                    <a href="./write.html" class="clearfix">
+                        <span class="btn pull-right">글쓰기</span></a>
+                </div>
+                <ul class=" border board-list">
+
+                    <hr>
+                    <li class="record clearfix">
+                        <a href="./article.html">
+                            <div class="summary pull-left"></div>
+
+
+                            <!-- 핸들바 라이브러리 적용 -->
+                            <script id="list" type="text/x-handlebars-template">
+                                    {{#each item}}
+                                    <dl id="user-article">
+                                        <dd class="list-tit">{{title}}</dd>
+                                        <dd class="list-date">날짜 : {{regdate}}</dd>
+                                    </dl>
+                                    {{/each}}
+                            </script>
+                        </a>
+                        <button type="submit" id="btn-delete" name="delete"
+                            class="btn btn-delete pull-right">삭제</button>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 값이 없다면 나올 로고입니다. -->
+            <div class="not-value-logo">
+            </div>
+
+        </section>
+
+
+        <!-- 푸터부분입니다. -->
+        <footer class="footer">
+            <!-- 푸터 아이콘입니다 -->
+            <div class="footer-icon">
+            </div>
+            <!-- 주소지 및 정보입니다. -->
+            <p>Company/CEO | (주) 정임최인터내셔널/정임최</p>
+            <address>Address | 서울특별시 강남구 w타워</address>
+            <p>Customer Service | 0000-0000</p>
+            <p>Business Lisense | 12312-123-12</p>
+
+            <p class="contact">Contact us</p>
+            <p>ezenprojectUS!@contacts.co.kr</p>
+            <p class="copyright">Copyright &copy; 2021 Dessert40 all Right Reserved</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"
+        integrity="sha256-ngJY93C4H39YbmrWhnLzSyiepRuQDVKDNCWO2iyMzFw=" crossorigin="anonymous"></script>
+    <script>
+        // 게시판 전체 영역입니다
+        let content = document.querySelector(".border");
+        // // 로고 표시입니다.
+        let logo = document.querySelector(".not-value-logo");
+
+
+        // 게시물이 없다면
+        if (content == null) {
+            // 클래스 display-on을 추가합니다.
+            logo.classList.add('display-on');
+            // // 클래스 display-off를 삭제합니다.
+            logo.classList.remove('display-off');
+
+            // 게시물이 있다면
+        } else {
+            // logo를 삭제합니다.
+            logo.classList.remove('display-on');
+            logo.classList.add('display-off');
+        }
+
+        /* 추후 DB에서 json형식으로 데이터를 가지고와 모듈화 해야함 */
+
+
+        // 임시로 보여줄 데이터 
+        const data = {
+            item: [
+                {
+                    title: '배송문의',
+                    regdate: '2022 - 01 - 20'
+                }
+            ]
+        };
+
+
+        // 핸들바 라이브러리 설정
+        const html = document.querySelector("#list").innerText;
+        const template = Handlebars.compile(html);
+
+        const result = template(data);
+
+        document.querySelector(".summary").insertAdjacentHTML("beforeend", result);
+
+
+        /* 삭제버튼 클릭 시 띄울 알럿 설정 */
+
+        document.querySelector(".btn-delete").addEventListener("click", (e) => {
+
+            Swal.fire({
+                title: '정말로 삭제하시겠습니까?',
+                text: "삭제된 내용은 복원할 수 없습니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    //백엔드로 delete 보내는 로직 설계..
+
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+
+
+                }
+            })
+
+
+
+        });
+
+    </script>
+
+</body>
+
+</html>
