@@ -22,6 +22,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../../css/admin/layout.css">
+    <link rel="stylesheet" href="../../css/admin/QnA.css">
 </head>
 
 <body>
@@ -71,12 +72,12 @@
         <table class="table table-bordered table-hover table-condensed table-striped text-center">
             <thead>
                 <tr>
-                    <th class="qna-content-header col-xs-4 text-center">내용</th>
-                    <th class="qna-date-header col-xs-2 text-center">답변 상태</th>
+                    <th class="qna-content-header col-xs-5 text-center">내용</th>
+                    <th class="qna-date-header col-xs-1 text-center">답변 상태</th>
                     <th class="qna-writer-header col-xs-2 text-center">작성자</th>
                     <th class="qna-date-header col-xs-2 text-center">작성일</th>
                     <th class="qna-select-header col-xs-2 text-center">
-                        수정/삭제
+                        답변/삭제
                     </th>
                 </tr>
             </thead>
@@ -91,12 +92,28 @@
                     <td class="qna-writer">adasd;</td>
                     <td class="qna-date">2012-02-03</td>
                     <td class="qna-select">
-                        <button type="button" class="btn btn-info">수정</button>
-                        <button type="button" class="btn btn-danger">삭제</button>
+                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html'">답변</button>
+                        <button type="button" class="btn btn-danger btn-delete">삭제</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="qna-content table-short-discription"><a href="#">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, voluptatibus sint aliquid
+                            sapiente et ullam repudiandae accusamus ex unde in asperiores eum harum deleniti perferendis
+                            tempora nostrum quos molestias explicabo!
+                        </a></td>
+                    <td class="qna-status">미등록</td>
+                    <td class="qna-writer">adasd;</td>
+                    <td class="qna-date">2012-02-03</td>
+                    <td class="qna-select">
+                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html'">답변</button>
+                        <button type="button" class="btn btn-danger btn-delete">삭제</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+
     </div>
     <!-- 페이지 네이션 영역입니다. -->
     <nav aria-label="Page navigation example">
@@ -117,6 +134,43 @@
         integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- 스위트 알럿 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let btnDelete = document.querySelectorAll('.btn-delete');
+        let btnPut = document.querySelectorAll('.btn-put');
+        // 수정버튼 이벤트
+
+        btnPut.forEach((v) => {
+            v.addEventListener("click", (e) => {
+                e.preventDefault();
+               
+            })
+        })
+
+
+        btnDelete.forEach((v) => {
+            v.addEventListener("click", (e) => {
+                e.preventDefault();
+                Swal.fire({
+                    title: '답변을 삭제하시겠습니까?',
+                    text: "삭제하시면 다시 불러오실 수 없습니다.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log(v.closest('tr'));
+                        v.closest('tr').remove();
+                        Swal.fire('삭제가 완료되었습니다.', '', 'success');
+                    }
+                });
+            })
+        });
+    </script>
 
 </body>
 

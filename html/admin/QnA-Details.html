@@ -74,12 +74,12 @@
             <h4 class="qna-details-answer">답변</h4>
             <form>
                 <textarea class="qna-details-answer-content" placeholder="답변을 적어주세요"></textarea>
-                <button type="button" id="qnaSave" class="btn btn-primary btn-qna-decision pull-right">등록</button>
+                <button type="button" id="qnaDelete" class="btn btn-danger btn-qna-decision btn-delete pull-right">삭제</button>
+                <button type="button" id="qnaSave" class="btn btn-primary btn-qna-decision btn-save pull-right">등록</button>
             </form>
-
         </div>
     </div>
-
+    <!-- 부트스트랩 -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"
         integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
         crossorigin="anonymous"></script>
@@ -99,7 +99,26 @@
                 cancelButtonText: '취소'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('등록이 완료되었습니다.','', 'success').then((result) => {
+                    Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
+                        if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
+                    })
+                }
+
+            });
+        })
+        document.querySelector('#qnaDelete').addEventListener('click', (e) => {
+            Swal.fire({
+                title: '답변을 삭제하시겠습니까?',
+                text: "삭제하시면 수정하실 수 없습니다.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '삭제',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('삭제가 완료되었습니다.', '', 'success').then((result) => {
                         if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
                     })
                 }
