@@ -68,6 +68,9 @@
 .nav-btn:first-child {
   margin-left: -10px;
 }
+.btn-information{
+width: 75px;
+}
 /* 서브 제목입니다. */
 .content-title {
   margin-top: -6px;

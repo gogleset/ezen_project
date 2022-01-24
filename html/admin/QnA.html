@@ -42,11 +42,11 @@
             <!-- 헤더 및 검정 바 영역입니다. -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <!-- 회원정보 및 다른 버튼입니다. -->
-                <button class="btn btn-default pull-left nav-btn" type="button">회원정보</button>
-                <button class="btn btn-default pull-left nav-btn" type="button">상품관리</button>
-                <button class="btn btn-default pull-left nav-btn" type="button">주문관리</button>
-                <button class="btn btn-default pull-left nav-btn" type="button">이벤트</button>
-                <button class="btn btn-default pull-left nav-btn" type="button">QnA관리</button>
+                <button class="btn btn-default pull-left nav-btn btn-information" type="button">회원정보</button>
+                <button class="btn btn-default pull-left nav-btn btn-information" type="button">상품관리</button>
+                <button class="btn btn-default pull-left nav-btn btn-information" type="button">주문관리</button>
+                <button class="btn btn-default pull-left nav-btn btn-information" type="button">이벤트</button>
+                <button class="btn btn-default pull-left nav-btn btn-information" type="button">QnA관리</button>
             </div>
         </div>
     </div>
@@ -71,23 +71,30 @@
         <table class="table table-bordered table-hover table-condensed table-striped text-center">
             <thead>
                 <tr>
-                    <th class="qna-content-header col-xs-6 text-center">내용</th>
+                    <th class="qna-content-header col-xs-4 text-center">내용</th>
                     <th class="qna-date-header col-xs-2 text-center">답변 상태</th>
                     <th class="qna-writer-header col-xs-2 text-center">작성자</th>
                     <th class="qna-date-header col-xs-2 text-center">작성일</th>
+                    <th class="qna-select-header col-xs-2 text-center">
+                        수정/삭제
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="qna-content table-short-discription"><a href="#">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, voluptatibus sint aliquid sapiente et ullam repudiandae accusamus ex unde in asperiores eum harum deleniti perferendis tempora nostrum quos molestias explicabo!
-                    </a></td>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, voluptatibus sint aliquid
+                            sapiente et ullam repudiandae accusamus ex unde in asperiores eum harum deleniti perferendis
+                            tempora nostrum quos molestias explicabo!
+                        </a></td>
                     <td class="qna-status">미등록</td>
                     <td class="qna-writer">adasd;</td>
                     <td class="qna-date">2012-02-03</td>
+                    <td class="qna-select">
+                        <button type="button" class="btn btn-info">수정</button>
+                        <button type="button" class="btn btn-danger">삭제</button>
+                    </td>
                 </tr>
-                
-                
             </tbody>
         </table>
     </div>
