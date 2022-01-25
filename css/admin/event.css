@@ -1,0 +1,8 @@
+th, td{
+    text-align: center;
+}
+
+#checkbox{
+    vertical-align: middle;
+    padding-top: 10px;
+}

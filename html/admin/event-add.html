@@ -1,0 +1,99 @@
+<!--
+    @Filename: layout.css
+    @Author: 최진 (choij2494@gmail.com)
+    @description: The file to be used in the admin-index.html file.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/admin/layout.css">
+    <link rel="stylesheet" href="../../css/admin/event-add.css">
+</head>
+
+<body>
+    <!-- 헤더입니다. -->
+    <div data-init="./inc/header.html"></div>
+    <!-- 서브 타이틀 영역입니다. -->
+    <div class="container">
+        <div class="content-header">
+            <h3 class="content-title pull-left">이벤트</h3>
+            <span class="content-sub-title pull-right">홈-이벤트-이벤트 등록/수정</span>
+        </div>
+    </div>
+
+    <!-- 데이터 테이블 영역입니다. -->
+    <div class="container table-container">
+        <table class="table table-bordered table-hover table-condensed table-striped">
+            <colgroup>
+                <col width="20%">
+                <col width="80%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" class="form-control" id="title" name="title" placeholder="내용을 입력해주세요" /></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Link</th>
+                    <td><input type="text" class="form-control" id="eventLink" name="eventLink" placeholder="내용을 입력해주세요" /></td>
+                </tr>
+                <tr>
+                    <th rowspan="2">사진</th>
+                    <td><input type="file"></td>
+                </tr>
+                <tr>
+                    <td class="thumb-box"><div class="thumb-img-box">thumbnail</div></td>
+                </tr>
+                <tr>
+                    <th>shows</th>
+                    <td><div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                          Dropdown
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a href="#">Shows</a></li>
+                          <li><a href="#">Disable</a></li>
+                        </ul>
+                      </div></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        <!-- 저장 취소를 감싸는 영역입니다. -->
+        <form class="container">
+            <div class="setting-container">
+                <div class="flx">
+                    <button class="btn btn-primary btn-admin-setting" id="logout" type="button">저장</button>
+                    <button class="btn btn-primary btn-admin-setting" id="logout" type="button">취소</button>
+                </div>
+            </div>
+        </form>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+
+</body>
+
+</html>

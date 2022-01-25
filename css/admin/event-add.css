@@ -1,0 +1,17 @@
+th{
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+.thumb-img-box{
+    width: 80%;
+    height: 400px;
+    margin: auto;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 390px;
+}
+.flx{
+    display: flex;
+    justify-content: flex-end;
+}
