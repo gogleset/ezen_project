@@ -1,0 +1,81 @@
+.card-container.card {
+    max-width: 350px;
+    padding: 40px 40px;
+}
+
+.btn {
+    color: rgb(255, 255, 255);
+    background-color: rgb(51, 51, 51);
+    font-weight: 700;
+    height: 36px;
+    user-select: none;
+    cursor: default;
+}
+
+.btn:hover {
+    color: rgb(255, 255, 255);
+}
+
+
+/*
+ * 전체 크기
+ */
+
+.card {
+    background-color: #ffffff;
+    padding: 20px 25px 30px;
+    margin: 0 auto 25px;
+    margin-top: 50px;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px 2px rgba(22, 22, 22, 0.3);
+}
+
+.profile-img-card {
+    width: 120px;
+    height: auto;
+    margin: 0 auto 10px;
+    display: block;
+}
+
+
+/*
+ * 로그인 폼
+ */
+
+.profile-name-card {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0 0;
+    min-height: 1em;
+}
+
+.input-group {
+    margin: 20px 0;
+}
+
+.form-signin #inputId,
+.form-signin #inputPassword {
+    direction: ltr;
+    height: 44px;
+    font-size: 16px;
+}
+
+.form-signin input[type=text],
+.form-signin input[type=password],
+.form-signin button {
+    width: 100%;
+    display: block;
+    z-index: 1;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.btn.btn-signin {
+    padding: 0px;
+    font-weight: 700;
+    font-size: 14px;
+    height: 36px;
+    border-radius: 3px;
+    border: none;
+}
