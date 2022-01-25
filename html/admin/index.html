@@ -25,31 +25,8 @@
 </head>
 
 <body>
-    <!-- 헤더 영역입니다. -->
-    <div class="container">
-        <div class="header">
-            <h2 class="pull-left admin-title">dessert40 관리시스템</h2>
-            <button class="btn btn-danger pull-right admin-logout" id="logout" type="button">Logout</button>
-            <span class="pull-right admin-username" id="username">정임최</span>
-            <span class="pull-right admin-login">Login :&nbsp;</span>
-        </div>
-    </div>
-    <!-- 메뉴바의 색상 테마 지정 -->
-    <div class="navbar navbar-inverse">
-        <!-- 메뉴의 영역 -->
-        <div class="container">
-
-            <!-- 헤더 및 검정 바 영역입니다. -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <!-- 회원정보 및 다른 버튼입니다. -->
-                <button class="btn btn-default pull-left nav-btn btn-information" type="button">회원정보</button>
-                <button class="btn btn-default pull-left nav-btn btn-information" type="button">상품관리</button>
-                <button class="btn btn-default pull-left nav-btn btn-information" type="button">주문관리</button>
-                <button class="btn btn-default pull-left nav-btn btn-information" type="button">이벤트</button>
-                <button class="btn btn-default pull-left nav-btn btn-information" type="button">QnA관리</button>
-            </div>
-        </div>
-    </div>
+    <!-- 헤더입니다. -->
+    <div data-init="./inc/header.html"></div>
     <!-- 서브 타이틀 영역입니다. -->
     <div class="container">
         <div class="content-header">
@@ -135,6 +112,8 @@
         integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
 
 </body>
 
