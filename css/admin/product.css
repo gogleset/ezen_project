@@ -1,0 +1,27 @@
+/* 
+@Filename: product.css
+@Author: 정한슬 (seul5106@gmail.com)
+@description: 상품관리 페이지 css
+*/
+
+img {
+    width: 50px;
+    height: 50px;
+}
+
+#checkAll {
+    margin: 0;
+    margin-left: 25px;
+    margin-bottom: 3px;
+}
+
+#checkbox {
+    margin: 25px;
+}
+
+select {
+    border-radius: 5px;
+    height: 32px;
+    margin: 9px;
+    border: #222;
+}
