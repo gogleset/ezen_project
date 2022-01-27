@@ -6,7 +6,7 @@ document.querySelectorAll("*[data-init]").forEach(async (v, i) => {
     // html 파일을 가져온다.
     const response = await axios.get(init);
     html = response.data;
-    console.log(html);
+    // console.log(html);
   } catch (e) {
     console.error(e);
   }

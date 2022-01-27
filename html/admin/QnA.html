@@ -57,36 +57,10 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td class="qna-content table-short-discription"><a href="#">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, voluptatibus sint aliquid
-                            sapiente et ullam repudiandae accusamus ex unde in asperiores eum harum deleniti perferendis
-                            tempora nostrum quos molestias explicabo!
-                        </a></td>
-                    <td class="qna-status">미등록</td>
-                    <td class="qna-writer">adasd;</td>
-                    <td class="qna-date">2012-02-03</td>
-                    <td class="qna-select">
-                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html'">답변</button>
-                        <button type="button" class="btn btn-danger btn-delete">삭제</button>
-                    </td>
-                </tr>
+            <tbody id="content">
 
-                <tr>
-                    <td class="qna-content table-short-discription"><a href="#">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur, voluptatibus sint aliquid
-                            sapiente et ullam repudiandae accusamus ex unde in asperiores eum harum deleniti perferendis
-                            tempora nostrum quos molestias explicabo!
-                        </a></td>
-                    <td class="qna-status">미등록</td>
-                    <td class="qna-writer">adasd;</td>
-                    <td class="qna-date">2012-02-03</td>
-                    <td class="qna-select">
-                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html'">답변</button>
-                        <button type="button" class="btn btn-danger btn-delete">삭제</button>
-                    </td>
-                </tr>
+
+
             </tbody>
         </table>
 
@@ -112,9 +86,30 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <!-- 스위트 알럿 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- 액시오스 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- 레이아웃 -->
     <script src="./assets/layout.js"></script>
+    <!-- 페이크데이터 -->
+    <script src="../../fake_data/qna.js"></script>
     <script>
+        let tableBody = document.querySelector("#content");
+
+        qna.data.map((v, i) => {
+            console.log(v);
+            tableBody.innerHTML += `<tr>
+                    <td class="qna-content table-short-discription"><a href="#">
+                            ${v.content}
+                        </a></td>
+                    <td class="qna-status">${v.status}</td>
+                    <td class="qna-writer">${v.writer}</td>
+                    <td class="qna-date">${v.writeDate}</td>
+                    <td class="qna-select">
+                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html'">답변</button>
+                        <button type="button" class="btn btn-danger btn-delete">삭제</button>
+                    </td>
+                </tr>`
+        })
         let btnDelete = document.querySelectorAll('.btn-delete');
         let btnPut = document.querySelectorAll('.btn-put');
         // 수정버튼 이벤트
@@ -122,7 +117,7 @@
         btnPut.forEach((v) => {
             v.addEventListener("click", (e) => {
                 e.preventDefault();
-               
+
             })
         })
 
