@@ -1,0 +1,46 @@
+/* 
+@Filename: productDetail.css
+@Author: 정한슬 (seul5106@gmail.com)
+@description: 상품관리 상세 페이지 css
+*/
+
+body {
+    height: 1200px;
+}
+
+form {
+    padding-top: 40px;
+}
+
+.labelform1 {
+    position: relative;
+}
+
+img {
+    width: 360px;
+    height: 300px;
+}
+
+#takeImg {
+    position: absolute;
+    top: 321px;
+    right: 55px;
+}
+
+.product-info {
+    padding-top: 55px;
+}
+
+.col-md-8 {
+    padding: 0;
+    padding-top: 30px;
+}
+
+.col-md-12 {
+    padding-top: 30px;
+}
+
+.col-md-12 textarea {
+    resize: none;
+    height: 100px;
+}

@@ -1,0 +1,116 @@
+<!--
+    @Filename: productDetail.html
+    @Author: 정한슬 (seul5106@gmail.com)
+    @description: 상품관리 상세페이지 html
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../css/admin/layout.css">
+    <link rel="stylesheet" href="../../css/admin/productDetail.css">
+</head>
+
+<body>
+    <!-- 헤더입니다. -->
+    <div data-init="./inc/header.html"></div>
+    <!-- 서브 타이틀 영역입니다. -->
+    <div class="container">
+        <div class="content-header">
+            <h3 class="content-title pull-left">상품관리</h3>
+            <span class="content-sub-title pull-right">홈-상품관리-상품상세</span>
+        </div>
+
+
+        <form class="clearfix">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label for="classification">분류</label>
+                    <div>
+                        <select name="classification">
+                    <option value="">전체분류</option>
+                    <option value="">케이크</option>
+                    <option value="">티라미슈</option>
+                    <option value="">빙수</option>
+                    <option value="">파르페</option>
+                    <option value="">마카롱</option>
+                    <option value="">오믈렛</option>
+                    <option value="">쿠키</option>
+                    <option value="">파이</option>
+                    <option value="">베이커리</option>
+                </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-5">
+                    <div class="col-md-8">
+                        <label for="img" class="labelform1">상품 이미지</label>
+                        <img src="http://placehold.it/360x300" name="img" id="img">
+                    </div>
+                    <button type="button" class="btn btn-default" aria-label="Left Align" id="takeImg">
+                        <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+                <div class="col-md-5 product-info">
+                    <div class="col-md-10">
+                        <label for="product-code" class="col-md-4">상품코드</label>
+                        <input type="text" name="product-code" id="product-code" readonly/>
+                    </div>
+                    <div class="col-md-10">
+                        <label for="product-name" class="col-md-4">상품명</label>
+                        <input type="text" name="product-name" id="product-name" />
+                    </div>
+                    <div class="col-md-10">
+                        <label for="sale-price" class="col-md-4">판매가격</label>
+                        <input type="text" name="sale-price" id="sale-price" />
+                    </div>
+                    <div class="col-md-10">
+                        <label for="stock" class="col-md-4">재고</label>
+                        <input type="text" name="stock" id="stock" />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group col-md-12">
+                <label for="nutrition-info">영양정보</label>
+                <textarea type="text" class="form-control" name="nutrition-info" id="nutrition-info"></textarea>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="allergy-info" class="pull-left">알레르기 정보</label>
+                <textarea type="text" class="form-control" name="allergy-info" id="allergy-info"></textarea>
+            </div>
+
+            <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">취소</button>
+            <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">삭제</button>
+            <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">저장</button>
+        </form>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+
+</body>
+
+</html>
