@@ -35,20 +35,7 @@
     <!-- 전체 콘테이너입니다 -->
     <div class="container">
         <!-- 상단 헤더를 표시합니다 -->
-        <header class="header">
-            <a href="#">
-                <!-- 상단 로고 부분입니다. -->
-                <div class="header-icon pull-left">
-                    <h1>logo</h1>
-                </div>
-            </a>
-            <!-- 상단 탭 메뉴를 표시합니다 -->
-            <a href="#">
-                <div class="header-tab pull-right">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </a>
-        </header>
+        <div data-init="./inc/header.html"></div>
         <!-- 내용부분입니다. -->
         <section class="content">
             <form id="payment_form" action="" name="payment_form" method="">
@@ -226,7 +213,9 @@
             </form>
         </section>
 
-
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="./assets/layout.js"></script>
+    
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script>
             // 우편번호 찾기 찾기 화면을 넣을 element

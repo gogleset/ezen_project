@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <div data-init="./inc/header.html"></div>
+    <div data-init="../inc/admin-header.html"></div>
     <!-- 서브 타이틀 영역입니다. -->
     <div class="container">
         <div class="content-header">
@@ -89,7 +89,7 @@
     <!-- 액시오스 -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- 레이아웃 -->
-    <script src="./assets/layout.js"></script>
+    <script src="../assets/layout.js"></script>
     <!-- 페이크데이터 -->
     <script src="../../fake_data/qna.js"></script>
     <script>
@@ -105,7 +105,7 @@
                     <td class="qna-writer">${v.writer}</td>
                     <td class="qna-date">${v.writeDate}</td>
                     <td class="qna-select">
-                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html'">답변</button>
+                        <button type="button" class="btn btn-primary btn-put" onclick="location.href = './QnA-Details.html?query='">답변</button>
                         <button type="button" class="btn btn-danger btn-delete">삭제</button>
                     </td>
                 </tr>`

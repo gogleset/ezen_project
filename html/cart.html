@@ -29,21 +29,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
 <body>
     <!-- 전체 콘테이너입니다 -->
     <div class="container">
-        <!-- 상단 헤더를 표시합니다 -->
-        <header class="header">
-            <a href="#">
-                <!-- 상단 로고 부분입니다. -->
-                <div class="header-icon pull-left">
-                    <h1>logo</h1>
-                </div>
-            </a>
-            <!-- 상단 탭 메뉴를 표시합니다 -->
-            <a href="#">
-                <div class="header-tab pull-right">
-                    <i class="fas fa-bars"></i>
-                </div>
-            </a>
-        </header>
+        <div data-init="./inc/header.html"></div>
 
         <!-- 내용부분입니다. -->
         <section class="content">
@@ -120,6 +106,8 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
     </div>
     <script src="../js/number_utils.js"></script>
     <script src="../fake_data/menu_items.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
     <script>
         menuItems[1].forEach((v) => {
             console.log(v);
@@ -141,7 +129,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                     </div>
                         `
         });
-        
+
         // box-cart가 있는지 없는지 감지하는 변수입니다.
         let content = document.querySelector(".inner-content .box-cart");
         // // 상품 목록 박스입니다.
@@ -189,7 +177,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             // // 미결제항목의 갯수 파악하여 동적으로 문자열을 바꿉니다.
             let unpaidCounting = unpaidCount.replace(unpaidCount.substring(unpaidCount.indexOf("(")), `(${contentCount}개)`);
             // // 바꾼 문자열을 출력시킵니다.
-            document.querySelector(".unpaid-count").innerHTML = unpaidCounting
+            document.querySelector(".unpaid-count").innerHTML = unpaidCounting;
 
 
             // // logo를 삭제합니다.
@@ -257,7 +245,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 })
             })
 
-
+            // 결과함수
             const result = () => {
                 countArray = [];
                 moneyArray = [];
@@ -292,7 +280,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 totalMoney.innerHTML = formatPrice(money) + "원";
                 payMoney.innerHTML = formatPrice(parseInt(money + (money / 100))) + "원";
                 // 서버로 보낼 가격입니다.
-                submitMoney.setAttribute("value", `${parseInt(money + (money / 100))}원 결제하기`)
+                submitMoney.setAttribute("value", `${formatPrice(parseInt(money + (money / 100)))}원 결제하기`)
             }
             result();
 
