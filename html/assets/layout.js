@@ -1,6 +1,3 @@
-
-
-
 document.querySelectorAll("*[data-init]").forEach(async (v, i) => {
   const init = v.dataset.init;
   let html = null;

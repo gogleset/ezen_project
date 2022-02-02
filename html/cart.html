@@ -42,33 +42,9 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                     <span class="unpaid-count">미결제항목(0개)</span>
                     <input type="button" class="btn-cancle-01-on pull-right" value="선택 상품 삭제">
                 </div>
-
-
-
                 <!-- 장바구니 목록을 카운트합니다. -->
                 <div class="box-cart-content">
-
-                    <!-- <div class="box-cart div-center clearfix"> -->
-                    <!-- 상품이미지 부분입니다. -->
-                    <!-- <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a> -->
-                    <!-- 상품 정보 부분입니다. -->
-                    <!-- <div class="box-cart-inner pull-left">
-                            <input type="checkbox" class="check-prod pull-right" name="check" value="1">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">~~~</span>
-                            <span class="box-cart-money pull-right">1원</span>
-                            <input type="button" class="btn-plus-01-on pull-right" value="+">
-                            <span class="cart-count">1</span>
-                            <input type="button" class="btn-minus-01-on pull-right" value="–">
-                        </div>
-                    </div> -->
-
-
-
-
-
+                    <!-- 동적으로 채워질 부분입니다. -->
                 </div>
 
                 <!-- 값이 없다면 나올 로고입니다. -->
@@ -109,7 +85,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./assets/layout.js"></script>
     <script>
-        menuItems[1].forEach((v) => {
+        menuItems[1].map((v) => {
             console.log(v);
             let innerBox = document.querySelector(".box-cart-content")
             innerBox.innerHTML += `
@@ -121,56 +97,54 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                             <input type="checkbox" class="check-prod pull-right" name="check" value="1">
                             <span class="box-cart-prod pull-left">상품명:</span>
                             <span class="box-cart-prod-name">${v.name}</span>
-                            <span class="box-cart-money pull-right">${v.price}원</span>
+                            <span class="box-cart-money pull-right" data-money="${v.price}">${(formatPrice(v.price))}원</span>
                             <input type="button" class="btn-plus-01-on pull-right" value="+">
                             <span class="cart-count">1</span>
                             <input type="button" class="btn-minus-01-on pull-right" value="–">
                         </div>
-                    </div>
-                        `
+                    </div>`
         });
 
         // box-cart가 있는지 없는지 감지하는 변수입니다.
         let content = document.querySelector(".inner-content .box-cart");
-        // // 상품 목록 박스입니다.
-        let boxMoney = document.querySelectorAll(".box-cart-money");
-        // // 미결제항목 부분입니다.
-        let unpaidCount = document.querySelector(".unpaid-count").innerHTML;
-        // // 로고 표시입니다.
-        let logo = document.querySelector(".not-value-logo");
         // // 상품 플러스 버튼입니다.
         let btnPlus = document.querySelectorAll(".btn-plus-01-on");
         // // 상품 마이너스 버튼입니다.
         let btnMinus = document.querySelectorAll(".btn-minus-01-on");
-        // // 상품 갯수 입니다.
-        let countProdNum = document.querySelectorAll(".cart-count");
-        // 상품의 가격입니다.
-        let cartMoney = document.querySelectorAll(".box-cart-money");
-        // 서버로 보낼 가격입니다.
-        let submitMoney = document.querySelector(".btn-cart-submit").value;
-        // // 상품의 총 갯수입니다.
-        let count = 0;
-        // // 상품의 총 금액입니다.
-        let money = 0;
-        // 상품 갯수가 들어있는 배열입니다.
-        let countArray = [];
-        // 상품 가격이 들어있는 배열입니다.
-        let moneyArray = [];
 
-
-
-
-
-        // 상품목록이 없다면
-        if (content == null) {
-            console.log(1);
-            // 클래스 display-on을 추가합니다.
-            logo.classList.add('display-on');
-            // // 클래스 display-off를 삭제합니다.
-            logo.classList.remove('display-off');
-            // 상품목록이 있다면 
-        } else {
-            console.log(2);
+        // 상품 갯수가 들어있는 배열을 리턴합니다.
+        const getProdNum = () => {
+            let countArray = [];
+            document.querySelectorAll(".cart-count").forEach((v) => {
+                countArray.push(parseInt(v.innerHTML));
+            });
+            return countArray;
+        }
+        // 상품 목록의 데이터머니에있는 값을 가져와 상품가격 배열에 순차적으로 넣습니다.
+        const getProdPrice = () => {
+            let moneyArray = [];
+            document.querySelectorAll(".box-cart-money").forEach((v) => {
+                console.log(v.dataset.money);
+                moneyArray.push(v.dataset.money);
+            });
+            return moneyArray;
+        }
+        // 로고를 생성하고 감춥니다.
+        const logos = (boolean = false) => {
+            let logo = document.querySelector(".not-value-logo");
+            if (boolean == true) {
+                // 클래스 display-on을 추가합니다.
+                logo.classList.add('display-on');
+                //클래스 display-off를 삭제합니다.
+                logo.classList.remove('display-off');
+            } else {
+                logo.classList.remove('display-on');
+                logo.classList.add('display-off');
+            }
+        }
+        // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+        const unpaidCountings = () => {
+            let unpaidCount = document.querySelector(".unpaid-count").innerHTML;
             // box-cart-content의 자식 갯수를 파악합니다.
             let contentCount = document.querySelector(".box-cart-content").childElementCount;
             // console.log(contentCount);
@@ -178,49 +152,77 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             let unpaidCounting = unpaidCount.replace(unpaidCount.substring(unpaidCount.indexOf("(")), `(${contentCount}개)`);
             // // 바꾼 문자열을 출력시킵니다.
             document.querySelector(".unpaid-count").innerHTML = unpaidCounting;
-
-
-            // // logo를 삭제합니다.
-            logo.classList.remove('display-on');
-            logo.classList.add('display-off');
-
-            // // 상품 금액입니다.
-            let cartMoney = document.querySelectorAll(".box-cart-money");
+        }
+        // 상품목록이 없다면 로고를 생성합니다.
+        const notContentLogo = () => {
+            content = document.querySelector(".inner-content .box-cart");
+            // 상품목록이 없다면
+            if (!content) {
+                logos(true);
+            }
+        }
+        // 결과함수
+        const result = () => {
             // // 총 합산한 금액입니다.
             let totalMoney = document.querySelector(".money-total-number");
             // // 총 결제할 금액입니다.
             let payMoney = document.querySelector(".paid-money-number");
             // // 총 전체 상품 개수 입니다.
             let totalProdNum = document.querySelector(".prod-total-number");
+            // // 상품의 총 갯수입니다.
+            let count = 0;
+            // // 상품의 총 금액입니다.
+            let money = 0;
+            // countArray는 getProdNum 함수의 배열값을 받아 저장합니다.
+            let countArray = getProdNum();
+            // 머니어레이는 getProdPrice의 배열값을 받아 저장합니다.
+            let moneyArray = getProdPrice();
+            // 서버로 보낼 가격입니다.
+            let submitMoney = document.querySelector(".btn-cart-submit");
 
+            // 전체상품의 총 갯수는
+            countArray.map((v) => {
+                count += v
+            })
+            // 전체상품의 총 가격은
+            moneyArray.map((v, i) => {
+                money += moneyArray[i] * countArray[i]
+            });
+            console.log(money);
+            // 장바구니 합계에 출력됩니다.
+            totalProdNum.innerHTML = count + "개";
+            totalMoney.innerHTML = formatPrice(money) + "원";
+            payMoney.innerHTML = formatPrice(parseInt(money + (money / 100))) + "원";
+            // 서버로 보낼 가격입니다.
+            submitMoney.setAttribute("value", `${formatPrice(parseInt(money + (money / 100)))}원 결제하기`)
+        }
+
+
+        // 상품목록이 없다면
+        if (!content) {
+            // 로고를 생성하고 감춥니다.
+            logos(true);
+            // 상품목록이 있다면 
+        } else {
+            // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+            unpaidCountings();
+            // 로고를 생성하고 감춥니다.
+            logos();
             // 선택상품삭제 버튼을 눌렀을 시 실행될 이벤트 함수입니다.
             document.querySelector(".btn-cancle-01-on").addEventListener("click", (e) => {
-                // 상품수를 초기화합니다.
-
                 let check = document.querySelectorAll("input[name=check]:checked");
-                // // check를 검사합니다.
+                //check를 검사합니다.
                 check.forEach((v) => {
                     // box-cart를 지웁니다.
                     v.closest(".box-cart").remove();
                 });
 
-                // // 상품목록이 없다면
-                content = document.querySelector(".inner-content .box-cart");
-                if (content == null) {
-                    // 클래스 display-on을 추가합니다.
-                    logo.classList.add('display-on');
-                    // 클래스 display-off를 삭제합니다.
-                    logo.classList.remove('display-off');
-                }
-                // box-cart-content의 자식 갯수를 파악합니다.
-                contentCount = document.querySelector(".box-cart-content").childElementCount;
-                // console.log(contentCount);
-                // // 미결제항목의 갯수 파악하여 동적으로 문자열을 바꿉니다.
-                let unpaidCounting = unpaidCount.replace(unpaidCount.substring(unpaidCount.indexOf("(")), `(${contentCount}개)`);
-                // // 바꾼 문자열을 출력시킵니다.
-                document.querySelector(".unpaid-count").innerHTML = unpaidCounting;
-
-                result()
+                //상품목록이 없다면 로고를 생성합니다
+                notContentLogo();
+                // 미결제항목의 갯수를 파악하여 동적으로 문자열을 바꿉니다.
+                unpaidCountings();
+                //결과함수
+                result();
             })
             // 선택상품삭제 끝
 
@@ -241,49 +243,11 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                         prodNum = 1;
                     }
                     v.previousElementSibling.innerHTML = prodNum;
-                    result()
+                    result();
                 })
             })
 
-            // 결과함수
-            const result = () => {
-                countArray = [];
-                moneyArray = [];
-                count = 0;
-                money = 0;
-                submitMoney = document.querySelector(".btn-cart-submit");
-                // 상품갯수을 재할당하여 초기화 합니다.
-                countProdNum = document.querySelectorAll(".cart-count");
-                // 상품의 갯수를 배열에 넣습니다.
-                countProdNum.forEach((v) => {
-                    countArray.push(parseInt(v.innerHTML));
-                })
-                // 상품가격을 재할당하여 초기화 합니다.
-                boxMoney = document.querySelectorAll(".box-cart-money");
-                // 상품의 가격을 배열에 넣습니다.
-                boxMoney.forEach((v) => {
-                    moneyArray.push(parseInt(v.innerHTML));
-                })
-
-                // 전체상품의 총 갯수는
-                countArray.forEach((v) => {
-                    count += v
-                })
-                console.log(count);
-                // 전체상품의 총 가격은
-                moneyArray.forEach((v, i) => {
-                    money += moneyArray[i] * countArray[i]
-                })
-                console.log(money);
-                // 장바구니 합계에 출력됩니다.
-                totalProdNum.innerHTML = count + "개";
-                totalMoney.innerHTML = formatPrice(money) + "원";
-                payMoney.innerHTML = formatPrice(parseInt(money + (money / 100))) + "원";
-                // 서버로 보낼 가격입니다.
-                submitMoney.setAttribute("value", `${formatPrice(parseInt(money + (money / 100)))}원 결제하기`)
-            }
             result();
-
         }
     </script>
 </body>
