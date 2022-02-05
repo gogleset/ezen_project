@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "C:\\Users\\seul5\\ezen_project\\_files\\_logs\\.b5e71b119620a5f02db5547170082d6fb5a5ab89-audit.json",
+    "files": [
+        {
+            "date": 1644040321447,
+            "name": "C:\\Users\\seul5\\ezen_project\\_files\\_logs\\log_220205.log",
+            "hash": "9d0371a5ee19592ccefa242c5caf4262"
+        }
+    ],
+    "hashType": "md5"
+}

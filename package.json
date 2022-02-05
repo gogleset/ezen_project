@@ -17,6 +17,22 @@
   },
   "homepage": "https://github.com/gogleset/ezen_project#readme",
   "dependencies": {
-    "sweetalert2": "^11.3.5"
+    "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.2",
+    "express-mysql-session": "^2.1.7",
+    "express-session": "^1.17.2",
+    "express-useragent": "^1.0.15",
+    "fs": "0.0.1-security",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.4",
+    "nodemailer": "^6.7.2",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.5.0",
+    "serve-static": "^1.14.2",
+    "sweetalert2": "^11.3.5",
+    "url": "^0.11.0",
+    "winston": "^3.5.1",
+    "winston-daily-rotate-file": "^4.6.0"
   }
 }

@@ -1,0 +1,39 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\.67670dc9f5655e487903e17083e381adf20edd64-audit.json",
+    "files": [
+        {
+            "date": 1639618923229,
+            "name": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\log_211216.log",
+            "hash": "ac9bf8eaacf31cd4f051a384017258fb"
+        },
+        {
+            "date": 1639960791284,
+            "name": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\log_211220.log",
+            "hash": "b9dbbdba0173cbf8f238fad9f5e8a88f"
+        },
+        {
+            "date": 1640052429575,
+            "name": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\log_211221.log",
+            "hash": "b3b60b4e1ea2142716e7f7cb1f72d660"
+        },
+        {
+            "date": 1640143539928,
+            "name": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\log_211222.log",
+            "hash": "c62f077c67033636ca92163045390972"
+        },
+        {
+            "date": 1642482190523,
+            "name": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\log_220118.log",
+            "hash": "44b00546366a991b49665796ab285a38"
+        },
+        {
+            "date": 1642645633478,
+            "name": "c:\\Users\\seul5\\BackEnd\\Node.js\\_files\\_logs\\log_220120.log",
+            "hash": "00453a4c7b6a607c48c8e5bd1c862f16"
+        }
+    ]
+}
