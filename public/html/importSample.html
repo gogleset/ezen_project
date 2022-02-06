@@ -1,0 +1,55 @@
+<!-- 
+@Filename: importSample.html
+@Author: 최진 (choij2494@gmail.com)
+@description: importSample HTML structure
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="result">결제하기</button>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/importFront.js"></script>
+    <script>
+        // 결제정보 변수들
+        let c = "ORD20180131-0000031" // 주문번호
+        let n = "식감이 우수한 빵" // 상품명
+        let a = 400;
+        let en = "gildong@gmail.com"
+        let t = "010-2031-2013";
+        let bn = "홍길동"
+        let p = 10231;
+        let ad = "서울시 동작구 대방동"
+        
+
+        // importFront의 함수 imports에 여덟개의 인자만 던져주면 알아서 프론트단의 결제정보를 투척
+        document.querySelector("#result").addEventListener("click", (e) => {
+            e.preventDefault();
+            imports(c,
+                n,
+                a,
+                en,
+                bn,
+                t,
+                ad,
+                p);
+        })
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "/Users/choijin/ezen_project/_files/_logs/.2ed9aa0d62a54aef2eeb4ab28fd7649bed73666a-audit.json",
+    "files": [
+        {
+            "date": 1644154103124,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220206.log",
+            "hash": "ddc4e7682ad68460695db6cf8b916f5d"
+        }
+    ],
+    "hashType": "md5"
+}
