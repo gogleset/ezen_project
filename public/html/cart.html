@@ -74,7 +74,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 </div>
                 <hr style="margin-bottom: 0;">
                 <!-- 결제 버튼 박스입니다. -->
-                <form action="" name="cart-total" method="">
+                <form action="" name="cart-total" method="" id="cart-total">
                     <input type="submit" value="00000원 결제하기" class="btn-common btn-cart-submit">
                 </form>
             </div>
@@ -119,6 +119,8 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
         let btnPlus = document.querySelectorAll(".btn-plus-01-on");
         // // 상품 마이너스 버튼입니다.
         let btnMinus = document.querySelectorAll(".btn-minus-01-on");
+        // // 상품의 총 갯수입니다.
+        let count = 0;
 
         // 상품 갯수가 들어있는 배열을 리턴합니다.
         const getProdNum = () => {
@@ -178,7 +180,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             // // 총 전체 상품 개수 입니다.
             let totalProdNum = document.querySelector(".prod-total-number");
             // // 상품의 총 갯수입니다.
-            let count = 0;
+            count = 0;
             // // 상품의 총 금액입니다.
             let money = 0;
             // countArray는 getProdNum 함수의 배열값을 받아 저장합니다.
@@ -258,8 +260,21 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             result();
             // 장바구니 로직 끝
 
-            // 3. 장바구니 데이터를 아임포트로 넘겨주기
+            // 3. 장바구니 데이터 DB로 넘겨주기
             
+            // document.getElementById("cart-total").addEventListener("click", async e => {
+            //     e.preventDefault();
+
+            //     console.log(count);
+            //     try {
+            //         await axios.post('/cart',{
+            //             count: count
+            //         });
+            //     } catch (error) {
+            //         alert(error+"서버 전송에 실패했습니다.");
+            //     }
+                
+            // })
             
         }
     </script>

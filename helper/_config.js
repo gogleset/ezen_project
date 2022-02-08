@@ -50,8 +50,8 @@ module.exports = {
         host: 'localhost',
         port: 3306,
         user: 'root',
-        password: 'root',
-        database: "myschool",
+        password: 'chlwls@213468',
+        database: "dessert40",
 
         checkExpirationInterval: 900000,
         expiration: 86400000,

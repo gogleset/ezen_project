@@ -40,7 +40,6 @@
             <div class="admin-box-setting">
                 <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
                 <button class="btn btn-primary pull-left btn-admin-setting" id="logout" type="button">검색</button>
-                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">삭제</button>
             </div>
         </div>
     </form>
@@ -48,48 +47,29 @@
     <div class="container table-container">
         <table class="table table-bordered table-hover table-condensed table-striped">
             <thead>
-                <tr>
-                    <th>고객명</th>
-                    <th>아이디</th>
-                    <th>이메일 주소</th>
-                    <th>휴대폰 번호</th>
-                    <th>주소</th>
-                    <th>가입일</th>
+                <tr class = "table-header">
+                    <th class="col-md-1">고객명</th>
+                    <th class="col-md-2">아이디</th>
+                    <th class="col-md-2">이메일 주소</th>
+                    <th class="col-md-2">휴대폰 번호</th>
+                    <th class="col-md-2">주소</th>
+                    <th class="col-md-1">가입일</th>
+                    <th class="col-md-1">탈퇴</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr class="table-content text-center">
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td></td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td>  
+                        <button type="button" class="btn btn-sm btn-danger">탈퇴</button>
+                    </td>
                 </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+                
             </tbody>
         </table>
     </div>
