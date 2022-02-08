@@ -72,10 +72,12 @@ h1 {
 /* 항목표시부분입니다. */
 
 .box-cart {
+    border-radius: 8px;
     width: 95%;
     height: 150px;
     background-color: rgb(236, 236, 236);
     margin-bottom: 10px;
+    overflow: hidden;
 }
 
 
@@ -83,8 +85,8 @@ h1 {
 
 .box-cart img {
     display: block;
-    height: 100%;
-    width: 28%;
+    height: auto;
+    width: 150px;
 }
 
 
@@ -92,7 +94,7 @@ h1 {
 
 .box-cart-inner {
     display: block;
-    width: 72%;
+    width: 55%;
     height: 100%;
     position: relative;
 }

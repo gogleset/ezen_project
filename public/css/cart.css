@@ -33,6 +33,7 @@
 }
 /* 항목표시부분입니다. */
 .box-cart {
+  border-radius: 9px;
   width: 95%;
   height: 150px;
   background-color: rgb(236, 236, 236);
@@ -42,12 +43,12 @@
 .box-cart img {
   display: block;
   height: 100%;
-  width: 28%;
+  width: 150px;
 }
 /* 상품 상세 정보 박스입니다. */
 .box-cart-inner {
   display: block;
-  width: 72%;
+  width: 50%;
   height: 100%;
   position: relative;
 }
