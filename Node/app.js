@@ -94,6 +94,7 @@ app.use(require('./Student')(app));
 app.use(require('./Professor')(app));
 app.use(require('./members')(app));
 app.use(require('./member')(app));*/
+app.use(require('./controllers/members')(app)); //회원테이블
 app.use(require('./controllers/import')(app)); //아임포트 결제 정보 
 app.use(require('./controllers/Product')(app)); //상품 테이블
 

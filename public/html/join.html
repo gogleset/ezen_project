@@ -29,10 +29,11 @@
 
     <!-- join.css-->
     <link rel="stylesheet" href="../css/join.css">
+
 </head>
 
 <body>
-    <form name="join_form" id="join_form">
+    <form name="join_form" id="join_form" method="post" action="/members/signup">
         <h1>가입을 시작합니다</h1>
 
         <!-- 아이디-->
@@ -134,6 +135,9 @@
 
     <!-- 유효성 검사-->
     <script src="../js/regex_helper.js"></script>
+
+    <!-- axios-->
+    <script src="//cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         // 우편번호 찾기 찾기 화면을 넣을 element
         var element_wrap = document.getElementById('wrap');
@@ -294,7 +298,45 @@
                 confirmButtonText: '확인'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    location.href = ""; //넘어갈 페이지 설정해야됨
+                   
+                    //Node에 넘겨줄 값
+                    const member_id = document.getElementById("user_id").value;
+                    const member_email = document.getElementById("email").value;
+                    const member_pw = document.getElementById("user_pw").value;
+                    const member_name = document.getElementById("user_name").value;
+                    const member_phone = document.getElementById("tel").value;
+                    const member_postcode = document.getElementById("postcode").value;
+                    const member_addr1 = document.getElementById("address").value;
+                    const member_addr2 = document.getElementById("detailAddress").value;
+                    const member_birth = document.getElementById("user_date").value;
+                    const admin = "N";
+                   
+                    const is_out = "N";
+
+                    console.log(member_id);
+                    //즉시실행 비동기 처리 함수
+                    (async () => {
+                        try {
+                            // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
+                            const response = await axios.post('/members/signup', {
+                                member_id: member_id,
+                                member_email: member_email,
+                                member_pw: member_pw,
+                                member_name: member_name,
+                                member_phone: member_phone,
+                                member_postcode: member_postcode,
+                                member_addr1: member_addr1,
+                                member_addr2: member_addr2,
+                                member_birth: member_birth,
+                                admin: admin,
+                               
+                                is_out: is_out
+                            });
+                            location.href = "signin.html"; //넘어갈 페이지 설정해야됨
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    })();
                 }
             });
         });
