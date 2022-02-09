@@ -22,13 +22,14 @@ const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 
 var ExpressMysqlSession = require("express-mysql-session")(expressSession);
+const multer = require("multer"); 
 
 const BadRequestException = require('./exceptions/BadRequestException');
 const RuntimeException = require('./exceptions/RuntimeException');
 const PageNotFoundException = require('./exceptions/PageNotFoundException');
 
 const app = express();
-
+    
 app.use(useragent.express());
 app.use((req, res, next) => {
     logger.debug("클라이언트가 접속했습니다.");

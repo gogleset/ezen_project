@@ -14,6 +14,16 @@
             "date": 1644303560222,
             "name": "/Users/choijin/ezen_project/_files/_logs/log_220208.log",
             "hash": "33c55b00a6db5ee72c4c15a6cb34d6c9"
+        },
+        {
+            "date": 1644389488164,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220209.log",
+            "hash": "ef1c1292a6536276c1ddd424167ce0c4"
+        },
+        {
+            "date": 1644418809606,
+            "name": "/Users/choijin/ezen_project/_files/_logs/log_220210.log",
+            "hash": "fd9e40ab54442019501b73c1fe2b45df"
         }
     ],
     "hashType": "md5"

@@ -223,7 +223,7 @@ class RegexHelper {
      * @return {boolean} 표현식을 충족할 경우 true / 그렇지 않은 경우 false
      */
     num(selector, msg) {
-        return this.field(selector, msg, /^[0-9]*&/);
+        return this.field(selector, msg,  /^[0-9]*$/);
     }
 
     eng(selector, msg) {

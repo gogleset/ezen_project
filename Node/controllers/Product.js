@@ -16,25 +16,24 @@ const multer = require("multer");
 
 // 라우팅 정의 부분
 module.exports = (app) => {
+  let dbcon = null;
+
   router.post("/product", async (req, res, next) => {
     // if (!req.session.memberInfo) {
     //     return next(new BadRequestException("로그인 중이 아닙니다."));
     // }
-
-    console.log(req.body.product_img);
-    
-    let dbcon = null;
-
+    console.log(req.body.productName);
     // webhelper에 추가된 기능을 활용하여 업로드 객체 반환받기
     const multipart = req.getMultipart();
     logger.debug("접속");
     // 업로드 수정하기
     // const upload = multipart.single("profile_img");
-    const upload = multipart.single("product_img");
-
+    const upload = multipart.single('photo')
     // 업로드 처리 후 텍스트 파라미터 받기
+  
     upload(req, res, async (err) => {
       // 업로드 에러 처리
+
       if (err) {
         throw new MultipartException(err);
       }
@@ -43,40 +42,45 @@ module.exports = (app) => {
       logger.debug(JSON.stringify(req.file));
 
       //   저장을 위한 파라미터 입력받기
-      const user_id = req.post("user_id");
-      const user_pw = req.post("user_pw");
-      const user_name = req.post("user_name");
-      const email = req.post("email");
-      const phone = req.post("phone");
-      const birthday = req.post("birthday");
-      const gender = req.post("gender");
-      const postcode = req.post("postcode");
-      const addr1 = req.post("addr1");
-      const addr2 = req.post("addr2");
-      const photo = req.file.url;
+      const product_name = req.post("productName");
+      const product_price = req.post("productPrice");
+      const product_stock = req.post("productStock");
+      const product_categorie = req.post("productCategorie");
+      const product_desc = req.post("productDesc");
+      const product_nutri = req.post("productNutri");
+      const product_allergy = req.post("productAllergy");
+      const product_img = req.file.url;
+      console.log(product_name);
+      console.log(product_img);
 
       // 유효성 검사
       try {
-        regexHelper.value(user_id, "아이디 값이 없습니다.");
-        regexHelper.value(user_pw, "비밀번호 값이 없습니다.");
-        regexHelper.value(user_name, "이름 값이 없습니다.");
-        regexHelper.value(email, "이메일 값이 없습니다.");
-        regexHelper.value(birthday, "생년월일 값이 없습니다.");
-        regexHelper.value(gender, "성별 값이 없습니다.");
-        regexHelper.value(phone, "핸드폰 번호 값이 없습니다.");
+        regexHelper.value(product_name, "상품명 값이 없습니다.");
+        regexHelper.value(product_price, "상품가격 값이 없습니다.");
+        regexHelper.value(product_stock, "재고수량 값이 없습니다.");
+        regexHelper.value(product_categorie, "카테고리 값이 없습니다.");
+        regexHelper.value(product_img, "상품 이미지가 없습니다.");
+        regexHelper.value(product_desc, "상세설명 값이 없습니다.");
+        regexHelper.value(product_nutri, "영양정보 값이 없습니다.");
+        regexHelper.value(product_allergy, "알레르기 값이 없습니다.");
 
-        regexHelper.maxLength(user_id, 30, "아이디가 너무 깁니다.");
-        regexHelper.maxLength(user_pw, 255, "비밀번호가 너무 깁니다.");
-        regexHelper.maxLength(user_name, 20, "이름이 너무 깁니다.");
-        regexHelper.maxLength(email, 150, "이메일 형식이 너무 깁니다.");
-        regexHelper.maxLength(addr1, 20, "국가번호가 너무 깁니다.");
-        regexHelper.maxLength(phone, 11, "전화번호가 너무 깁니다.");
-
-        regexHelper.num(
-          phone,
-          "전화번호가 숫자가 아닌 형식이 들어가 있습니다."
+        regexHelper.maxLength(product_name, 30, "아이디가 너무 깁니다.");
+        regexHelper.maxLength(product_price, 11, "판매가격이 너무 큽니다.");
+        regexHelper.maxLength(product_stock, 11, "재고수량이 너무 큽니다.");
+        regexHelper.maxLength(product_desc, 255, "상세 설명 값이 너무 큽니다.");
+        regexHelper.maxLength(
+          product_nutri,
+          255,
+          "영양 정보 값이 너무 큽니다."
         );
-        regexHelper.num(postcode, "우편번호 값이 없습니다.");
+        regexHelper.maxLength(
+          product_allergy,
+          255,
+          "알레르기 값이 너무 큽니다."
+        );
+
+        regexHelper.num(product_price, "상품 가격을 숫자로 입력해주세요.");
+        regexHelper.num(product_stock, "재고 수량을 숫자로 입력해주세요.");
       } catch (err) {
         return next(err);
       }
@@ -86,44 +90,30 @@ module.exports = (app) => {
         dbcon = await mysql2.createConnection(config.database);
         await dbcon.connect();
 
-        let sql1 = "SELECT COUNT(*) AS cnt FROM members WHERE user_id=?";
-        let args1 = [user_id];
-
-        const [result1] = await dbcon.query(sql1, args1);
-        const totalCount = result1[0].cnt;
-
-        if (totalCount > 0) {
-          throw new BadRequestException("이미 사용중인 아이디입니다.");
-        }
-
         // 데이터 저장하기
-        let sql2 = "INSERT INTO `members` (";
+        let sql2 = "INSERT INTO `products` (";
         sql2 +=
-          "user_id, user_pw, user_name, email, phone, birthday, gender, postcode, addr1, addr2, photo, ";
-        sql2 += "is_out, is_admin, login_date, reg_date, edit_date";
+          "product_name, product_price, product_stock, product_categorie, product_img, product_desc, product_nutri, product_allergy";
         sql2 += ") VALUES (";
-        sql2 +=
-          "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'N', 'N', null, now(), now());";
+        sql2 += "?, ?, ?, ?, ?, ?, ?, ?);";
 
         const args2 = [
-          user_id,
-          user_pw,
-          user_name,
-          email,
-          phone,
-          birthday,
-          gender,
-          postcode,
-          addr1,
-          addr2,
-          photo,
+          product_name,
+          product_price,
+          product_stock,
+          product_categorie,
+          product_img,
+          product_desc,
+          product_nutri,
+          product_allergy,
         ];
         await dbcon.query(sql2, args2);
       } catch (e) {
         return next(e);
       } finally {
-        dbcon.end();
+
       }
+      
 
       res.sendJson();
     });

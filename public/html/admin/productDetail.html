@@ -33,12 +33,15 @@
             <h3 class="content-title pull-left">상품관리</h3>
             <span class="content-sub-title pull-right">홈-상품관리-상품상세</span>
         </div>
-        <form class="clearfix prodContainer" enctype='multipart/form-data'>
+
+
+        <form class="clearfix prodContainer" enctype='multipart/form-data' action='/product' method="post"
+            id="formData">
             <div class="form-group">
                 <div class="col-md-12">
                     <label for="classification">분류</label>
                     <div>
-                        <select name="classification" id="prodOption">
+                        <select name="productCategorie" id="productCategorie">
                             <option class="prodSelect" value="">전체분류</option>
                             <option class="prodSelect" value="c&t">케이크&티라미슈</option>
                             <option class="prodSelect" value="b&p">빙수&파르페</option>
@@ -57,24 +60,20 @@
                         <img src="" name="img" id="img" style="border:1px solid rgb(167, 163, 163)">
                     </div>
                     <!-- 상품 이미지를 전송합니다 -->
-                    <form method="post">
-                        <div>
-                            <input type="file" id="prodFile" name="prodFile" accept=".jpg, .jpeg, .png">
-                        </div>
-                    </form>
+                    <input type="file" id="profileImg" name="profileImg" accept=".jpg, .jpeg, .png">
                 </div>
                 <div class="col-md-5 product-info">
                     <div class="col-md-10">
-                        <label for="product-name" class="col-md-4">상품명</label>
-                        <input type="text" name="product-name" id="product-name" />
+                        <label for="productName" class="col-md-4">상품명</label>
+                        <input type="text" name="productName" id="productName" />
                     </div>
                     <div class="col-md-10">
                         <label for="sale-price" class="col-md-4">판매가격</label>
-                        <input type="text" name="sale-price" id="sale-price" maxlength="10" />
+                        <input type="text" name="productPrice" id="productPrice" maxlength="10" />
                     </div>
                     <div class="col-md-10">
                         <label for="stock" class="col-md-4">재고</label>
-                        <input type="text" name="stock" id="stock" maxlength="5" />
+                        <input type="text" name="productStock" id="productStock" maxlength="11" />
                     </div>
                 </div>
             </div>
@@ -82,20 +81,19 @@
 
             <div class="form-group col-md-12">
                 <label for="product-details" class="pull-left">부가설명</label>
-                <textarea type="text" class="form-control" name="product-details" id="product-details"></textarea>
+                <input type="text" class="form-control" name="productDesc" id="productDesc"></input>
             </div>
             <div class="form-group col-md-12">
-                <label for="nutrition-info">영양정보</label>
-                <textarea type="text" class="form-control" name="nutrition-info" id="nutrition-info"></textarea>
+                <label for="productNutri">영양정보</label>
+                <input type="text" class="form-control" name="productNutri" id="productNutri"></input>
             </div>
             <div class="form-group col-md-12">
                 <label for="allergy-info" class="pull-left">알레르기 정보</label>
-                <textarea type="text" class="form-control" name="allergy-info" id="allergy-info"></textarea>
+                <input type="text" class="form-control" name="productAllergy" id="productAllergy"></input>
             </div>
-
             <button class="btn btn-primary pull-right btn-admin-setting" id="cancel" type="button">취소</button>
-            <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">삭제</button>
-            <button class="btn btn-primary pull-right btn-admin-setting" id="save" type="button">저장
+            <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="reset">삭제</button>
+            <button class="btn btn-primary pull-right btn-admin-setting" type="submit" id="save">저장</button>
         </form>
     </div>
 
@@ -109,43 +107,33 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const regexHelper = new RegexHelper();
+        let imgUrl = null;
 
-        document.getElementById("save").addEventListener("click", async e => {
+        document.querySelector("#formData").addEventListener("submit", async e => {
+
             e.preventDefault();
 
-            // dropdown 객체
-            const dropdown = document.querySelector("#prodOption");
+            const dropdown = document.querySelector("#productCategorie");
 
             // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
             const choose = dropdown.selectedIndex;
 
-
-
-            // 상품명
-            const product_name = document.querySelector("#product-name").value;
-
-            // 상품가격
-            const product_price = document.querySelector("#sale-price").value.trim();
-
-            // 재고 수량
-            const product_stock = document.querySelector("#stock").value.trim();
-
             // 이미지파일 소스
-            const product_img = document.querySelector("#img").getAttribute("src");
+            const productImg = document.querySelector("#img").getAttribute("src");
 
             // 선택된 option의 value 및 카테고리 
-            const product_categorie = dropdown[choose].value;
+            const productCategorie = dropdown[choose].value;
 
-            // 상품 상세설명
-            const product_desc = document.querySelector("#product-details").value;
-            
-            // 상품 영양정보
-            const product_nutri = document.querySelector("#nutrition-info").value;
 
-            // 상품 알레르기 정보
-            const product_allergy = document.querySelector("#allergy-info").value;
-            
-            if (!product_categorie) {
+            const productName = document.querySelector("#productName").value;
+            console.log(productName);
+            const productPrice = document.querySelector("#productPrice").value;
+            const productStock = document.querySelector("#productStock").value;
+            const productDesc = document.querySelector("#productDesc").value;
+            const productNutri = document.querySelector("#productNutri").value;
+            const productAllergy = document.querySelector("#productAllergy").value;
+
+            if (!productCategorie) {
                 Swal.fire({
                     text: "카테고리 값을 입력해주세요",
                     icon: 'error',
@@ -154,7 +142,7 @@
                 return false;
             }
 
-            if (!product_img) {
+            if (!productImg) {
                 Swal.fire({
                     text: "상품 이미지를 입력해주세요",
                     icon: 'error',
@@ -163,57 +151,100 @@
                 return false;
             }
 
-            if (!regexHelper.value("#product-name", "상품명을 입력하세요.")) {
+            if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
                 return false;
             }
 
-            if (!regexHelper.value("#sale-price", "판매가격을 입력하세요.")) {
+
+            if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
                 return false;
             }
-            if (!regexHelper.value("#stock", "재고를 입력하세요.")) {
+            if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
                 return false;
             }
 
-            if (!regexHelper.value("#product-details", "부가설명을 입력하세요.")) {
+
+
+
+            if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
                 return false;
             }
-            if (!regexHelper.value("#nutrition-info", "영양 정보를 입력하세요.")) {
+            if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
                 return false;
             }
-            if (!regexHelper.value("#allergy-info", "알레르기 정보를 입력하세요.")) {
+            if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
                 return false;
             }
-            // 유효성 검사 끝난 후 백엔드 전송
+
+
+
+            if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+            if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+            if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+            
+
+
+
+            let formData = new FormData();
+            // 폼 데이터를 넘깁니다.
+            formData.append('photo', imgUrl)
+            formData.append('productName', productName)
+            formData.append('productPrice', productPrice)
+            formData.append('productStock', productStock)
+            formData.append('productCategorie', productCategorie)
+            formData.append('productDesc', productDesc)
+            formData.append('productNutri', productNutri)
+            formData.append('productAllergy', productAllergy)
+            
             try {
-                await axios.post('/product', {
-                    product_name:product_name,
-                    product_price:product_price,
-                    product_stock:product_stock,
-                    product_img:product_img,
-                    product_categorie:product_categorie,
-                    product_desc:product_desc,
-                    product_nutri:product_nutri,
-                    product_allergy:product_allergy,
+                // await axios.post('/product', formData, {
+
+                // })
+                await axios.post('/product', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
                 })
             } catch (e) {
-                Swal.fire({
-                    text: `${e} 전송에 실패했습니다.`,
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
+                console.log(e);
             }
 
         })
 
         // 파일 업로드를 감지합니다.
-        document.querySelector("#prodFile").addEventListener("change", e => {
+        document.querySelector("#profileImg").addEventListener("change", e => {
 
             e.preventDefault();
             let img = document.querySelector("#img");
-
-            img.src = URL.createObjectURL(e.currentTarget.files[0]);
-            console.log(img);
-            imgUrl = img.src
+            if (!e.currentTarget.files[0]) {
+                img.src = ""
+                return;
+            } else {
+                img.src = URL.createObjectURL(e.currentTarget.files[0]);
+            }
+            imgUrl = e.currentTarget.files[0]
             console.log(imgUrl);
         });
         // 삭제버튼 이벤트

@@ -97,9 +97,11 @@ module.exports = () => {
         };
 
         req.getMultipart = () => {
+            console.log("getMultipart실행")
             const multipart = multer({
                 storage: multer.diskStorage({
                     destination: (req, file, callback) => {
+                        console.log("WebHelper:::::"+file);
                         fileHelper.mkdirs(config.upload.dir);
                         fileHelper.mkdirs(config.thumbnail.dir);
 
