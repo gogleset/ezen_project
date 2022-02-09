@@ -1,130 +1,201 @@
-<!--
-    @Filename: layout.css
-    @Author: 최진 (choij2494@gmail.com)
-    @description: The file to be used in the admin-index.html file.
--->
+<!-- 
+@Filename: admin event.html
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: admin event HTML
+ -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="../../css/admin/layout.css">
-    <link rel="stylesheet" href="../../css/admin/event.css">
-</head>
-
-<body>
-    <!-- 헤더입니다. -->
-    <div data-init="../inc/admin-header.html"></div>
-    <!-- 서브 타이틀 영역입니다. -->
-    <div class="container">
-        <div class="content-header">
-            <h3 class="content-title pull-left">이벤트</h3>
-            <span class="content-sub-title pull-right">홈-이벤트</span>
-        </div>
-    </div>
-    <!-- 검색과 삭제를 감싸는 영역입니다. -->
-    <form class="container">
-        <div class="setting-container">
-            <div class="admin-box-setting">
-                <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
-                <button class="btn btn-primary pull-left btn-admin-setting" id="logout" type="button">검색</button>
-                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">삭제</button>
-                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">이벤트등록</button>
-            </div>
-        </div>
-    </form>
-    <!-- 데이터 테이블 영역입니다. -->
-    <div class="container table-container">
-        <table class="table table-bordered table-hover table-condensed table-striped">
-            <colgroup>
-                <col width="1%">
-                <col width="30%">
-                <col width="30%">
-                <col width="10%">
-                <col width="10%">
-                <col width="20%">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th><input type="checkbox" name="mycheckbox" id="checkbox" value="" /></th>
-                    <th>제목</th>
-                    <th>Link</th>
-                    <th>Shows</th>
-                    <th>작성자</th>
-                    <th>등록일시</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- 페이지 네이션 영역입니다. -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
-
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="../assets/layout.js"></script>
-
-</body>
-
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Document</title>
+     <!-- bootstrap -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+ 
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+ 
+     <!-- sweetalert-->
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ 
+     <!-- Optional theme -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+     <link rel="stylesheet" href="../../css/admin/layout.css">
+     <link rel="stylesheet" href="../../css/admin/event.css">
+ </head>
+ 
+ <body>
+     <!-- 헤더입니다. -->
+     <div data-init="../inc/admin-header.html"></div>
+     <!-- 서브 타이틀 영역입니다. -->
+     <div class="container">
+         <div class="content-header">
+             <h3 class="content-title pull-left">이벤트</h3>
+             <span class="content-sub-title pull-right">홈-이벤트</span>
+         </div>
+     </div>
+     <!-- 검색과 삭제를 감싸는 영역입니다. -->
+     <form class="container">
+         <div class="setting-container">
+             <div class="admin-box-setting">
+                 <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
+                 <button class="btn btn-primary pull-left btn-admin-setting" id="search" type="search">검색</button>
+                 <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button"
+                     onclick="delRow()">삭제</button>
+                 <button class="btn btn-primary pull-right btn-admin-setting" id="add" type="button"><a
+                         href="/html/admin/event-add.html" style="text-decoration: none; color: #fff;">이벤트등록</a></button>
+             </div>
+         </div>
+     </form>
+     <!-- 데이터 테이블 영역입니다. -->
+     <div class="container table-container">
+         <table class="table table-bordered table-hover table-condensed table-striped" id="table">
+             <colgroup>
+                 <col width="2%">
+                 <col width="20%">
+                 <col width="65%">
+                 <col width="13%">
+             </colgroup>
+             <thead>
+                 <tr>
+                     <th><input type="checkbox" name="mycheckbox" class="" value="selectall" onclick="selectAll(this)" />
+                     </th>
+                     <th>제목</th>
+                     <th>Link</th>
+                     <th>Shows</th>
+                 </tr>
+             </thead>
+             <tbody id="listBody"></tbody>
+         </table>
+     </div>
+     <!-- 페이지 네이션 영역입니다. -->
+ <!--     <nav aria-label="Page navigation example">
+         <ul class="pagination">
+             <li class="page-item disabled">
+                 <a class="page-link" href="#" tabindex="-1">Previous</a>
+             </li>
+             <li class="page-item"><a class="page-link" href="#">1</a></li>
+             <li class="page-item"><a class="page-link" href="#">2</a></li>
+             <li class="page-item"><a class="page-link" href="#">3</a></li>
+             <li class="page-item">
+                 <a class="page-link" href="#">Next</a>
+             </li>
+         </ul>
+     </nav> -->
+ 
+     <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+         integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+         crossorigin="anonymous"></script>
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+     <script src="../assets/layout.js"></script>
+     <script id="tmpl" type="text/x-handlebars-template">
+         {{#each item}}
+         <tr>
+             <td><input type="checkbox" name="mycheckbox" class="checkbox" value=""/></td>
+             <td class="ellipsis"><a href="/html/admin/event-add.html?event_code={{event_code}}">{{event_title}}</a></td>
+             <td class="ellipsis"><span class="ellipsisTxt">{{event_link}}</span></td>
+             <td class="ellipsis">{{event_show}}</td>
+         </tr>
+         {{/each}}
+     </script>
+ 
+     <script>
+         (async () => {
+ 
+             // 불러온 데이터를 담을 변수
+             let json = null;
+             // // 전체 체크박스
+             // let boxGroup = document.getElementsByName('mycheckbox');
+ 
+             try {
+                 let response = await axios.get('/event');
+ 
+                 json = response.data;
+ 
+                 //console.log(json.item[0].event_code)
+ 
+             } catch (e) {
+                 const data = e.response.data;
+                 alert('[' + data.rt + ']' + data.rtmsg);
+                 return;
+             };
+ 
+             if (json != null) {
+                 const source = document.querySelector('#tmpl').innerHTML;
+                 const template = Handlebars.compile(source);
+                 const html = template(json);
+ 
+                 document.querySelector("#listBody").insertAdjacentHTML('beforeend', html);
+ 
+                 // //  전체 체크박스 선택하는 함수
+                 // function selectAll(selectAll) {
+                 //     boxGroup.forEach((checkbox) =>
+                 //         checkbox.checked = selectAll.checked
+                 //     )
+                 // };
+ 
+                 // 체크box가 선택 된 row 삭제 하기
+                 delRow = async (delRow) => {
+                     // 테이블 전체를 선택
+                     let table = document.getElementById('table');
+                     // 마지막 로우 (index는 0부터니까 -1)
+                     let lastRow = table.rows.length - 1;
+                     // 선택된 체크박스
+                     let chkCnt = checkCount();
+ 
+                     
+                     if (chkCnt > 0) {
+                         if (confirm("정말 삭제하시겠습니까?")) {
+                             for (let i = lastRow; i > 0; i--) {
+ 
+                                 if (document.getElementsByTagName("tr")[i].cells[0].firstChild.checked) {
+                                     //event_code 꺼내오기
+                                     let event_code = json.item[0].event_code
+ 
+                                     try { // DB에서 선택한 데이터 삭제
+                                         const url = "/event/" + event_code;
+                                         await axios.delete(url);
+                                     } catch (e) {
+                                         const data = e.response.data;
+                                         alert("[" + data.rt + "]" + data.rtmsg);
+                                         return;
+                                     }
+                                     // row에서 선택한 데이터 삭제
+                                     table.deleteRow(i);
+                                 }
+                             }
+                         }
+                     } else {
+                         alert(" 삭제 할 데이터를 선택해주세요");
+                         return
+                     }
+                 }
+ 
+                 // 선택된 체크박스 카운트하기
+                 function checkCount() {
+                     let table = document.getElementById('table');
+                     let lastRow = table.rows.length - 1;
+                     let rtnCnt = 0;
+ 
+                     for (let i = lastRow; i > 0; i--) {
+                         if (document.getElementsByTagName("tr")[i].cells[0].firstChild.checked)
+                         
+                         rtnCnt++;
+                     }
+                     return rtnCnt;
+                 }
+             }
+         })();
+     </script>
+ 
+ 
+ 
+ </body>
+ 
+ </html>

@@ -1,7 +1,7 @@
 /* 
 @Filename: event.css
 @Author: 임다정 (dazoo0221@gmail.com)
-@description: CSS event apply it.
+@description: event css.
 */
 
 /* 내용 wrap 영역 */
@@ -22,7 +22,6 @@
 .event-wrap{
     width: 100%;
 
-}
 
 /* event 단일  설정영역*/
 .list-item{

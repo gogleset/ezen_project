@@ -1,3 +1,8 @@
+/* 
+@Filename: admin event-add.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: 관리자 이벤트-add page css.
+*/
 th{
     text-align: center;
     vertical-align: middle !important;
@@ -9,7 +14,12 @@ th{
     margin: auto;
     border: 1px solid #ccc;
     text-align: center;
-    line-height: 390px;
+}
+
+.thumb-img-box img{
+    width: 95%;
+    margin: auto;
+    text-align: center;
 }
 .flx{
     display: flex;

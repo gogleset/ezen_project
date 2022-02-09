@@ -1,7 +1,7 @@
 /* 
 @Filename: qa.css
 @Author: 임다정 (dazoo0221@gmail.com)
-@description: CSS qa apply it.
+@description: qa 게시판css.
 */
 
 /* 내용 wrap 영역 */
@@ -11,9 +11,13 @@
     max-width: 1100px;
 }
 
+.title{
+    margin: 0 -5%;
+}
+
 .record{
     width: 100%;
-    margin: auto;
+    margin: 10px 0;
     text-indent: 5px;
 }
 

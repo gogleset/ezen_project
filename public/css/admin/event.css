@@ -1,8 +1,25 @@
-th, td{
+/* 
+@Filename: admin event.css
+@Author: 임다정 (dazoo0221@gmail.com)
+@description: 관리자 이벤트 css.
+*/
+th, td:nth-child(2n){
     text-align: center;
+    vertical-align: middle !important;
 }
 
-#checkbox{
-    vertical-align: middle;
-    padding-top: 10px;
+table{
+    table-layout: fixed;
+}
+
+
+/**링크 텍스트 줄임설정**/
+.ellipsis {
+    position: relative;
+}
+td{
+    overflow: hidden !important; 
+    text-overflow: ellipsis !important;
+    white-space:nowrap !important;
+    position: absolute;
 }
