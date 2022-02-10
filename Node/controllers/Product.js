@@ -11,12 +11,108 @@ const mysql2 = require("mysql2/promise");
 const regexHelper = require("../../helper/regex_helper");
 const MultipartException = require("../exceptions/MultipartException");
 const BadRequestException = require("../exceptions/BadRequestException");
-const utilHelper = require("../../helper/UtillHelper");
+const util = require("../../helper/UtillHelper");
 const multer = require("multer");
 
 // 라우팅 정의 부분
 module.exports = (app) => {
   let dbcon = null;
+  router.get("/product", async (req, res, next) => {
+    // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
+    const query = req.get("prod");
+  
+
+
+    // 현재 페이지 번호 받기(기본값은 1)
+    const page = req.get("page", 1);
+
+    // 한 페이지에 보여질 목록 수 받기 (기본값은 10, 최소 10, 최대 30)
+    const rows = req.get("rows", 10);
+
+    // 데이터 조회 결과가 저장될 빈 변수
+    let json = null;
+    let pagenation = null;
+
+    try {
+      // 데이터베이스 접속
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 데이터 조회
+      let sql1 = "SELECT COUNT(*) AS cnt FROM products";
+
+      // SQL문에 설정할 치환값
+      let args1 = [];
+
+      if (query != null) {
+        sql1 += " WHERE product_name LIKE concat('%', ?, '%')";
+        args1.push(query);
+      }
+      const [result1] = await dbcon.query(sql1, args1);
+      console.log([result1]);
+      const totalCount = result1[0].cnt;
+
+      // 페이지번호 정보를 계산한다.
+      pagenation = util.pagenation(totalCount, page, rows);
+      logger.debug(JSON.stringify(pagenation));
+
+      // 데이터 조회
+      let sql2 =
+        "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products";
+
+      // SQL문에 설정할 치환값
+      let args2 = [];
+
+      if (query != null) {
+        sql2 += " WHERE name LIKE concat('%', ?, '%')";
+        args2.push(query);
+      }
+      sql2 += " LIMIT ?, ?";
+      args2.push(pagenation.offset);
+      args2.push(pagenation.listCount);
+
+      const [result2] = await dbcon.query(sql2, args2);
+
+      // 조회 결과를 미리 준비한 변수에 저장함
+      json = result2;
+    } catch (e) {
+      return next(e);
+    } finally {
+      dbcon.end();
+    }
+    // 모든 처리에 성공했으므로 정상 조회 결과를 구성
+    res.sendJson({ pagenation: pagenation, item: json });
+  });
+
+  router.get("/product/:prod", async (req, res, next) => {
+    // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
+    const query = req.get("prod");
+
+    // 데이터 조회 결과가 저장될 빈 변수
+    let json = null;
+
+    try {
+      // 데이터베이스 접속
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 데이터 조회
+      let sql2 =
+        "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products WHERE product_code = ?";
+
+      const [result2] = await dbcon.query(sql2, query);
+
+      // 조회 결과를 미리 준비한 변수에 저장함
+      json = result2;
+      console.log(json);
+    } catch (e) {
+      return next(e);
+    } finally {
+      dbcon.end();
+    }
+    // 모든 처리에 성공했으므로 정상 조회 결과를 구성
+    res.sendJson({ item: json });
+  });
 
   router.post("/product", async (req, res, next) => {
     // if (!req.session.memberInfo) {
@@ -28,9 +124,9 @@ module.exports = (app) => {
     logger.debug("접속");
     // 업로드 수정하기
     // const upload = multipart.single("profile_img");
-    const upload = multipart.single('photo')
+    const upload = multipart.single("photo");
     // 업로드 처리 후 텍스트 파라미터 받기
-  
+
     upload(req, res, async (err) => {
       // 업로드 에러 처리
 
@@ -51,7 +147,9 @@ module.exports = (app) => {
       const product_allergy = req.post("productAllergy");
       const product_img = req.file.url;
       console.log(product_name);
-      console.log(product_img);
+      console.log(
+        "***::::::::::::::::::::::::::::::::::::::::::::::::::" + product_img
+      );
 
       // 유효성 검사
       try {
@@ -111,9 +209,7 @@ module.exports = (app) => {
       } catch (e) {
         return next(e);
       } finally {
-
       }
-      
 
       res.sendJson();
     });

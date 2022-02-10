@@ -106,6 +106,36 @@
     <script src="../../js/regex_helper.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        const params = new URLSearchParams(window.location.search);
+        const prod = params.get('prod');
+
+        data = null;
+
+        if (prod) {
+            (async () => {
+                try {
+
+                    const response = await axios.get(`/product/${prod}`)
+                    console.log(response);
+                    data = response.data.item;
+                } catch (e) {
+                    console.log(e);
+                }
+                data.map((v, i) => {
+                    document.getElementById("productCategorie").value = v.product_categorie;
+                    document.getElementById("productName").value = v.product_name;
+                    document.getElementById("productPrice").value = v.product_price;
+                    document.getElementById("productStock").value = v.product_stock;
+                    document.getElementById("productDesc").value = v.product_desc;
+                    document.getElementById("productNutri").value = v.product_nutri
+                    document.getElementById("productAllergy").value = v.product_allergy
+                    document.querySelector("#img").setAttribute("src", `../../..${v.product_img}`);
+                    // document.querySelector("#profileImg").files[0] = `../../..${v.product_img}`
+
+                    // console.log(document.querySelector("#profileImg").files[0]);
+                })
+            })();
+        }
         const regexHelper = new RegexHelper();
         let imgUrl = null;
 
@@ -203,7 +233,7 @@
             if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
                 return false;
             }
-            
+
 
 
 
@@ -217,7 +247,7 @@
             formData.append('productDesc', productDesc)
             formData.append('productNutri', productNutri)
             formData.append('productAllergy', productAllergy)
-            
+
             try {
                 // await axios.post('/product', formData, {
 
@@ -247,6 +277,9 @@
             imgUrl = e.currentTarget.files[0]
             console.log(imgUrl);
         });
+
+
+
         // 삭제버튼 이벤트
         document.getElementById("delete").addEventListener("click", e => { })
         // 취소버튼 이벤트

@@ -52,23 +52,24 @@
                     <option value="">베이커리</option>
                 </select>
                 <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
-                <button class="btn btn-primary pull-left btn-admin-setting" id="logout" type="button">검색</button>
-                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">상품삭제</button>
-                <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">상품추가</button>
+                <button class="btn btn-primary pull-left btn-admin-setting" id="search" type="button">검색</button>
+                <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">상품삭제</button>
+                <a class="btn btn-primary pull-right btn-admin-setting" id="add" type="button"
+                    href="productDetail.html">상품추가</a>
             </div>
         </div>
     </form>
     <!-- 데이터 테이블 영역입니다. -->
     <div class="container table-container">
-        <table class="table table-bordered table-hover table-condensed table-striped">
+        <table class="table table-bordered table-hover table-condensed table-striped text-center">
             <colgroup>
                 <col width="1%">
-                <col width="17%">
-                <col width="17%">
-                <col width="16%">
-                <col width="16%">
-                <col width="17%">
-                <col width="16%">
+                <col width="10%">
+                <col width="20%">
+                <col width="10%">
+                <col width="20%">
+                <col width="10%">
+                <col width="10%">
             </colgroup>
             <thead>
                 <tr>
@@ -81,57 +82,67 @@
                     <th class="text-center">재고</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" /></td>
-                    <td>&nbsp;</td>
-                    <td><img src="../../img/dessert39_simbol2.png" class="img-responsive center-block"></td>
-                    <td>&nbsp;</td>
-                    <td class="text-center"><a href="#">맛있는dessert40</a></td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" /></td>
-                    <td>&nbsp;</td>
-                    <td><img src="../../img/dessert39_simbol2.png" class="img-responsive center-block"></td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" /></td>
-                    <td>&nbsp;</td>
-                    <td><img src="../../img/dessert39_simbol2.png" class="img-responsive center-block"></td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+            <tbody class="contents">
+
             </tbody>
         </table>
     </div>
     <!-- 페이지 네이션 영역입니다. -->
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
+
         </ul>
     </nav>
 
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../assets/layout.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/pageHelper.js"></script>
+    <script>
+        // data 데이터입니다.
+        let data = null;
+        let pageData = null;
 
+        (async () => {
+            try {
+                const result = await axios.get('/product');
+                data = result.data.item
+                pageData = result.data.pagenation
+                console.log(data);
+
+            } catch (error) {
+                Swal.fire({
+                    text: error,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+            // 가져온 데이터를 기반으로 동적으로 DOM을 생성합니다
+            data.map((v, i) => {
+                document.querySelector(".contents").innerHTML += `
+                 <tr>
+                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="${v.product_code}" /></td>
+                    <td>${v.product_code}</td>
+                    <td><img src="../../..${v.product_img}" class="img-responsive center-block"></td>
+                    <td>${v.product_categorie}</td>
+                    <td class="text-center">
+                        <a href="./productDetail.html?prod=${v.product_code}" target="_blank">
+                            ${v.product_name}
+                            </a>
+                            </td>
+                    <td>${v.product_price}</td>
+                    <td>${v.product_stock}</td>
+                </tr>
+                `
+            })
+            // 페이지 구현 함수입니다.
+            pagenation(".pagination", pageData);
+        })();
+
+
+    </script>
 </body>
 
 </html>
