@@ -98,6 +98,8 @@ app.use(require('./member')(app));*/
 app.use(require('./controllers/members')(app)); //회원테이블
 app.use(require('./controllers/import')(app)); //아임포트 결제 정보 
 app.use(require('./controllers/Product')(app)); //상품 테이블
+app.use(require('./controllers/Event')(app)); // 이벤트 테이블
+app.use(require('./controllers/QnA')(app)); // QnA 테이블
 
 app.use((err, req, res, next) => {
     if (err instanceof BadRequestException) {
