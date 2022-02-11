@@ -43,10 +43,10 @@
                     <div>
                         <select name="productCategorie" id="productCategorie">
                             <option class="prodSelect" value="">전체분류</option>
-                            <option class="prodSelect" value="c&t">케이크&티라미슈</option>
-                            <option class="prodSelect" value="b&p">빙수&파르페</option>
-                            <option class="prodSelect" value="m&o">마카롱&오믈렛</option>
-                            <option class="prodSelect" value="c&p">쿠키</option>
+                            <option class="prodSelect" value="t">케이크&티라미슈</option>
+                            <option class="prodSelect" value="b">빙수&파르페</option>
+                            <option class="prodSelect" value="m">마카롱&오믈렛</option>
+                            <option class="prodSelect" value="c">쿠키</option>
                             <option class="prodSelect" value="b">베이커리</option>
                         </select>
                     </div>
@@ -114,7 +114,6 @@
         if (prod) {
             (async () => {
                 try {
-
                     const response = await axios.get(`/product/${prod}`)
                     console.log(response);
                     data = response.data.item;
@@ -135,133 +134,137 @@
                     // console.log(document.querySelector("#profileImg").files[0]);
                 })
             })();
+
+            document.querySelector("#save").innerHTML = "수정";
+        } else {
+            const regexHelper = new RegexHelper();
+            let imgUrl = null;
+
+            document.querySelector("#formData").addEventListener("submit", async e => {
+
+                e.preventDefault();
+
+                const dropdown = document.querySelector("#productCategorie");
+
+                // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
+                const choose = dropdown.selectedIndex;
+
+                // 이미지파일 소스
+                const productImg = document.querySelector("#img").getAttribute("src");
+
+                // 선택된 option의 value 및 카테고리 
+                const productCategorie = dropdown[choose].value;
+
+
+                const productName = document.querySelector("#productName").value;
+                console.log(productName);
+                const productPrice = document.querySelector("#productPrice").value;
+                const productStock = document.querySelector("#productStock").value;
+                const productDesc = document.querySelector("#productDesc").value;
+                const productNutri = document.querySelector("#productNutri").value;
+                const productAllergy = document.querySelector("#productAllergy").value;
+
+                if (!productCategorie) {
+                    Swal.fire({
+                        text: "카테고리 값을 입력해주세요",
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                    return false;
+                }
+
+                if (!productImg) {
+                    Swal.fire({
+                        text: "상품 이미지를 입력해주세요",
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                    return false;
+                }
+
+                if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
+                    return false;
+                }
+
+
+                if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
+                    return false;
+                }
+
+
+
+
+                if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
+                    return false;
+                }
+
+
+
+                if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
+                    return false;
+                }
+
+                if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
+                    return false;
+                }
+                if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
+                    return false;
+                }
+
+
+
+
+                let formData = new FormData();
+                // 폼 데이터를 넘깁니다.
+                formData.append('photo', imgUrl)
+                formData.append('productName', productName)
+                formData.append('productPrice', productPrice)
+                formData.append('productStock', productStock)
+                formData.append('productCategorie', productCategorie)
+                formData.append('productDesc', productDesc)
+                formData.append('productNutri', productNutri)
+                formData.append('productAllergy', productAllergy)
+
+                try {
+                    // await axios.post('/product', formData, {
+
+                    // })
+                    await axios.post('/product', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    })
+                } catch (e) {
+                    console.log(e);
+                }
+
+            })
+
         }
-        const regexHelper = new RegexHelper();
-        let imgUrl = null;
-
-        document.querySelector("#formData").addEventListener("submit", async e => {
-
-            e.preventDefault();
-
-            const dropdown = document.querySelector("#productCategorie");
-
-            // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
-            const choose = dropdown.selectedIndex;
-
-            // 이미지파일 소스
-            const productImg = document.querySelector("#img").getAttribute("src");
-
-            // 선택된 option의 value 및 카테고리 
-            const productCategorie = dropdown[choose].value;
-
-
-            const productName = document.querySelector("#productName").value;
-            console.log(productName);
-            const productPrice = document.querySelector("#productPrice").value;
-            const productStock = document.querySelector("#productStock").value;
-            const productDesc = document.querySelector("#productDesc").value;
-            const productNutri = document.querySelector("#productNutri").value;
-            const productAllergy = document.querySelector("#productAllergy").value;
-
-            if (!productCategorie) {
-                Swal.fire({
-                    text: "카테고리 값을 입력해주세요",
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
-                return false;
-            }
-
-            if (!productImg) {
-                Swal.fire({
-                    text: "상품 이미지를 입력해주세요",
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
-                return false;
-            }
-
-            if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
-                return false;
-            }
-
-
-            if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
-                return false;
-            }
-
-
-
-
-            if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
-                return false;
-            }
-
-
-
-            if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
-                return false;
-            }
-
-            if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
-                return false;
-            }
-            if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
-                return false;
-            }
-
-
-
-
-            let formData = new FormData();
-            // 폼 데이터를 넘깁니다.
-            formData.append('photo', imgUrl)
-            formData.append('productName', productName)
-            formData.append('productPrice', productPrice)
-            formData.append('productStock', productStock)
-            formData.append('productCategorie', productCategorie)
-            formData.append('productDesc', productDesc)
-            formData.append('productNutri', productNutri)
-            formData.append('productAllergy', productAllergy)
-
-            try {
-                // await axios.post('/product', formData, {
-
-                // })
-                await axios.post('/product', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                })
-            } catch (e) {
-                console.log(e);
-            }
-
-        })
 
         // 파일 업로드를 감지합니다.
         document.querySelector("#profileImg").addEventListener("change", e => {

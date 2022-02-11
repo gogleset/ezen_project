@@ -14,13 +14,14 @@ function pagenation(selector, data) {
   // 1) 이전 그룹 링크 : <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
   const li1 = document.createElement("li");
   li1.classList.add("page-item");
-
+  
+  console.log(query);
   const a1 = document.createElement("a");
   a1.innerHTML = "&laquo;";
   a1.classList.add("page-link");
   a1.setAttribute(
     "href",
-    "/professor/list.html?page=" + data.prevGroupLastPage
+    "./product.html?page=" + data.prevGroupLastPage + "&query=" + query + "&cate" + cate 
   );
   // + "&query=" + query
   if (data.prevGroupLastPage == 0) {
@@ -41,7 +42,7 @@ function pagenation(selector, data) {
     const a2 = document.createElement("a");
     a2.innerHTML = i;
     a2.classList.add("page-link");
-    a2.setAttribute("href", "/professor/list.html?page=" + i);
+    a2.setAttribute("href", "./product.html?page=" + i + '&query=' + query + "&cate" + cate );
     // + '&query=' + query
 
     if (data.nowPage == i) {
@@ -60,7 +61,7 @@ function pagenation(selector, data) {
   a3.classList.add("page-link");
   a3.setAttribute(
     "href",
-    "/professor/list.html?page=" + data.nextGroupFirstPage
+    "./product.html?page=" + data.nextGroupFirstPage + '&query=' + query + "&cate" + cate 
   );
 //   +"&query=" + query;
   if (data.nextGroupFirstPage == 0) {

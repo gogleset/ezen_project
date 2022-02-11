@@ -19,15 +19,15 @@ module.exports = (app) => {
   let dbcon = null;
   router.get("/product", async (req, res, next) => {
     // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
-    const query = req.get("prod");
-  
-
-
+    const query = req.get("query");
+    const cate = req.get("cate");
+    console.log(cate);
     // 현재 페이지 번호 받기(기본값은 1)
-    const page = req.get("page", 1);
+    const page = req.get("page");
+    console.log(page);
 
     // 한 페이지에 보여질 목록 수 받기 (기본값은 10, 최소 10, 최대 30)
-    const rows = req.get("rows", 10);
+    const rows = req.get("rows", 7);
 
     // 데이터 조회 결과가 저장될 빈 변수
     let json = null;
@@ -44,10 +44,13 @@ module.exports = (app) => {
       // SQL문에 설정할 치환값
       let args1 = [];
 
-      if (query != null) {
+      if (query != null && cate != null) {
         sql1 += " WHERE product_name LIKE concat('%', ?, '%')";
+        sql1 += " AND product_categorie LIKE concat('%', ?, '%')";
         args1.push(query);
+        args1.push(cate);
       }
+
       const [result1] = await dbcon.query(sql1, args1);
       console.log([result1]);
       const totalCount = result1[0].cnt;
@@ -63,10 +66,13 @@ module.exports = (app) => {
       // SQL문에 설정할 치환값
       let args2 = [];
 
-      if (query != null) {
-        sql2 += " WHERE name LIKE concat('%', ?, '%')";
+      if (query != null && cate != null) {
+        sql2 += " WHERE product_name LIKE concat('%', ?, '%')";
+        sql2 += " AND product_categorie LIKE concat('%', ?, '%')";
         args2.push(query);
+        args2.push(cate);
       }
+
       sql2 += " LIMIT ?, ?";
       args2.push(pagenation.offset);
       args2.push(pagenation.listCount);
