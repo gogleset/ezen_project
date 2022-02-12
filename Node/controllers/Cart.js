@@ -1,3 +1,10 @@
+/**
+ * @filename  : Cart.js
+ * @author    : 임다정 (dazoo0221@gmail.com)
+ * @description : Cart DB연동
+ **/
+
+
 /** 모듈 참조 */
 const axios = require("axios");
 const router = require("express").Router();
