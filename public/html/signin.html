@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="form-wrap">
-                    <form action="" id="signin-form">
+                    <form method="post" action="/member/login" id="signin-form">
                         <div class="input-box">
                             <input type="text" name="userid" id="userid" placeholder="아이디">
                             <input type="password" name="userpw" id="userpw" placeholder="비밀번호">
@@ -70,28 +70,23 @@
         document.querySelector("#signin-form").addEventListener("submit", e => {
             e.preventDefault();
 
-            //userid에서 받아올 값
-            const userid = document.getElementById("userid").value;
+            const member_id = document.getElementById("userid").value;
+            const member_pw = document.getElementById("userpw").value;
 
-            //userpw에서 받아올 값
-            const userpw = document.getElementById("userpw").value;
-
-            if (userid == "userid" && userpw == "12345678") {
-                Swal.fire({
-                    text: '로그인 성공',
-                    confirmButtonText: 'success'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.href = "./main.html"  // 향후 로그인 성공 시 메인 페이지로 연결
-                    }
-                });
-
-            } else {
-                Swal.fire({
-                    text: '아이디 또는 비밀번호가 일치하지 않습니다.',
-                    icon: 'error'
-                });
-            }
+            (async () => {
+                try {
+                    // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
+                    const response = await axios.post('/members/login', { member_id: member_id, member_pw: member_pw });
+                    location.href = "index.html";
+                } catch (error) {
+                    const errorMsg = '[' + error.response.status + '] ' + error.response.statusText;
+                    console.error(errorMsg);
+                    Swal.fire({
+                        text: '로그인에 실패했습니다. 아이디나 비밀번호를 확인하세요.',
+                        icon: 'error'
+                    });
+                }
+            })();
 
 
             // 아이디, 비밀번호 알림 따로 구분
@@ -101,14 +96,14 @@
                     text:'아이디가 일치하지 않습니다.',
                     icon:'error'
                 });
-
+ 
             }            
             else if (userid == "userid" && userpw !== "12345678") {
                 Swal.fire({
                     text:'비밀번호가 일치하지 않습니다.',
                     icon:'error'
                 });
-
+ 
             } else {
                 Swal.fire({
                     text: '아이디와 비밀번호를 확인 후 다시 시도해주세요',

@@ -25,6 +25,9 @@
   <link rel="stylesheet" href="../css/reset.css" />
   <link rel="stylesheet" href="../css/headerfooter.css">
   <link rel="stylesheet" href="../css/menu.css" />
+
+  <!-- sweetalert-->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -82,7 +85,7 @@
                 <a href="#" class="menu4-3"><span class="text">나의 QnA</span></a>
               </li>
               <li>
-                <a href="#" class="menu4-4"><span class="text">회원정보 수정</span></a>
+                <a id="signUpdate" class="menu4-4"><span class="text">회원정보 수정</span></a>
               </li>
             </ul>
           </li>
@@ -90,7 +93,7 @@
       </div>
     </div>
   </div>
-
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="../fake_data/menus.js"></script>
   <script>
     // fake_data에서 menus 데이터를 가져와 이동하는 링크를 생성 - 디저트 메뉴에 대해서만 생성.  
@@ -102,6 +105,29 @@
         </a>`;
       menuUlElement.appendChild(newLiElement);
     }
+
+    // 회원정보 수정 클릭시 파라미터 넘김
+    document.querySelector("#signUpdate").addEventListener("click", e => {
+      (async () => {
+        // ajax 결과가 저장될 json
+        let json = null;
+
+        // ajax 요청
+        try {
+          const response = await axios.post('/members/session');
+          json = response.data;
+          const member_id = json.item[0].member_id;
+          location.href = "/html/modification.html?member_id=" + member_id;
+        } catch {
+          Swal.fire({
+            text: '로그인중이 아닙니다.',
+            icon: 'error'
+          });
+          return;
+        }
+
+      })();
+    })
   </script>
 </body>
 

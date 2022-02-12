@@ -42,7 +42,8 @@
         <div data-init="./inc/header.html"></div>
 
         <!-- 내용부분입니다. -->
-        <form class="content box-modification-inner div-center" name="join_form" id="join_form">
+        <form method="post" action="/members/update" class="content box-modification-inner div-center" name="join_form"
+            id="join_form">
             <h1>회원정보 수정</h1>
 
             <!-- 아이디-->
@@ -222,7 +223,49 @@
             element_wrap.style.display = 'block';
         }
     </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript">
+        //메뉴에서 회원가입으로 이동시 얻은 member_id로 조회하여 인풋태그에 저장되어있던 정보들을 넣는다.
+        let member_id = null;
+
+        const inputId = document.getElementById("user_id");
+        const inputEmail = document.getElementById("email");
+        const inputName = document.getElementById("user_name");
+        const inputPhone = document.getElementById("tel");
+        const inputPostcode = document.getElementById("postcode");
+        const inputAddr1 = document.getElementById("address");
+        const inputAddr2 = document.getElementById("detailAddress");
+        const inputBirthDate = document.getElementById("user_date");
+
+        (async () => {
+            const params = new URLSearchParams(window.location.search);
+            member_id = params.get('member_id');
+            // ajax 결과가 저장될 json
+            let json = null;
+
+            // ajax 요청
+            try {
+                const response = await axios.get('/members/set/' + member_id);
+                json = response.data.item[0];
+                console.log(json);
+
+            } catch (e) {
+                console.log(e);
+                return;
+            }
+
+            inputId.value = json.member_id;
+            inputEmail.value = json.member_email;
+            inputName.value = json.member_name;
+            inputPhone.value = json.member_phone;
+            inputPostcode.value = json.member_postcode;
+            inputAddr1.value = json.member_addr1;
+            inputAddr2.value = json.member_addr2;
+            inputBirthDate.value = (json.member_birth).substr(0, 10);
+        })();
+
+
+
         document.querySelector("#join_form").addEventListener("submit", e => {
             e.preventDefault();
 
@@ -301,13 +344,45 @@
             if (!regexHelper.value("#user_date", "생년월일을 선택해주세요.")) {
                 return false;
             }
+
             Swal.fire({
-                text: "회원가입을 환영합니다.",
+                text: "회원정보 수정이 완료되었습니다.",
                 icon: 'success',
                 confirmButtonText: '확인'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    location.href = ""; //넘어갈 페이지 설정해야됨
+                    //Node에 넘겨줄 값
+                    const member_id = document.getElementById("user_id").value;
+                    const member_email = document.getElementById("email").value;
+                    const member_pw = document.getElementById("user_pw").value;
+                    const member_name = document.getElementById("user_name").value;
+                    const member_phone = document.getElementById("tel").value;
+                    const member_postcode = document.getElementById("postcode").value;
+                    const member_addr1 = document.getElementById("address").value;
+                    const member_addr2 = document.getElementById("detailAddress").value;
+                    const member_birth = document.getElementById("user_date").value;
+
+
+                    //즉시실행 비동기 처리 함수
+                    (async () => {
+                        try {
+                            // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
+                            const response = await axios.put('/members/edit/'+ member_id, {
+                                
+                                member_email: member_email,
+                                member_pw: member_pw,
+                                member_name: member_name,
+                                member_phone: member_phone,
+                                member_postcode: member_postcode,
+                                member_addr1: member_addr1,
+                                member_addr2: member_addr2,
+                                member_birth: member_birth,
+                            });
+                            location.href = "index.html"; //넘어갈 페이지 설정해야됨
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    })();
                 }
             });
         });
