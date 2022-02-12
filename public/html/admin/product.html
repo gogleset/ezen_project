@@ -51,7 +51,7 @@
                     <input type="search" class="form-control admin-searchbar pull-left" placeholder="검색어를 입력하세요."
                         id="query" name="query">
                     <button class="btn btn-primary pull-left btn-admin-setting" id="search" type="submit">검색</button>
-                    <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">상품삭제</button>
+                    <button class="btn btn-danger pull-right btn-admin-setting" id="delete" type="button">상품삭제</button>
                     <a class="btn btn-primary pull-right btn-admin-setting" id="add" type="button"
                         href="productDetail.html">상품추가</a>
                 </div>
@@ -72,7 +72,7 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th><input type="checkbox" name="mycheckbox" id="checkAll" value="" /></th>
+                    <th class="text-center">선택</th>
                     <th class="text-center">상품코드</th>
                     <th class="text-center">이미지</th>
                     <th class="text-center">분류</th>
@@ -107,12 +107,13 @@
 
         // 검색어 파라미터를 input 태그에 설정
         document.querySelector("#query").value = query;
-        // 검색어 파라미터와 URL의 cate 변수와 같은 건 seleted 합니다.
+
+        // 검색어 파라미터와 URL의 cate 변수와 같은 걸 seleted 합니다.
         let categories = document.querySelectorAll(".prodSelect");
         console.log(categories);
         categories.forEach((v, i) => {
             console.log(v.value);
-            if(cate == v.value){
+            if (cate == v.value) {
                 v.setAttribute("selected", "selelted");
             }
         });
@@ -145,7 +146,7 @@
             document.querySelector(".contents").innerHTML = ""
             data.map((v, i) => {
                 document.querySelector(".contents").innerHTML += `
-                 <tr>
+                 <tr class="contentsInner">
                     <td><input type="checkbox" name="mycheckbox" id="checkbox" value="${v.product_code}" /></td>
                     <td>${v.product_code}</td>
                     <td><img src="../../..${v.product_img}" class="img-responsive center-block"></td>
@@ -168,8 +169,77 @@
 
         // 검색 값 전송하고 값 가져오기
 
+        // 삭제버튼 눌렀을 시
+        document.querySelector("#delete").addEventListener("click", e => {
+            e.preventDefault();
+            // 스위트 알럿2
+            Swal.fire({
+                title: '상품을 삭제하시겠습니까?',
+                text: '삭제된 상품은 복구할 수 없습니다.',
+                icon: 'warning',
+
+                showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+                cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+                reverseButtons: true, // 버튼 순서 거꾸로
+
+            }).then(async result => {
+                // 만약 Promise리턴을 받으면,
+                if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+                    let check = document.querySelectorAll("#checkbox:checked");
+                    // 백엔드로 보낼 pk값들입니다.
+
+                    // 백엔드로 보낼 FormData입니다.
+                    // let formData = new FormData();
 
 
+                    //check를 검사합니다.
+                    let key = Array.from(check).map((v, i) => {
+                        // 부모를 찾아 삭제합니다.
+                        v.closest(".contentsInner").remove();
+                        return parseInt(v.value);
+                    });
+                    console.log(key);
+
+                    let keys = {
+                        key : key
+                    }
+                    console.log(keys.key);
+
+                    // key의 값을 백엔드에 전송할 formData에 넣습니다.
+                    // key.forEach((v) => {
+                    //     formData.append('key[]', v);
+                    // });
+                    // console.log(formData);
+
+                    try {
+                        // 서버와 연결
+                        const response = await axios.delete('/product', {
+                            data: keys
+                        })
+                        console.log(response);
+
+                    } catch (e) {
+                        Swal.fire({
+                            text: `{${e}} \n 서버와 연결에 실패했습니다.`,
+                            icon: 'error',
+                            confirmButtonText: '확인'
+                        });
+                    }
+                    // 성공 시 로직
+
+
+                    Swal.fire('삭제가 완료되었습니다.', '삭제되었습니다.', 'success');
+
+                    location.reload(true);
+                }
+            });
+
+
+        });
 
 
         function pagenation(selector, data) {
@@ -238,6 +308,9 @@
             li3.appendChild(a3);
             container.appendChild(li3);
         }
+
+
+
 
     </script>
 </body>

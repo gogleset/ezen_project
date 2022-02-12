@@ -215,10 +215,62 @@ module.exports = (app) => {
       } catch (e) {
         return next(e);
       } finally {
+        dbcon.end();
       }
 
       res.sendJson();
     });
+  });
+
+  //   데이터 삭제 --> DELETE
+  router.delete("/product", async (req, res, next) => {
+    const key = req.post("key");
+
+    if (key === undefined) {
+      //400 Bad Request -> 잘못된 요청
+      return next(new Error(400));
+    }
+
+    try {
+      // 데이터 베이스접속
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 삭제하고자 하는 원 데이터를 참조하는 자식 데이터를 먼저 삭제해야 한다.
+      // 만약 자식데이터를 유지해야 한다면 참조키 값을 null로 업데이트 해야한다.
+      // 단, 자식 데이터는 결과 행 수가 0이더라도 무시한다.
+
+      // await dbcon.query(
+      //   "ALTER TABLE `student` CHANGE `profno` `profno` INT(11) NULL;"
+      // );
+      // await dbcon.query("UPDATE student SET profno = null WHERE profno = ?", [
+      //   profno,
+      // ]);
+
+      //데이터 삭제하기
+      let sql = "DELETE FROM products WHERE product_code IN (";
+      key.map((v, i) => {
+        if (i == key.length - 1) {
+          return (sql += "?");
+        }
+        sql += "?,";
+      });
+      sql += ")";
+      console.log(sql);
+      console.log(key);
+      const [result1] = await dbcon.query(sql, key);
+      logger.debug([result1]);
+      if (result1.affectedRows < 1) {
+        throw new Error("삭제된 데이터가 없습니다.");
+      }
+    } catch (e) {
+      logger.debug(e);
+    }
+
+    // await dbcon.query("UPDATE carts SET product_code = null WHERE product_code IN "
+
+    // 모든 처리에 성공했으므로 정상 조회 결과 구성
+    res.sendJson();
   });
   return router;
 };
