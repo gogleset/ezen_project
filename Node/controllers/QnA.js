@@ -30,23 +30,38 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            // 전체 데이터 조회
-            let sql1 = 'SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_id FROM qnas q inner join members m on q.member_code=m.member_code';
+            // 전체 데이터수 조회 - 페이지 번호구현에 쓰일dt
+            let sql1 = 'SELECT COUNT(*) AS cnt FROM qnas'
             let args1 = [];
 
             if (query != null) {
-                sql += " WHERE qna_title Like concat('%', ?, '%')";
-
-                const totalCount = result1[0];
+                sql1 += " WHERE qna_title Like concat('%', ?, '%')";
+                args1.push(query);
             }
 
             const [result1] = await dbcon.query(sql1, args1);
-            const totalCount = result1[0];
+            const totalCount = result1[0].cnt;
 
             pagenation = utilHelper.pagenation(totalCount, page, rows);
             logger.debug(JSON.stringify(pagenation));
 
-            json = result1;
+
+            // 전체 데이터 조회
+            let sql2 = 'SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_code, m.member_id FROM qnas q inner join members m on q.member_code=m.member_code';
+            let args2 = [];
+
+            if (query != null) {
+                sql2 += " WHERE qna_desc Like concat('%', ?, '%')";
+                args2.push(query);
+            }
+
+            sql2 += " LIMIT ?, ?";
+            args2.push(pagenation.offset);
+            args2.push(pagenation.listCount);
+
+            const [result2] = await dbcon.query(sql2, args2);
+
+            json = result2;
 
         } catch (err) {
             return next(err);
@@ -59,7 +74,8 @@ module.exports = (app) => {
 
 
     // 특정 데이터 조회  --> 본인이 작성한 글 가져오기
-    router.get('/qna/myboard', async (req, res, next) => {
+    router.get('/qna/:qna_code', async (req, res, next) => {
+        const qnaCode = req.get('qna_code')
 
         // DB세션에 저장된 데이터 가져오기
         let sessionInfo = req.session.memberInfo
@@ -71,10 +87,15 @@ module.exports = (app) => {
             await dbcon.connect();
 
             // qnas 테이블에서 세션에 저장된 ID와 일치하는 게시글 조회하는 sql문
-            let sql1 = 'SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_id FROM qnas q inner join members m on q.member_code = m.member_code where m.member_id = ?';
+            let sql1 = "SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_id FROM qnas q inner join members m on q.member_code = m.member_code where qna_code = ?";
 
-            const [result1] = await dbcon.query(sql1, sessionInfo.member_id);
-    
+            // 사용자 qna에서 확인 시 본인의 게시글만 확인되어야하기때문에 sql문에 AND 연산자 추가하여 검색 조건을 추가함 sessionInfo.member_id 
+            if (qnaCode != null) {
+                sql1 += " AND m.member_id = sessionInfo.member_id";
+            }
+
+            const [result1] = await dbcon.query(sql1, qnaCode);
+
             json = result1;
 
         } catch (err) {
@@ -133,7 +154,7 @@ module.exports = (app) => {
 
 
     // 데이터 수정
-    router.put('/qna/:no', async (req, res, next) => {
+    router.put('/qna/:qna_code', async (req, res, next) => {
         const qnaCode = req.get('qna_code');
         const qnaTiTle = req.post('qna_title');
         const qnaDesc = req.post('qna_desc');
@@ -142,9 +163,24 @@ module.exports = (app) => {
         const qnadate = req.post('qna_date');
         const memberCode = req.post('member_code');
 
-        if (qnaCode === null || qnaTiTle === null || qnaDesc === null || qnaState === null || qnadate === null) {
+        if (qnaCode === null || qnaTiTle === null || qnaDesc === null || qnaState === null) {
             return next(new Error(400));
         }
+
+        // 유효성 검사
+
+        try{
+            regexHelper.value(qnaTiTle, '제목 값이 없습니다.'); 
+            regexHelper.value(qnaDesc, '내용 값이 없습니다.'); 
+            regexHelper.value(qnaState, '상태 값이 없습니다.'); 
+            regexHelper.value(qnadate, '날짜 값이 없습니다.'); 
+
+            regexHelper.maxLength(qnaTiTle, 20, '제목이 너무 깁니다.'); 
+            regexHelper.maxLength(qnaDesc, 255, '내용이 너무 깁니다.'); 
+
+        }catch(err){
+            return next(err);
+        };
 
         let json = null;
 
@@ -152,8 +188,8 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            const sql = 'UPDATE qnas SET qna_title=?, qna_desc=?, qna_answer=?, qna_state=?, qna_date=?, member_code =? WHERE qna_code=?'
-            const input_data = [qnaTiTle, qnaDesc, qnaAnswer, qnaState, qnadate, memberCode];
+            const sql = `UPDATE qnas SET qna_title=?, qna_desc=?, qna_answer=?, qna_state=? WHERE qna_code=?`
+            const input_data = [qnaTiTle, qnaDesc, qnaAnswer, qnaState, qnaCode];
             const [result1] = await dbcon.query(sql, input_data);
 
             if (result1.affectedRows < 1) {
@@ -170,10 +206,10 @@ module.exports = (app) => {
 
 
     // 데이터 삭제
-    router.delete('/qna/:no', async (req, res, next) => {
+    router.delete('/qna/:qna_code', async (req, res, next) => {
         const qnaCode = req.get('qna_code');
 
-        if (qna_code === null) {
+        if (qnaCode === null) {
             return next(new Error(400));
         }
 
@@ -182,7 +218,7 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            const sql = 'DELETE FROM event WHERE qna_code = ?'
+            const sql = 'DELETE FROM qnas WHERE qna_code = ?'
 
             const [result1] = await dbcon.query(sql, qnaCode);
 

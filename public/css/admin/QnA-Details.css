@@ -4,7 +4,17 @@
 @description: The file to be used in the admin-QnA-Details.html file.
 */
 
-.qna-details-title-content,
+.qna-details-title-content1{
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid rgb(153, 153, 153);
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+.qna-details-title-content2,
 .qna-details-answer-content {
   display: block;
   width: 100%;

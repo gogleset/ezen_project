@@ -35,23 +35,24 @@
         </div>
     </div>
     <!-- 문의내용, 답변 영역입니다. -->
-    <div class="container">
+    <div class="container qnaForm">
         <div class="content-header">
-            <h4 class="qna-details-title">문의 내용</h4>
-            <div class="qna-details-title-content">
-                <!-- 최대 문자수 2500자?? 정해야된다. -->
-                <span> tempore nulla dicta, nemo ipsam? Laborum exercitationem harum esse perspiciatis id?
-
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores quidem officiis debitis
-                    accusantium vel eius, quia fugiat, deserunt laudantium facilis praesentium animi excepturi numquam?
-                    Dolorum nostrum magni fuga ipsa dignissimos?
-                </span>
-            </div>
+            <h4 class="qna-details-title">문의 내용</h4> <!--문의내용 영역은 수정불가하도록 비활성화처리함.-->
+            <input class="qna-details-title-content1" disabled>
+            <!-- 최대 문자수 20자. -->
+            </input>
+            <input class="qna-details-title-content2" disabled>
+            <!-- 최대 문자수 250자 -->
+            <span>
+            </span>
+            </input>
             <h4 class="qna-details-answer">답변</h4>
             <form>
                 <textarea class="qna-details-answer-content" placeholder="답변을 적어주세요"></textarea>
-                <button type="button" id="qnaDelete" class="btn btn-danger btn-qna-decision btn-delete pull-right">삭제</button>
-                <button type="button" id="qnaSave" class="btn btn-primary btn-qna-decision btn-save pull-right">등록</button>
+                <button type="button" id="qnaDelete"
+                    class="btn btn-danger btn-qna-decision btn-delete pull-right">삭제</button>
+                <button type="submit" id="qnaSave"
+                    class="btn btn-primary btn-qna-decision btn-save pull-right">등록</button>
             </form>
         </div>
     </div>
@@ -64,45 +65,131 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../assets/layout.js"></script>
+
     <script>
-        document.querySelector('#qnaSave').addEventListener('click', (e) => {
-            Swal.fire({
-                title: '답변을 등록하시겠습니까?',
-                text: "등록하시면 수정하실 수 없습니다.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '등록',
-                cancelButtonText: '취소'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
-                        if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
-                    })
+        (async () => {
+            const qnaTitle = document.querySelector(".qna-details-title-content1")
+            const qnaDesc = document.querySelector(".qna-details-title-content2")
+            const qnaAnswer = document.querySelector(".qna-details-answer-content")
+            const btnSave = document.querySelector(".btn-save")
+
+            const params = new URLSearchParams(window.location.search);
+            qnaCode = params.get('qna_code');
+
+            if (!qnaCode) {
+                alert('게시글이 없습니다.');
+                history.back();
+                return;
+            }
+
+            let json = null;
+
+            try {
+                const response = await axios.get(`/qna/ ${qnaCode}`);
+                json = response.data;
+            } catch (e) {
+                alert(e.response.data.rtmsg);
+                return;
+            };
+
+            // 조회결과가 있다면 input 태그에 조회결과를 세팅
+            if (json != null) {
+                qnaTitle.value = json.item[0].qna_title;
+                qnaDesc.value = json.item[0].qna_desc;
+
+
+                //관리자가 이미 답변을 한 경우 답변을 띄워주고 인풋과 버튼은 비활성화 처리
+                if(json.item[0].qna_answer != null) {
+                    qnaAnswer.value = json.item[0].qna_answer;
+                    qnaAnswer.setAttribute('disabled', true);
+                    btnSave.setAttribute('disabled', true);
+                }
+            }
+            // 저장 버튼 이벤트처리 
+            document.querySelector('.qnaForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+
+            // db로 보내기위한 인풋태그 값을 변수에 담아주기
+                const qnaTitle = document.querySelector(".qna-details-title-content1").value
+                const qnaDesc = document.querySelector(".qna-details-title-content2").value
+                const qnaAnswer = document.querySelector(".qna-details-answer-content").value
+
+                if (!qnaAnswer) {
+                    Swal.fire({
+                        text: "답변을 입력해주세요",
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                    return false;
                 }
 
-            });
-        })
-        document.querySelector('#qnaDelete').addEventListener('click', (e) => {
-            Swal.fire({
-                title: '답변을 삭제하시겠습니까?',
-                text: "삭제하시면 수정하실 수 없습니다.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: '삭제',
-                cancelButtonText: '취소'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire('삭제가 완료되었습니다.', '', 'success').then((result) => {
-                        if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
-                    })
-                }
+                let item = null;
 
-            });
-        })
+                Swal.fire({
+                    title: '답변을 등록하시겠습니까?',
+                    text: "등록 완료 후엔 수정이 불가합니다.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '등록',
+                    cancelButtonText: '취소'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+
+                        try {
+                            const response = await axios.put('/qna/' + qnaCode, {
+                                qna_title: qnaTitle,
+                                qna_desc: qnaDesc,
+                                qna_answer: qnaAnswer,
+                                // 관리자가 답변한 경우 qna_state -> Y 변경
+                                qna_state: 'Y'
+                                // member_code는 로그인 연동 후 db세션에서 비교 후 저장하는 것으로 변경예정
+                            });
+                            item = response.data;
+                        } catch (e) {
+                            alert(e.response.data.rtmsg);
+                            return;
+                        };
+
+                        Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
+                            if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
+                        })
+                    }
+                })
+            })
+
+            // 삭제버튼 이벤트 처리
+            document.querySelector('#qnaDelete').addEventListener('click', (e) => {
+                Swal.fire({
+                    title: '정말로 삭제하시겠습니까?',
+                    text: "삭제된 내용은 복원할 수 없습니다.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '삭제',
+                    cancelButtonText: '취소'
+                }).then( async (result) => {
+                    if (result.isConfirmed) {
+
+                        try {
+                            const url = "/qna/" + qnaCode;
+                            await axios.delete(url);
+
+                        } catch (e) {
+                            const data = e.response.data;
+                            alert("[" + data.rt + "]" + data.rtmsg);
+                            return;
+                        }
+                        Swal.fire('삭제가 완료되었습니다.', '', 'success').then((result) => {
+                            if (result.isConfirmed) { location.href = "../../html/admin/QnA.html" }
+                        })
+                    }
+
+                });
+            })
+        })();
     </script>
 
 </body>
