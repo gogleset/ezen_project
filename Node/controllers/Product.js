@@ -96,7 +96,7 @@ module.exports = (app) => {
 
     // 데이터 조회 결과가 저장될 빈 변수
     let json = null;
-
+    logger.debug("get파라미터 실행");
     try {
       // 데이터베이스 접속
       dbcon = await mysql2.createConnection(config.database);
@@ -124,10 +124,10 @@ module.exports = (app) => {
     // if (!req.session.memberInfo) {
     //     return next(new BadRequestException("로그인 중이 아닙니다."));
     // }
-    console.log(req.body.productName);
+
     // webhelper에 추가된 기능을 활용하여 업로드 객체 반환받기
     const multipart = req.getMultipart();
-    logger.debug("접속");
+    logger.debug("포스트 접속");
     // 업로드 수정하기
     // const upload = multipart.single("profile_img");
     const upload = multipart.single("photo");
@@ -221,6 +221,169 @@ module.exports = (app) => {
       res.sendJson();
     });
   });
+  
+  // 이미지는 수정하지 않는 경우 수정
+  router.put("/product", async (req, res, next) => {
+    const product_code = req.post("prod");
+    const product_name = req.post("productName");
+    const product_price = req.post("productPrice");
+    const product_stock = req.post("productStock");
+    const product_categorie = req.post("productCategorie");
+    const product_desc = req.post("productDesc");
+    const product_nutri = req.post("productNutri");
+    const product_allergy = req.post("productAllergy");
+    logger.debug("이미지가 없는 경우 실행");
+
+    try {
+      regexHelper.value(product_code, "상품코드의 값이 없습니다.");
+      regexHelper.value(product_name, "상품명 값이 없습니다.");
+      regexHelper.value(product_price, "상품가격 값이 없습니다.");
+      regexHelper.value(product_stock, "재고수량 값이 없습니다.");
+      regexHelper.value(product_categorie, "카테고리 값이 없습니다.");
+      regexHelper.value(product_desc, "상세설명 값이 없습니다.");
+      regexHelper.value(product_nutri, "영양정보 값이 없습니다.");
+      regexHelper.value(product_allergy, "알레르기 값이 없습니다.");
+
+      regexHelper.maxLength(product_code, 11, "상품 코드가 너무 깁니다.");
+      regexHelper.maxLength(product_name, 30, "아이디가 너무 깁니다.");
+      regexHelper.maxLength(product_price, 11, "판매가격이 너무 큽니다.");
+      regexHelper.maxLength(product_stock, 11, "재고수량이 너무 큽니다.");
+      regexHelper.maxLength(product_desc, 255, "상세 설명 값이 너무 큽니다.");
+      regexHelper.maxLength(product_nutri, 255, "영양 정보 값이 너무 큽니다.");
+      regexHelper.maxLength(product_allergy, 255, "알레르기 값이 너무 큽니다.");
+      regexHelper.num(product_code, "상품 코드를 숫자로 입력해주세요.");
+      regexHelper.num(product_price, "상품 가격을 숫자로 입력해주세요.");
+      regexHelper.num(product_stock, "재고 수량을 숫자로 입력해주세요.");
+    } catch (err) {
+      return next(err);
+    }
+    // 실행로직
+
+    try {
+      // 데이터 베이스접속
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 데이터 저장하기
+      let sql =
+        "UPDATE products SET product_name = ?, product_price = ?, product_stock = ?, product_categorie = ?, product_desc = ?, product_nutri = ?, product_allergy= ? WHERE product_code = ?";
+
+      const args = [
+        product_name,
+        product_price,
+        product_stock,
+        product_categorie,
+        product_desc,
+        product_nutri,
+        product_allergy,
+        product_code,
+      ];
+      await dbcon.query(sql, args);
+    } catch (e) {
+      return next(e);
+    } finally {
+      dbcon.end();
+    }
+
+    res.sendJson();
+  });
+
+  //이미지까지 수정하기
+  router.put("/productImg", async (req, res, next) => {
+    // if (!req.session.memberInfo) {
+    //     return next(new BadRequestException("로그인 중이 아닙니다."));
+    // }
+
+    // webhelper에 추가된 기능을 활용하여 업로드 객체 반환받기
+    const multipart = req.getMultipart();
+    logger.debug("포스트put 접속");
+    // 업로드 수정하기
+    // const upload = multipart.single("profile_img");
+    const upload = multipart.single("photo");
+
+    // 업로드 처리 후 텍스트 파라미터 받기
+
+    upload(req, res, async (err) => {
+      // 업로드 값이 있을 경우
+      if (err) {
+        throw new MultipartException(err);
+      }
+
+      // 업로드 된 파일의 정보를 로그로 기록(필요에 따른 선택사항)
+      logger.debug(JSON.stringify(req.file));
+
+      const product_code = req.post("prod");
+      const product_name = req.post("productName");
+      const product_price = req.post("productPrice");
+      const product_stock = req.post("productStock");
+      const product_categorie = req.post("productCategorie");
+      const product_desc = req.post("productDesc");
+      const product_nutri = req.post("productNutri");
+      const product_allergy = req.post("productAllergy");
+      const product_img = req.file.url;
+      logger.debug("이미지 값이 있습니다.");
+      try {
+        regexHelper.value(product_code, "상품코드의 값이 없습니다.");
+        regexHelper.value(product_name, "상품명 값이 없습니다.");
+        regexHelper.value(product_price, "상품가격 값이 없습니다.");
+        regexHelper.value(product_stock, "재고수량 값이 없습니다.");
+        regexHelper.value(product_categorie, "카테고리 값이 없습니다.");
+        regexHelper.value(product_img, "상품 이미지가 없습니다.");
+        regexHelper.value(product_desc, "상세설명 값이 없습니다.");
+        regexHelper.value(product_nutri, "영양정보 값이 없습니다.");
+        regexHelper.value(product_allergy, "알레르기 값이 없습니다.");
+
+        regexHelper.maxLength(product_code, 11, "상품 코드가 너무 깁니다.");
+        regexHelper.maxLength(product_name, 30, "아이디가 너무 깁니다.");
+        regexHelper.maxLength(product_price, 11, "판매가격이 너무 큽니다.");
+        regexHelper.maxLength(product_stock, 11, "재고수량이 너무 큽니다.");
+        regexHelper.maxLength(product_desc, 255, "상세 설명 값이 너무 큽니다.");
+        regexHelper.maxLength(
+          product_nutri,
+          255,
+          "영양 정보 값이 너무 큽니다."
+        );
+        regexHelper.maxLength(
+          product_allergy,
+          255,
+          "알레르기 값이 너무 큽니다."
+        );
+        regexHelper.num(product_code, "상품 코드를 숫자로 입력해주세요.");
+        regexHelper.num(product_price, "상품 가격을 숫자로 입력해주세요.");
+        regexHelper.num(product_stock, "재고 수량을 숫자로 입력해주세요.");
+      } catch (err) {
+        return next(err);
+      }
+      // DB
+      try {
+        // 데이터 베이스접속
+        dbcon = await mysql2.createConnection(config.database);
+        await dbcon.connect();
+
+        // 데이터 저장하기
+        let sql =
+          "UPDATE products SET product_name = ?, product_price = ?, product_stock = ?, product_categorie = ?, product_img = ?, product_desc = ?, product_nutri = ?, product_allergy= ? WHERE product_code = ?";
+
+        const args = [
+          product_name,
+          product_price,
+          product_stock,
+          product_categorie,
+          product_img,
+          product_desc,
+          product_nutri,
+          product_allergy,
+          product_code,
+        ];
+        await dbcon.query(sql, args);
+      } catch (e) {
+        return next(e);
+      } finally {
+        dbcon.end();
+      }
+      res.sendJson();
+    });
+  });
 
   //   데이터 삭제 --> DELETE
   router.delete("/product", async (req, res, next) => {
@@ -272,5 +435,6 @@ module.exports = (app) => {
     // 모든 처리에 성공했으므로 정상 조회 결과 구성
     res.sendJson();
   });
+
   return router;
 };
