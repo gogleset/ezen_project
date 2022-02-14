@@ -140,9 +140,9 @@ module.exports = (app) => {
             let sql = "select member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
             sql += "member_birth, admin, reg_date, is_out ";
             sql += "from members where member_id =? and member_pw =?"
-            const [result1] = await dbcon.query(sql, [sessionInfo.member_id, sessionInfo.member_pw]);
+            const [result] = await dbcon.query(sql, [sessionInfo.member_id, sessionInfo.member_pw]);
 
-            json = result1;
+            json = result;
 
         } catch (err) {
             return next(err);
@@ -179,6 +179,7 @@ module.exports = (app) => {
         res.sendJson({ item: json })
     });
 
+    //회원정보수정
     router.put('/members/edit/:member_id', async (req, res, next) => {
         const member_id = req.get("member_id");
         const member_email = req.post("member_email");
@@ -217,14 +218,87 @@ module.exports = (app) => {
             dbcon.end();
         }
 
-        res.sendJson({ 'item': json});
+        res.sendJson({ 'item': json });
     });
 
 
     //관리자 로그인
     router.post("/admin/login", async (req, res, next) => {
+        const member_id = req.post("member_id");
+        const member_pw = req.post("member_pw");
 
+        try {
+            regexHelper.value(member_id, "아이디를 입력하세요");
+            regexHelper.value(member_pw, "비밀번호를 입력하세요");
+        } catch (e) {
+            return next(e);
+        }
+
+        let json = null;
+
+        try {
+            dbcon = await mysql2.createConnection(config.database);
+            await dbcon.connect();
+
+            let sql = "select member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
+            sql += "member_birth, admin, reg_date, is_out ";
+            sql += "from members where member_id =? and member_pw =? and admin=?"
+            let args1 = [member_id, member_pw, "Y"];
+
+            const [result] = await dbcon.query(sql, args1);
+
+            json = result;
+
+        } catch (e) {
+            return next(e);
+        } finally {
+            dbcon.end();
+        }
+
+        if (json == null || json.length == 0) {
+            return next(
+                new BadRequestException("아이디나 비밀번호가 잘못되었습니다.")
+            );
+        }
+        req.session.memberInfo = json[0];
+
+        res.sendJson();
     });
+
+    //로그인 쿠키 저장
+    router.route("/cookie").post((req, res, next) => {
+        // URL 파라미터들은 req.body 객체의 하위 데이터로 저장된다.
+        for (key in req.body) {
+            const str = "[" + req.method + "]" + key + "=" + req.body[key];
+            logger.debug(str);
+        }
+
+        // 암호화된 쿠기 저장하기 -> 유효시간을 30초로 설정
+        res.cookie("my_id_signed", req.body.member_id, {
+            maxAge: 9000000,
+            path: "/",
+            signed: true,
+        });
+
+        res.status(200).send("ok");
+    })//로그인 쿠키 읽어오기
+        .get((req, res, next) => {
+           
+            // 암호화 된 쿠키값들은 req.signedCookies 객체의 하위 데이터로 저장된다.
+            for (key in req.signedCookies) {
+                const str = "[signedCookies]" + key + "=" + req.signedCookies[key];
+                logger.warn(str);
+            }
+
+            // 원하는 쿠키값을 가져온다
+            const my_id_signed = req.signedCookies.my_id_signed;
+
+            const result_data = {
+                my_id_signed: my_id_signed,
+            };
+
+            res.status(200).send(result_data);
+        })
 
     return router;
 }

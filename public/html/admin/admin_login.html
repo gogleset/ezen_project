@@ -19,6 +19,9 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../../css/admin/admin_login.css">
+
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>로그인 폼</title>
 </head>
 
@@ -27,7 +30,7 @@
         <div class="card card-container">
             <img id="profile-img" class="profile-img-card" src="../../img/dessert39_simbol2.png" />
             <p id="profile-name" class="profile-name-card">dessert40 관리 시스템</p>
-            <form class="form-signin">
+            <form method="post" action="/admin/login" class="form-signin">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                     <input type="text" id="inputId" class="form-control" placeholder="Admin Id">
@@ -38,7 +41,7 @@
                 </div>
                 <div id="remember" class="checkbox">
                     <label>
-                        <input type="checkbox" value="remember-me"> 아이디 저장
+                        <input id="saveId" type="checkbox" value="remember-me" checked> 아이디 저장
                     </label>
                 </div>
                 <button class="btn btn-lg btn-block btn-signin" type="submit">로그인</button>
@@ -46,6 +49,70 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        //생성된 쿠키값 읽어와서 input태그에 넣기
+        const backendUrl = "/cookie";
+        (async () => {
+            try {
+                // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
+                const response = await axios.get(backendUrl);
+                console.log(response.data);
+                // 저장되어있는 쿠키가 존재한다면 input태그에 값을 넣는다.
+                if (!(response.data.my_id_signed == undefined)) {
+                    document.getElementById("inputId").value = response.data.my_id_signed;
+                }
+
+            } catch (error) {
+                const errorMsg = "[" + error.response.status + "] " + error.response.statusText
+                console.error(errorMsg);
+            }
+
+        })();
+
+        //로그인 버튼
+        document.querySelector(".form-signin").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const member_id = document.getElementById("inputId").value;
+            const member_pw = document.getElementById("inputPassword").value;
+
+            //아이디 체크시 쿠키 생성
+            if (document.getElementById("saveId").checked) {
+                (async () => {
+                    try {
+                        const response = await axios.post(backendUrl, { member_id: member_id });
+                    } catch (error) {
+                        const errorMsg = "[" + error.response.status + "] " + error.response.statusText
+                        console.error(errorMsg);
+                    }
+                })();
+            }
+
+            (async () => {
+                try {
+                    // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
+                    const response = await axios.post('/admin/login', { member_id: member_id, member_pw: member_pw });
+                    Swal.fire({
+                        text: '로그인이 성공하였습니다 오늘도 힘찬하루 되세요!!',
+                        icon: 'success'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.href = "index.html";
+                        }
+                    })
+                } catch (error) {
+                    const errorMsg = '[' + error.response.status + '] ' + error.response.statusText;
+                    console.error(errorMsg);
+                    Swal.fire({
+                        text: '로그인에 실패했습니다. 아이디나 비밀번호를 확인하세요.',
+                        icon: 'error'
+                    });
+                }
+            })();
+
+        });
+    </script>
 </body>
 
 
