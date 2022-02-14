@@ -23,7 +23,7 @@ module.exports = (app) => {
     const cate = req.get("cate");
     console.log(cate);
     // 현재 페이지 번호 받기(기본값은 1)
-    const page = req.get("page");
+    const page = req.get("page", 1);
     console.log(page);
 
     // 한 페이지에 보여질 목록 수 받기 (기본값은 10, 최소 10, 최대 30)
@@ -33,61 +33,82 @@ module.exports = (app) => {
     let json = null;
     let pagenation = null;
 
-    try {
-      // 데이터베이스 접속
-      dbcon = await mysql2.createConnection(config.database);
-      await dbcon.connect();
+    // 카테의 값이 all일 경우
+    if (cate === "all") {
+      try {
+        dbcon = await mysql2.createConnection(config.database);
+        await dbcon.connect();
 
-      // 데이터 조회
-      let sql1 = "SELECT COUNT(*) AS cnt FROM products";
+        // 데이터 조회
+        let sql =
+          "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products";
 
-      // SQL문에 설정할 치환값
-      let args1 = [];
+        const [result] = await dbcon.query(sql);
+        json = result;
+      } catch (e) {
+        next(e);
+      } finally {
+        dbcon.end();
+      }
+      // 모든 처리에 성공했으므로 정상 조회 결과를 구성
+      res.sendJson({ item: json });
+    } else {
+      try {
+        // 데이터베이스 접속
+        dbcon = await mysql2.createConnection(config.database);
+        await dbcon.connect();
 
-      if (query != null && cate != null) {
-        sql1 += " WHERE product_name LIKE concat('%', ?, '%')";
-        sql1 += " AND product_categorie LIKE concat('%', ?, '%')";
-        args1.push(query);
-        args1.push(cate);
+        // 데이터 조회
+        let sql1 = "SELECT COUNT(*) AS cnt FROM products";
+
+        // SQL문에 설정할 치환값
+        let args1 = [];
+
+        if (query != null && cate != null) {
+          sql1 += " WHERE product_name LIKE concat('%', ?, '%')";
+          sql1 += " AND product_categorie LIKE concat('%', ?, '%')";
+          args1.push(query);
+          args1.push(cate);
+        }
+
+        const [result1] = await dbcon.query(sql1, args1);
+        console.log([result1]);
+        const totalCount = result1[0].cnt;
+
+        // 페이지번호 정보를 계산한다.
+        pagenation = util.pagenation(totalCount, page, rows);
+        logger.debug(JSON.stringify(pagenation));
+
+        // 데이터 조회
+        let sql2 =
+          "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products";
+
+        // SQL문에 설정할 치환값
+        let args2 = [];
+
+        if (query != null && cate != null) {
+          sql2 += " WHERE product_name LIKE concat('%', ?, '%')";
+          sql2 += " AND product_categorie LIKE concat('%', ?, '%')";
+          args2.push(query);
+          args2.push(cate);
+        }
+        sql2 += " LIMIT ?, ?";
+        args2.push(pagenation.offset);
+        args2.push(pagenation.listCount);
+
+        const [result2] = await dbcon.query(sql2, args2);
+
+        // 조회 결과를 미리 준비한 변수에 저장함
+        json = result2;
+      } catch (e) {
+        return next(e);
+      } finally {
+        dbcon.end();
       }
 
-      const [result1] = await dbcon.query(sql1, args1);
-      console.log([result1]);
-      const totalCount = result1[0].cnt;
-
-      // 페이지번호 정보를 계산한다.
-      pagenation = util.pagenation(totalCount, page, rows);
-      logger.debug(JSON.stringify(pagenation));
-
-      // 데이터 조회
-      let sql2 =
-        "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products";
-
-      // SQL문에 설정할 치환값
-      let args2 = [];
-
-      if (query != null && cate != null) {
-        sql2 += " WHERE product_name LIKE concat('%', ?, '%')";
-        sql2 += " AND product_categorie LIKE concat('%', ?, '%')";
-        args2.push(query);
-        args2.push(cate);
-      }
-
-      sql2 += " LIMIT ?, ?";
-      args2.push(pagenation.offset);
-      args2.push(pagenation.listCount);
-
-      const [result2] = await dbcon.query(sql2, args2);
-
-      // 조회 결과를 미리 준비한 변수에 저장함
-      json = result2;
-    } catch (e) {
-      return next(e);
-    } finally {
-      dbcon.end();
+      // 모든 처리에 성공했으므로 정상 조회 결과를 구성
+      res.sendJson({ pagenation: pagenation, item: json });
     }
-    // 모든 처리에 성공했으므로 정상 조회 결과를 구성
-    res.sendJson({ pagenation: pagenation, item: json });
   });
 
   router.get("/product/:prod", async (req, res, next) => {
@@ -221,7 +242,7 @@ module.exports = (app) => {
       res.sendJson();
     });
   });
-  
+
   // 이미지는 수정하지 않는 경우 수정
   router.put("/product", async (req, res, next) => {
     const product_code = req.post("prod");

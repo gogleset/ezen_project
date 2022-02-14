@@ -35,14 +35,14 @@
         <!-- 내용부분입니다. -->
         <section class="content">
             <div class="img-100">
-                <img src="http://placehold.it/360x300" alt="상품이미지" />
+                <img id="prodImg" src="http://placehold.it/360x300" alt="상품이미지" />
             </div>
             <div class="form-group">
-                <h1>상품명</h1>
-                <div class="ex-description">
+                <h1 id="prodName">상품명</h1>
+                <div id="prodDesc"class="ex-description">
                     부가설명
                 </div>
-                <div class="total-price">
+                <div id="prodPrice"class="total-price">
                     <h2>00000원</h2>
                 </div>
                 <hr />
@@ -54,16 +54,16 @@
             </div>
 
             <div class="form-group">
-                <h2 class="detail-form">영양정보</h2>
+                <h2 class="detail-form" >영양정보</h2>
                 <hr />
-                <div class="detail">
+                <div id ="prodNutri" class="detail">
                     총 내용량 : ---g 100g당 1회 제공 칼로리 : ---kcal 100g당 (% : 1일 영양성분기준치에 대한 비율) - 나트륨 : ---mg / --% · 당류 : -g
                     /-% · 포화지방 : -g / --% · 단백질 : -g / --%
                 </div>
 
                 <h2 class="detail-form">알레르기 정보</h2>
                 <hr />
-                <div class="detail">
+                <div id="prodAllergy"class="detail">
                     밀,우유,대두, 쇠고기 함유
                 </div>
             </div>
@@ -105,9 +105,40 @@
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./assets/layout.js"></script>
+    <script src="../js/number_utils.js"></script>
 
 
     <script>
+        const params = new URLSearchParams(window.location.search);
+        const prod = params.get('prod');
+
+        let data = null;
+        // prodDesc prodPrice prodNutri prodAllergy
+        if (prod) {
+            (async () => {
+                try {
+                    const response = await axios.get(`/product/${prod}`)
+                    
+                    data = response.data.item[0];
+                    console.log(data);
+                } catch (e) {
+                    Swal.fire({
+                        title: "서버와 접속이 실패했습니다.",
+                        text: `${e}`,
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                }
+                document.getElementById("prodName").innerHTML = data.product_name;
+                document.getElementById("prodDesc").innerHTML = data.product_desc;
+                document.getElementById("prodPrice").innerHTML = formatPrice(data.product_price) + "원";
+                document.getElementById("prodNutri").innerHTML = data.product_nutri;
+                document.getElementById("prodAllergy").innerHTML = data.product_allergy;
+                document.getElementById("prodImg").setAttribute("src", `../..${data.product_img}`)
+            })();
+        }
+
+        
         document.querySelector("#addBasket").addEventListener("click", () => {
 
         });

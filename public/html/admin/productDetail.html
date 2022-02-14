@@ -121,7 +121,11 @@
                     console.log(response);
                     data = response.data.item;
                 } catch (e) {
-                    console.log(e);
+                    Swal.fire({
+                        text: "서버와 접속이 실패했습니다.",
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
                 }
                 data.map((v, i) => {
                     document.getElementById("productCategorie").value = v.product_categorie;
