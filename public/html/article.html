@@ -37,24 +37,14 @@
         <!-- 내용부분입니다. -->
         <section class="content">
             <div class="title">
-                <h1>나의 QnA</h1>
+                <h1><a href="../html/qa.html">나의 QnA</a></h1>
             </div>
             <hr>
             <div class="show-user"></div>
-            <script id="tmpl-u" type="text/x-handlebars-template">
-                    {{#each item}}
-                    <dl id="user-article">
-                        <dt>제목 :</dt>
-                        <dd>{{title}}</dd>
-                        <dt>내용 :</dt>
-                        <dd>{{desc}}</dd>
-                        <dt>날짜 :</dt>
-                        <dd>{{regdate}}</dd>
-                    </dl>
-                    {{/each}}
-                </script>
+
             <div class="btn-wrap clearfix">
-                <button type="submit" class="btn-delete pull-right">삭제</button>
+                <button type="submit" class="btn-delete pull-right" id="btn-delete">삭제</button>
+                <button type="submit" class="btn-modify pull-right" id="btn-modify" onclick="modifyLink()">수정</button>
             </div>
             <hr>
 
@@ -62,23 +52,12 @@
                 <h1>관리자 답변</h1>
             </div>
 
-            <!-- 기본값은 default 이고, 관리자 답변이 있는 경우에만 노출되도록 설정 -->
-            <div class="show-admin displaynone"></div>
-            <script id="tmpl-a" type="text/x-handlebars-template">
-                    {{#each item}}
-                    <dl id="admin-article">
-                        <dt>내용 :</dt>
-                        <dd>{{desc}}</dd>
-                        <dt>날짜 :</dt>
-                        <dd>{{regdate}}</dd>
-                    </dl>
-                    {{/each}}
-                </script>
+            <!-- 기본값은 displaynon 이고, 관리자 답변이 있는 경우에만 노출되도록 설정 -->
+                <div class="show-admin displaynone"></div>
+
 
             <!-- 관리자 답변이 없는 경우 띄울 이미지-->
             <div class="non-answer">
-                <img src="../img/dessert39_simbol2.png" alt="">
-                <span>확인 중..</span>
             </div>
         </section>
 
@@ -91,60 +70,105 @@
     <script src="./assets/layout.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
     <script>
+        let params = new URLSearchParams(window.location.search);
+        let qnaNm = params.get('qnaNm');
+        /*     DB에서 가지고 올 데이터를 실행할 로직*/
+        (async () => {
 
-        /*     DB에서 가지고 올 데이터를 실행할 로직
-            (acync() => {
-                try {
-                    const data = await 
-                }
-                catch(e){
-                    console.log(e);
-                }
-            }) */
 
-        // 화면에 보여 줄 임의의 데이터
-        const data = {
-            item: [
-                {
-                    title: '배송문의',
-                    desc: '배송은 언제되나요?',
-                    regdate: '2022 - 01 - 20'
-                }
-            ]
+            if (!qnaNm) {
+                alert('게시글 정보가 없습니다.');
+                history.back();
+                return;
+            }
+
+            let json = null
+
+            try {
+                const response = await axios.get(`/qna/${qnaNm}`)
+                json = response.data;
+                item = json.item[0]
+
+                console.log(item)
+
+            } catch (e) {
+                console.log(e);
+                alert(e.response.data.rtmsg);
+                return;
+            }
+
+            // 관리자 답변이 있을 경우 수정 불가
+            if (json != null && item.qna_answer != null) {
+                const btnModify = document.querySelector('#btn-modify')
+                btnModify.classList.add('display-off')
+                document.querySelector('.non-answer').classList.remove('.non-answer')
+            }
+
+            // 데이터가 있을 경우 show-user에 표시
+            if (json != null) {
+                const showUser = document.querySelector(".show-user")
+                const html = document.createElement("dl")
+                html.classList.add(".user-article")
+                html.innerHTML = `
+                                <dt>제목 :</dt>
+                                <dd>${item.qna_title}</dd>
+                                <dt>내용 :</dt>
+                                <dd>${item.qna_desc}</dd>`
+                showUser.appendChild(html);
+
+                // 데이터가 있을 경우 show-admin에 표시
+                const showAdmin = document.querySelector('.show-admin')
+                const html1 = document.createElement("dl")
+                html1.classList.add('.admin-article')
+                html1.innerHTML = `
+                                <dd>${item.qna_answer}</dd>`
+                showAdmin.appendChild(html1);
+
+                // 삭제 버튼 이벤트 
+                document.querySelector("#btn-delete").addEventListener("click", (e) => {
+                    e.preventDefault();
+                    console.log(`삭제합니다??`)
+
+                    Swal.fire({
+                        title: '정말로 삭제하시겠습니까?',
+                        text: "삭제된 내용은 복원할 수 없습니다.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: '확인',
+                        cancelButtonText: '취소',
+                    }).then(async (result) => {
+
+                        // 확인 버튼 눌렀을 경우
+                        if (result.isConfirmed) {
+                            // 서버에 전달
+                            try {
+                                const response = await axios.delete(`/qna/${qnaNm}`)
+                            } catch (e) {
+                                // 실패 alert
+                                Swal.fire('오류로 인해 삭제되지 않았습니다', '', 'warning')
+                            };
+                            // 성공 alert
+                            Swal.fire({
+                                title: '삭제되었습니다.',
+                                icon: 'success',
+                                confirmButtonText: '확인',
+                            }).then(() => {
+                                location.href = '/html/qa.html' // 삭제 성공시 이동할 경로
+                            })
+                            // 취소 버튼 클릭
+                        } else if (result.isCancelled) {
+                            location.reload
+                        }
+                    })
+                })
+            }
+        })();
+
+        const modifyLink = () => {
+            return (window.location.href = `/html/write.html?qnaNm=${qnaNm}`);
         };
-
-        const html = document.querySelector("#tmpl-u").innerText;
-        const template = Handlebars.compile(html);
-
-        const result = template(data);
-
-        document.querySelector(".show-user").insertAdjacentHTML("beforeend", result);
-
-
-        document.querySelector(".btn-delete").addEventListener("click", (e) => {
-
-            Swal.fire({
-                title: '정말로 삭제하시겠습니까?',
-                text: "삭제된 내용은 복원할 수 없습니다.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    //백엔드로 delete 보내는 로직 설계..
-                    location.href = "./qa.html"  // 삭제 후 이전 페이지로 연결
-
-                    Swal.fire(
-                        'Deleted!',
-                        'Your file has been deleted.',
-                        'success'
-                    )
-                }
-            })
-        })
 
     </script>
 </body>

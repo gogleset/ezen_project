@@ -6,9 +6,13 @@
 
 /* 내용 wrap 영역 */
 .content {
-  width: 95%;
+  width: 100%;
   margin: auto;
   max-width: 1100px;
+}
+
+hr{
+  width: 95%;
 }
 
 /* 사용자 게시물 배경 설정 */
@@ -50,9 +54,19 @@ dl dd {
   margin-left: 5px;
 }
 
+/* 수정버튼 */
+.btn-modify {
+  border-radius:5px;
+  color: #fff;
+  background-color: #222;
+  width: 50px;
+  height: 25px;
+  margin-right: 10px;
+}
+
 /* 삭제 버튼 영역 */
 .btn-delete {
-    margin-right: 6px;
+    margin-right: 25px;
     width: 50px;
     height: 25px;
     background-color: #222;
@@ -64,6 +78,7 @@ dl dd {
 .non-answer {
   width: 30%;
   margin: 50px auto;
+  background: url(../img/dessert39_simbol2.png);
 }
 
 .non-answer img {
@@ -72,9 +87,3 @@ dl dd {
   display: block;
 }
 
-.non-answer span {
-  font-size: 1.2em;
-  font-weight: bold;
-  display: block; /* 블럭인데 텍스트 얼라인 센터가 왜 먹지..? */
-  text-align: center;
-}

@@ -114,9 +114,9 @@
 
                     console.log(v);
                     tableBody.innerHTML += `<tr>
-                    <td class="qna-content table-short-discription"><a href="#">
+                    <td class="qna-content table-short-discription">
                             ${v.qna_desc}
-                        </a></td>
+                        </td>
                     <td class="qna-status">${v.qna_state}</td>
                     <td class="qna-writer">${v.member_id}</td>
                     <td class="qna-date">${v.qna_date}</td>
@@ -136,8 +136,8 @@
 
                         const current = e.currentTarget;
 
-                        const no = current.dataset.qna_code;
-                        console.log("%s", no);
+                        const qnaNm = current.dataset.qna_code;
+                        console.log(current);
 
                         if (Swal.fire({
                             title: '정말로 삭제하시겠습니까?',
@@ -151,7 +151,7 @@
                         }).then(async (result) => {
                             if (result.isConfirmed) {
                                 try {
-                                    const url = "/qna/" + no;
+                                    const url = "/qna/" + qnaNm;
 
                                     console.log(url)
                                     await axios.delete(url);
@@ -167,11 +167,11 @@
                                     })
                             }
                         })
-                        )
-                            /** 페이지 번호 구현 함수 호출*/
-                            pagenation('.pagination', json.pagenation);
+                        );
                     })
                 })
+                /** 페이지 번호 구현 함수 호출*/
+                pagenation('.pagination', json.pagenation);
             }
         })();
 

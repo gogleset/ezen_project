@@ -36,18 +36,18 @@
         <section class="content">
             <div class="wrap">
                 <div class="title">
-                    <h1>QnA</h1>
+                    <h1><a href="../html/qa.html">QnA</a></h1>
                 </div>
 
                 <!-- input 영역 -->
-                <form action="" id="form-wrap">
+                <form action="" id="formWrap" class="form-warp">
 
                     <!-- 제목 input------------->
-                    <input type="text" name="title" id="title" placeholder="제목을 입력해주세요">
+                    <input type="text" name="title" id="title" placeholder="제목을 입력해주세요" class="title">
                     <div class="sub-tit">문의하고 싶은 내용</div>
 
                     <!-- 문의 input 영역------------->
-                    <textarea type="text" name="desc" id="desc" placeholder="내용을 입력해주세요"></textarea>
+                    <textarea type="text" name="desc" id="desc" class='desc' placeholder="내용을 입력해주세요"></textarea>
 
                     <!-- 향후 저장 버튼 'click' 이벤트 발생시 db로 저장 되도록 변경 예정-->
                     <div class="btn-wrap clearfix">
@@ -64,6 +64,94 @@
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./assets/layout.js"></script>
+    <script src="../../js/regex_helper.js"></script>
+    <!-- sweetalert2 참조 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        let params = new URLSearchParams(window.location.search);
+        let qnaNm = params.get('qnaNm')
+
+        let json = null;
+
+        // qna 수정 시 기존에 작성한 데이터 불러오기
+        if (qnaNm) (async () => {
+            const qnaTitle = document.querySelector("#title")
+            const qnaDesc = document.querySelector("#desc")
+            const btnSave = document.querySelector(".btn-save")
+
+            try {
+                const response = await axios.get(`/qna/ ${qnaNm}`);
+                json = response.data;
+            } catch (e) {
+                alert(e.response.data.rtmsg);
+                return;
+            };
+
+            // 조회결과가 있다면 input 태그에 조회결과를 세팅
+            if (json != null) {
+                qnaTitle.value = json.item[0].qna_title;
+                qnaDesc.value = json.item[0].qna_desc;
+
+            }
+        })();
+
+        const regexHelper = new RegexHelper();
+
+        let item = null;
+
+        document.querySelector("#formWrap").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const qnaTitle = document.querySelector('#title').value;
+            const qnaDesc = document.querySelector('#desc').value;
+
+            if (!qnaTitle) {
+                Swal.fire({
+                    text: "제목을 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+            if (!qnaDesc) {
+                Swal.fire({
+                    text: '내용을 입력해주세요',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+            if (!regexHelper.max_length("#title", 20, "제목은 20자 이내로 입력해주세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#desc", 200, "내용은 250자 이내로 입력해주세요.")) {
+                return false;
+            }
+
+            try {
+                const response = await axios.post('/qna', {
+                    qna_title: qnaTitle,
+                    qna_desc: qnaDesc,
+                    member_code: 1    // 향후 sessionInfo에 담겨있는 dt로 변경
+                });
+                item = response.data;
+
+            } catch (e) {
+                console.log(e);
+            };
+
+            if (item != null) {
+                /* const qnaNm = item.qna_code; */
+                const qnaNm = item.item[0].qna_code
+                Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
+                    if (result.isConfirmed) { location.href = `/html/article.html?qnaNm=${qnaNm}` }
+                })
+            } else {
+            }
+
+        })
+    </script>
 
 </body>
 
