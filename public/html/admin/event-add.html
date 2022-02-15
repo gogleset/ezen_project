@@ -1,28 +1,28 @@
 <!-- 
 @Filename: admin event-add.html
 @Author: 임다정 (dazoo0221@gmail.com)
-@description: admin event-add HTML
+@description: 어드민 이벤트 추가 HTML
  -->
 
  <!DOCTYPE html>
  <html lang="en">
  
  <head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta charset="UTF-8" />
+     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <title>Document</title>
      <!-- bootstrap -->
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
  
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
  
      <!-- Optional theme -->
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
-     <link rel="stylesheet" href="../../css/admin/layout.css">
-     <link rel="stylesheet" href="../../css/admin/event-add.css">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" />
+     <link rel="stylesheet" href="../../css/admin/layout.css" />
+     <link rel="stylesheet" href="../../css/admin/event-add.css" />
  </head>
  
  <body>
@@ -37,40 +37,45 @@
      </div>
  
      <!-- 데이터 테이블 영역입니다. -->
-     <form class="container table-container" id="event-form">
+     <form class="container table-container" id="formData" enctype="multipart/form-data" action="/event" method="post">
          <table class="table table-bordered table-hover table-condensed table-striped">
              <colgroup>
-                 <col width="20%">
-                 <col width="80%">
+                 <col width="20%" />
+                 <col width="80%" />
              </colgroup>
              <thead>
                  <tr>
                      <th>제목</th>
-                     <td><input type="text" class="form-control" id="title" name="title" placeholder="내용을 입력해주세요" /></td>
+                     <td>
+                         <input type="text" class="form-control" id="title" name="title" placeholder="내용을 입력해주세요" />
+                     </td>
                  </tr>
              </thead>
              <tbody>
                  <tr>
                      <th>Link</th>
-                     <td><input type="text" class="form-control" id="link" name="link" placeholder="내용을 입력해주세요" /></td>
+                     <td>
+                         <input type="text" class="form-control" id="link" name="link" placeholder="내용을 입력해주세요" />
+                     </td>
                  </tr>
                  <tr>
                      <th rowspan="2">사진</th>
-                     <form enctype="multipart/form-data" action="uploadImage.json" method="post"></form>
-                     <td><input type="file" name="img" accept="image/*" id="img" onchange="setThumbnail(event);"></td>
+                     <td><input type="file" id="img" name="img" accept="image/*" /></td>
                  </tr>
                  <tr>
                      <td class="thumb-box">
-                         <div class="thumb-img-box"></div>
+                         <div class="thumb-img-box"><img src="" id="profileImg"></div>
                      </td>
                  </tr>
                  <tr>
                      <th>shows</th>
                      <td>
                          <div class="dropdown">
-                             <div id="select" style="width: 200px; "></div>
-                             <!-- <select name="event_show" id="event_show" class="form-control">
-                             </select> -->
+                             <div id="select"></div>
+                             <select id="event_show" name="select" class="form-control" style="width: 200px">
+                                 <option value="Y" class="show">show</option>
+                                 <option value="N" class="show">disable</option>
+                             </select>
                          </div>
                      </td>
                  </tr>
@@ -78,14 +83,16 @@
          </table>
  
          <!-- 저장 취소를 감싸는 영역입니다. -->
-         <!--     <form class="container"> -->
          <div class="setting-container">
              <div class="flx">
-                 <button class="btn btn-primary btn-admin-setting" id="submit" type="submit">저장</button>
-                 <button class="btn btn-primary btn-admin-setting" id="cancel" type="button">취소</button>
+                 <button class="btn btn-primary btn-admin-setting" id="submit" type="submit">
+                     저장
+                 </button>
+                 <button class="btn btn-primary btn-admin-setting" id="cancel" type="button" onclick="back()">
+                     취소
+                 </button>
              </div>
          </div>
-         <!--     </form> -->
      </form>
  
      <script src="https://code.jquery.com/jquery-1.12.4.min.js"
@@ -94,61 +101,144 @@
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
      <script src="../assets/layout.js"></script>
-     <script>
-         // 게시 여부 옵션 만들어주기
-         const target = document.querySelector('#select');
- 
-         const element = document.createElement('select');
-         element.classList.add('form-control');
-         element.innerHTML = ` <option value="">---선택하세요---</option>
-                             <option value="Y" class="show">show</option>
-                             <option value="N" class="show">disable</option>`
-         target.appendChild(element);
- 
-     </script>
+     <script src="../../js/regex_helper.js"></script>
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
      <script>
          // 썸네일 보여주기
          function setThumbnail(event) {
              let reader = new FileReader();
-             reader.onload = function (event) {
-                 let img = document.createElement('img');
-                 img.setAttribute('src', event.target.result);
-                 document.querySelector('div.thumb-img-box').appendChild(img);
-             };
  
+             reader.onload = function (event) {
+                 let img = document.querySelector("#profileImg");
+                 img.setAttribute("src", event.target.result);
+                 document.querySelector("div.thumb-img-box").appendChild(img);
+                 console.log(event.target);
+             };
              reader.readAsDataURL(event.target.files[0]);
          }
+ 
+         function back() {
+             location.href = "/html/admin/event.html";
+         }
+ 
+         const imageInput = document.querySelector("#img");
+         imageInput.addEventListener("change", setThumbnail);
      </script>
      <script>
-         document.querySelector('#event-form').addEventListener('submit', async (e) => {
+         // Page 정보들
+         const params = new URLSearchParams(window.location.search);
+         const eventNm = params.get("eventNm");
+         console.log(eventNm);
+ 
+         // Input 필드들
+         const eventTitle = document.querySelector("#title");
+         const eventLink = document.querySelector("#link");
+         const eventShow = document.querySelector("#event_show");
+         const profileImg = document.querySelector("#profileImg");
+ 
+         const regexHelper = new RegexHelper();
+ 
+         if (eventNm) {
+             // eventNm이 있을 때 해당 ID의 데이터를 가져와서 field 채우기
+             getDataAndFillFields(eventNm).then(() => {
+                 document
+                     .querySelector("#formData")
+                     .addEventListener("submit", handleEdit);
+             });
+         } else {
+             document
+                 .querySelector("#formData")
+                 .addEventListener("submit", handleCreate);
+         }
+ 
+         /*
+         * Input field들의 데이터를 검증하고 FormData 객체 반환
+         */
+         function getFormData() {
+             if (!regexHelper.value("#title", "제목을 입력해주세요")) {
+                 return false;
+             }
+             if (!regexHelper.value("#link", "링크를 넣어주세요")) {
+                 return false;
+             }
+             if (!regexHelper.value("#img", "이미지를 넣어주세요")) {
+                 return false;
+             }
+ 
+             const formData = new FormData();
+             formData.append("event_title", eventTitle.value);
+             formData.append("event_link", eventLink.value);
+             formData.append("event_show", eventShow.value);
+             formData.append("event_img", imageInput.files[0]);
+             return formData;
+         }
+ 
+         /*
+         * PUT 메소드로 기존 데이터 수정
+         */
+         async function handleEdit(e) {
              e.preventDefault();
  
-             const eventTitle = document.querySelector('#title').value;
-             const eventLink = document.querySelector('#link').value;
-             const eventImg = document.querySelector('#img').value;
-             const eventShow = document.querySelector('.show').value;
+             Swal.fire({
+                 title: "저장하시겠습니까?",
+                 confirmButtonColor: "#3085d6",
+                 cancelButtonColor: "#d33",
+                 confirmButtonText: "저장",
+                 cancelButtonText: "취소",
+             }).then(async (result) => {
+                 if (result.isConfirmed) {
+                     try {
+                         const formData = getFormData();
+                         const response = await axios.put("/event/" + eventNm, formData);
+                         Swal.fire("저장되었습니다.", "", "success").then((result) => {
+                             location.href = "/html/admin/event.html";
+                         });
+                     } catch (e) {
+                         const data = e.response.data;
+                         alert("[" + data.rt + "]" + data.rtmsg);
+                     }
+                 }
+             });
+         }
  
+         /*
+         * POST 메소드로 새로운 데이터 저장
+         */
+         async function handleCreate(e) {
+             e.preventDefault();
+             try {
+                 const formData = getFormData();
+                 await axios.post("/event", formData);
+                 Swal.fire("저장되었습니다.", "", "success").then((result) => {
+                     location.href = "/html/admin/event.html";
+                 });
+             } catch (e) {
+                 const data = e.response.data;
+                 alert("[" + data.rt + "]" + data.rtmsg);
+             }
+         }
  
+         /*
+         * 수정할 때 기존 데이터를 가져옴
+         */
+         async function getDataAndFillFields(eventNm) {
              let json = null;
  
              try {
-                 const response = await axios.post('/event',{
-                     event_title: eventTitle,
-                     event_link: eventLink,
-                     event_img: eventImg,
-                     event_show: eventShow
-                 })
-                 json = response.data;
- 
+                 const response = await axios.get(`/event/${eventNm}`);
+                 json = response.data.item;
+                 console.log(json);
+                 if (json != null) {
+                     eventTitle.value = json[0].event_title;
+                     eventLink.value = json[0].event_link;
+                     eventShow.value = json[0].event_show;
+                     profileImg.src = json[0].event_img;
+                 }
              } catch (e) {
-                 alert(e.response.data.rtmsg);
-                 return;
-             };
- 
-             window.location = "/html/admin/event.html"
-         });
+                 console.log(e);
+             }
+         }
      </script>
- 
  </body>
  
  </html>

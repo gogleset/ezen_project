@@ -50,9 +50,12 @@
     font-size: 0.9em;
 }
 
-.list-date{
+.list-desc{
     font-size: 0.7em;
     margin: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 li{

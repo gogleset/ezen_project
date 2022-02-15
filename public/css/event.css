@@ -21,17 +21,17 @@
 /* event 게시영역  */
 .event-wrap{
     width: 100%;
-
+}
 
 /* event 단일  설정영역*/
-.list-item{
+.listItem{
     width: 100%;
     height: 120px;
     margin: 10px 0;
 }
 
 /* event 배너 이미지 설정영역 */
-.list-item img{
+.listItem img{
     width: 90%;
     height: 90%;
     display: block;

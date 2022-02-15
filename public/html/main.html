@@ -81,6 +81,33 @@
     <script src="../fake_data/menus.js"></script>
     <!-- sweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // 이벤트 배너 노출
+        (async () => {
+            let Data = null;
+
+            try {
+                const response = await axios.get(`/event`)
+                Data = response.data
+                items = Data.item
+
+            } catch (e) {
+                console.log(e)
+            };
+
+            if (items != null) {
+                const eventBox = document.querySelector('.event-box')
+                eventBox.innerHTML = `<img src="${items[1].event_img}">`
+
+                /*                 for(let i in items){
+                                    if(items[i].event_show === `Y`){
+                                    eventBox.innerHTML += `<img src="${items[i].event_img}">`
+                                }
+                            } */
+
+            }
+        })();
+    </script>
 
     <script>
 

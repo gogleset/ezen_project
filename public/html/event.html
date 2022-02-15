@@ -1,121 +1,93 @@
 <!-- 
 @Filename: event.html
 @Author: 임다정 (dazoo0221@gmail.com)
-@description: event HTML
+@description: 사용자 event HTML
  -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-    <title>Document</title>
-    <!-- 웹폰트(한글) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-
-    <!-- 폰트어썸 -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <!-- CSS 참조 -->
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/headerfooter.css">
-    <link rel="stylesheet" href="../css/event.css">
-</head>
-
-<body>
-    <!-- 전체 콘테이너입니다 -->
-    <div class="container">
-        <div data-init="./inc/header.html"></div>
-
-        <!-- 내용부분입니다. -->
-        <section class="content">
-
-            <!-- 내용 wrap -->
-            <div class="wrap">
-                <div class="title">
-                    <h1>Dessert40 Event</h1>
-                    <h3>진행중인 이벤트</h3>
-                </div>
-
-                <!-- event 배너 영역 -->
-                <div class="event-wrap">
-                    <!-- <ul class="list-gallery">
-                        <li class="list-item"><a href="#"><img src="../img/introduction_sec_01_img.jpg" alt=""></a></li>
-                    </ul> -->
-                </div>
-                <!--                 <div class="non-event">
-                    <img src="../img/icon_null.png" alt="">
-                </div> -->
-        </section>
-
-
-        <!-- 푸터부분입니다. -->
-        <div data-init="./inc/footer.html"></div>
-    </div>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./assets/layout.js"></script>
-
-    <!-- 베너 페이크데이터가져오기 -->
-    <!-- <script type="text/javascript" src="../fake_data/banners.js"></script>
-    <script>
-        const items = banners;
-
-        const item = items.data;
-
-        let target = document.querySelector('.event-wrap');
-
-        /* 베너 영역에 반복문 돌려 게시물 개수만큼 생성 */
-        for (let i = 0; i < item.length; i++) {
-
-
-            const element = document.createElement('ul');
-            element.classList.add('list-gallery');
-
-            element.innerHTML = `<li class="list-item"><a href="${item[i].link}"><img src="${item[i].img}" alt=""></a></li>`
-            target.appendChild(element);
-
-        }
-    </script> -->
-    <script>
-        (async () => {
-            let json = null;
-
-            try {
-                const response = await axios.get('/event')
-                json = response.data;
-
-            } catch (e) {
-                const Data = e.response.data;
-                alert("[" + Data.rt + "]" + Data.rtmsg);
-                return;
-            };
-
-            // <ul class="list-gallery">
-            //             <li class="list-item"><a href="#"><img src="../img/introduction_sec_01_img.jpg" alt=""></a></li>
-            //         </ul>
-            let item = json.item;
-
-            if (item != null) {
-                const target = document.querySelector('.event-wrap');
-
-                for (let i = 0; i < item.length; i++) {
-                    const element = document.createElement('ul');
-                    element.classList.add('list-gallery');
-                    console.log(item[i].event_img)
-
-                    element.innerHTML = `<li class="listItem"><a href="#"><img src="${item[i].event_img}" alt=""></a></li>`
-                    target.appendChild(element);
-                };
-            };
-
-        })();
-    </script>
-
-</body>
-
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+     <title>Document</title>
+     <!-- 웹폰트(한글) -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+ 
+     <!-- 폰트어썸 -->
+     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+     <!-- CSS 참조 -->
+     <link rel="stylesheet" href="../css/common.css">
+     <link rel="stylesheet" href="../css/reset.css">
+     <link rel="stylesheet" href="../css/headerfooter.css">
+     <link rel="stylesheet" href="../css/event.css">
+ </head>
+ 
+ <body>
+     <!-- 전체 콘테이너입니다 -->
+     <div class="container">
+         <div data-init="./inc/header.html"></div>
+ 
+         <!-- 내용부분입니다. -->
+         <section class="content">
+ 
+             <!-- 내용 wrap -->
+             <div class="wrap">
+                 <div class="title">
+                     <h1>Dessert40 Event</h1>
+                     <h3>진행중인 이벤트</h3>
+                 </div>
+                 <!-- event 배너가 표시 될 영역 -->
+                 <div class="event-wrap">
+                 </div>
+         </section>
+         <!-- 푸터부분입니다. -->
+         <div data-init="./inc/footer.html"></div>
+     </div>
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+     <script src="./assets/layout.js"></script>
+ 
+     <script>
+         (async () => {
+             let json = null;
+             /*
+             * GET 메소드로 데이터 가져오기
+             */
+             try {
+                 const response = await axios.get('/event')
+                 json = response.data;
+ 
+             } catch (e) {
+                 const Data = e.response.data;
+                 alert("[" + Data.rt + "]" + Data.rtmsg);
+                 return;
+             };
+ 
+             let item = json.item;
+ 
+             if (item != null ) {
+                 const target = document.querySelector('.event-wrap');
+ 
+                 for (let i = 0; i < item.length; i++) {
+ 
+                     if(item[i].event_show === 'Y'){ // event_show 값이 Y인것만 표시
+                     const element = document.createElement('ul');
+                     element.classList.add('list-gallery');
+                     console.log(item[i].event_img)
+ 
+                     element.innerHTML = `<li class="listItem"><a href="#"><img src="${item[i].event_img}" alt=""></a></li>`
+                     target.appendChild(element);
+                     }
+                 };
+             };
+ 
+         })();
+     </script>
+ 
+ </body>
+ 
+ </html>

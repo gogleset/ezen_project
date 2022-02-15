@@ -4,155 +4,214 @@
 @description: intro HTML
  -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-    <title>write</title>
-    <!-- 웹폰트(한글) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-
-    <!-- 폰트어썸 -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <!-- CSS 참조 -->
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/headerfooter.css">
-    <link rel="stylesheet" href="../css/write.css">
-</head>
-
-<body>
-    <!-- 전체 콘테이너입니다 -->
-    <div class="container">
-        <!-- 상단 헤더를 표시합니다 -->
-        <div data-init="./inc/header.html"></div>
-        <!-- 내용부분입니다. -->
-        <section class="content">
-            <div class="wrap">
-                <div class="title">
-                    <h1><a href="../html/qa.html">QnA</a></h1>
-                </div>
-
-                <!-- input 영역 -->
-                <form action="" id="formWrap" class="form-warp">
-
-                    <!-- 제목 input------------->
-                    <input type="text" name="title" id="title" placeholder="제목을 입력해주세요" class="title">
-                    <div class="sub-tit">문의하고 싶은 내용</div>
-
-                    <!-- 문의 input 영역------------->
-                    <textarea type="text" name="desc" id="desc" class='desc' placeholder="내용을 입력해주세요"></textarea>
-
-                    <!-- 향후 저장 버튼 'click' 이벤트 발생시 db로 저장 되도록 변경 예정-->
-                    <div class="btn-wrap clearfix">
-                        <button type="submit" id="btn" class="pull-right">저장</button>
-                    </div>
-                </form>
-            </div>
-
-        </section>
-
-
-        <!-- 푸터부분입니다. -->
-        <div data-init="./inc/footer.html"></div>
-    </div>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./assets/layout.js"></script>
-    <script src="../../js/regex_helper.js"></script>
-    <!-- sweetalert2 참조 -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        let params = new URLSearchParams(window.location.search);
-        let qnaNm = params.get('qnaNm')
-
-        let json = null;
-
-        // qna 수정 시 기존에 작성한 데이터 불러오기
-        if (qnaNm) (async () => {
-            const qnaTitle = document.querySelector("#title")
-            const qnaDesc = document.querySelector("#desc")
-            const btnSave = document.querySelector(".btn-save")
-
-            try {
-                const response = await axios.get(`/qna/ ${qnaNm}`);
-                json = response.data;
-            } catch (e) {
-                alert(e.response.data.rtmsg);
-                return;
-            };
-
-            // 조회결과가 있다면 input 태그에 조회결과를 세팅
-            if (json != null) {
-                qnaTitle.value = json.item[0].qna_title;
-                qnaDesc.value = json.item[0].qna_desc;
-
-            }
-        })();
-
-        const regexHelper = new RegexHelper();
-
-        let item = null;
-
-        document.querySelector("#formWrap").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const qnaTitle = document.querySelector('#title').value;
-            const qnaDesc = document.querySelector('#desc').value;
-
-            if (!qnaTitle) {
-                Swal.fire({
-                    text: "제목을 입력해주세요",
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
-                return false;
-            }
-            if (!qnaDesc) {
-                Swal.fire({
-                    text: '내용을 입력해주세요',
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
-                return false;
-            }
-            if (!regexHelper.max_length("#title", 20, "제목은 20자 이내로 입력해주세요.")) {
-                return false;
-            }
-            if (!regexHelper.max_length("#desc", 200, "내용은 250자 이내로 입력해주세요.")) {
-                return false;
-            }
-
-            try {
-                const response = await axios.post('/qna', {
-                    qna_title: qnaTitle,
-                    qna_desc: qnaDesc,
-                    member_code: 1    // 향후 sessionInfo에 담겨있는 dt로 변경
-                });
-                item = response.data;
-
-            } catch (e) {
-                console.log(e);
-            };
-
-            if (item != null) {
-                /* const qnaNm = item.qna_code; */
-                const qnaNm = item.item[0].qna_code
-                Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
-                    if (result.isConfirmed) { location.href = `/html/article.html?qnaNm=${qnaNm}` }
-                })
-            } else {
-            }
-
-        })
-    </script>
-
-</body>
-
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+     <title>write</title>
+     <!-- 웹폰트(한글) -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+ 
+     <!-- 폰트어썸 -->
+     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+     <!-- CSS 참조 -->
+     <link rel="stylesheet" href="../css/common.css">
+     <link rel="stylesheet" href="../css/reset.css">
+     <link rel="stylesheet" href="../css/headerfooter.css">
+     <link rel="stylesheet" href="../css/write.css">
+ </head>
+ 
+ <body>
+     <!-- 전체 콘테이너입니다 -->
+     <div class="container">
+         <!-- 상단 헤더를 표시합니다 -->
+         <div data-init="./inc/header.html"></div>
+         <!-- 내용부분입니다. -->
+         <section class="content">
+             <div class="wrap">
+                 <div class="title">
+                     <h1><a href="../html/qa.html">QnA</a></h1>
+                 </div>
+ 
+                 <!-- input 영역 -->
+                 <form action="" id="formWrap" class="form-warp">
+ 
+                     <!-- 제목 input------------->
+                     <input type="text" name="title" id="title" placeholder="제목을 입력해주세요" class="title">
+                     <div class="sub-tit">문의하고 싶은 내용</div>
+ 
+                     <!-- 문의 input 영역------------->
+                     <textarea type="text" name="desc" id="desc" class='desc' placeholder="내용을 입력해주세요"></textarea>
+ 
+                     <!-- 향후 저장 버튼 'click' 이벤트 발생시 db로 저장 되도록 변경 예정-->
+                     <div class="btn-wrap clearfix">
+                         <button type="submit" id="btn" class="pull-right">저장</button>
+                     </div>
+                 </form>
+             </div>
+ 
+         </section>
+ 
+ 
+         <!-- 푸터부분입니다. -->
+         <div data-init="./inc/footer.html"></div>
+     </div>
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+     <script src="./assets/layout.js"></script>
+     <script src="../../js/regex_helper.js"></script>
+     <!-- sweetalert2 참조 -->
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ 
+     <script>
+         let regexHelper = new RegexHelper();
+         let params = new URLSearchParams(window.location.search);
+         let qnaNm = params.get('qnaNm')
+ 
+         let json = null;
+ 
+         // qna 수정 시 기존에 작성한 데이터 불러오기
+         if (qnaNm) {
+             (async () => {
+                 const qnaTitle = document.querySelector("#title")
+                 const qnaDesc = document.querySelector("#desc")
+                 const btnSave = document.querySelector(".btn-save")
+ 
+                 console.log(qnaNm)
+ 
+                 try {
+                     const response = await axios.get(`/qna/ ${qnaNm}`);
+                     json = response.data;
+                     item = json.item[0]
+ 
+                     console.log(item)
+                 } catch (e) {
+                     alert(e.response.data.rtmsg);
+                     return;
+                 };
+ 
+                 // 조회결과가 있다면 input 태그에 조회결과를 세팅
+                 if (json != null) {
+                     qnaTitle.value = json.item[0].qna_title;
+                     qnaDesc.value = json.item[0].qna_desc;
+ 
+                 }
+ 
+                 let result = null;
+ 
+                 document.querySelector("#formWrap").addEventListener("submit", async (e) => {
+                     e.preventDefault();
+                     const qnaTitle = document.querySelector('#title').value;
+                     const qnaDesc = document.querySelector('#desc').value;
+ 
+                     if (!qnaTitle) {
+                         Swal.fire({
+                             text: "제목을 입력해주세요",
+                             icon: 'error',
+                             confirmButtonText: '확인'
+                         });
+                         return false;
+                     }
+                     if (!qnaDesc) {
+                         Swal.fire({
+                             text: '내용을 입력해주세요',
+                             icon: 'error',
+                             confirmButtonText: '확인'
+                         });
+                         return false;
+                     }
+                     if (!regexHelper.max_length("#title", 20, "제목은 20자 이내로 입력해주세요.")) {
+                         return false;
+                     }
+                     if (!regexHelper.max_length("#desc", 200, "내용은 250자 이내로 입력해주세요.")) {
+                         return false;
+                     }
+ 
+                     try {
+                         const response = await axios.put(`/qna/${qnaNm}`, {
+                             qna_title: qnaTitle,
+                             qna_desc: qnaDesc,
+                             qna_state: 'N',
+                             /* member_code: 1    // 향후 sessionInfo에 담겨있는 dt로 변경 */
+                         });
+                         result = response.data;
+ 
+                     } catch (e) {
+                         console.log(e);
+                     };
+ 
+                     if (result != null) {
+                         Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
+                             if (result.isConfirmed) { location.href = `/html/article.html?qnaNm=${qnaNm}` }
+                         })
+                     } else {
+                     }
+ 
+                 })
+             })();
+         } else {
+ 
+             let item = null;
+ 
+             document.querySelector("#formWrap").addEventListener("submit", async (e) => {
+                 e.preventDefault();
+ 
+                 const qnaTitle = document.querySelector('#title').value;
+                 const qnaDesc = document.querySelector('#desc').value;
+ 
+                 if (!qnaTitle) {
+                     Swal.fire({
+                         text: "제목을 입력해주세요",
+                         icon: 'error',
+                         confirmButtonText: '확인'
+                     });
+                     return false;
+                 }
+                 if (!qnaDesc) {
+                     Swal.fire({
+                         text: '내용을 입력해주세요',
+                         icon: 'error',
+                         confirmButtonText: '확인'
+                     });
+                     return false;
+                 }
+                 if (!regexHelper.max_length("#title", 20, "제목은 20자 이내로 입력해주세요.")) {
+                     return false;
+                 }
+                 if (!regexHelper.max_length("#desc", 200, "내용은 250자 이내로 입력해주세요.")) {
+                     return false;
+                 }
+ 
+                 try {
+                     const response = await axios.post('/qna', {
+                         qna_title: qnaTitle,
+                         qna_desc: qnaDesc,
+                         member_code: 1    // 향후 sessionInfo에 담겨있는 dt로 변경
+                     });
+                     item = response.data;
+ 
+                 } catch (e) {
+                     console.log(e);
+                 };
+ 
+                 if (item != null) {
+                     /* const qnaNm = item.qna_code; */
+                     const qnaNm = item.item[0].qna_code
+                     Swal.fire('등록이 완료되었습니다.', '', 'success').then((result) => {
+                         if (result.isConfirmed) { location.href = `/html/article.html?qnaNm=${qnaNm}` }
+                     })
+                 } else {
+                 }
+ 
+             })
+         };
+     </script>
+ 
+ </body>
+ 
+ </html>
