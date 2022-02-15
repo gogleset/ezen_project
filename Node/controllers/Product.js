@@ -159,6 +159,7 @@ module.exports = (app) => {
     res.sendJson({ item: json });
   });
 
+  // 데이터 넣어주기
   router.post("/product", async (req, res, next) => {
     // if (!req.session.memberInfo) {
     //     return next(new BadRequestException("로그인 중이 아닙니다."));
@@ -453,13 +454,10 @@ module.exports = (app) => {
       let sql = "DELETE FROM products WHERE product_code IN (";
       key.map((v, i) => {
         if (i == key.length - 1) {
-          return (sql += "?");
+          return (sql += "?)");
         }
         sql += "?,";
       });
-      sql += ")";
-      console.log(sql);
-      console.log(key);
       const [result1] = await dbcon.query(sql, key);
       logger.debug([result1]);
       if (result1.affectedRows < 1) {
@@ -468,9 +466,6 @@ module.exports = (app) => {
     } catch (e) {
       logger.debug(e);
     }
-
-    // await dbcon.query("UPDATE carts SET product_code = null WHERE product_code IN "
-
     // 모든 처리에 성공했으므로 정상 조회 결과 구성
     res.sendJson();
   });

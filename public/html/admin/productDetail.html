@@ -105,20 +105,140 @@
     <script src="../../js/regex_helper.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        //백엔드로 보낼 값이 담겨있는 변수모음입니다.
+        let values = {
+            productCategorie: null,
+            productName: null,
+            productPrice: null,
+            productStock: null,
+            productDesc: null,
+            productNutri: null,
+            productAllergy: null,
+            productImage: null,
+            productCode: null
+        }
+
+        // URL 파라미터를 가져옵니다.
         const params = new URLSearchParams(window.location.search);
-        const prod = params.get('prod');
+        values.productCode = params.get('prod');
 
+
+        // 동적으로 input 값을 할당합니다.
+        const dataOutput = (data) => {
+            data.map((v, i) => {
+                document.getElementById("productCategorie").value = v.product_categorie;
+                document.getElementById("productName").value = v.product_name;
+                document.getElementById("productPrice").value = v.product_price;
+                document.getElementById("productStock").value = v.product_stock;
+                document.getElementById("productDesc").value = v.product_desc;
+                document.getElementById("productNutri").value = v.product_nutri;
+                document.getElementById("productAllergy").value = v.product_allergy;
+                document.querySelector("#img").setAttribute("src", `../../..${v.product_img}`);
+            })
+        }
+        // 유효성검사가 실행될 함수입니다.
+        const regexHelpers = () => {
+            // 유효성검사 클래스를 가져옵니다.
+            const regexHelper = new RegexHelper();
+            const productImg = document.querySelector("#img").src;
+
+            if (!values.productCategorie) {
+                Swal.fire({
+                    text: "카테고리 값을 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+
+            if (!productImg) {
+                Swal.fire({
+                    text: "상품 이미지를 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+
+            if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+
+            if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+
+
+
+            if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+
+
+            if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+
+            if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+            if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
+                return false;
+            }
+            if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
+                return false;
+            }
+        }
+        // 값을 저장합니다.
+        const setValues = () => {
+            // 드롭다운의 값을 가져옵니다
+            let dropdown = document.querySelector("#productCategorie");
+            // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
+            let choose = dropdown.selectedIndex;
+            // 선택된 option의 value 및 카테고리 
+            values.productCategorie = dropdown[choose].value;
+
+            //백엔드로 보낼 값이 담겨있는 변수모음입니다.
+            values.productName = document.querySelector("#productName").value;
+            values.productPrice = document.querySelector("#productPrice").value;
+            values.productStock = document.querySelector("#productStock").value;
+            values.productDesc = document.querySelector("#productDesc").value;
+            values.productNutri = document.querySelector("#productNutri").value;
+            values.productAllergy = document.querySelector("#productAllergy").value;
+        }
         
-        const regexHelper = new RegexHelper();
-        let imgUrl = null;
-
         //URL에 파라미터가 있을때 
-        if (prod) {
-            let data = null;
+        if (values.productCode) {
+            // 값 불러오기
             (async () => {
+                let data = null;
+                // 통신
                 try {
-                    const response = await axios.get(`/product/${prod}`)
-                    console.log(response);
+                    const response = await axios.get(`/product/${values.productCode}`)
                     data = response.data.item;
                 } catch (e) {
                     Swal.fire({
@@ -127,119 +247,18 @@
                         confirmButtonText: '확인'
                     });
                 }
-                data.map((v, i) => {
-                    document.getElementById("productCategorie").value = v.product_categorie;
-                    document.getElementById("productName").value = v.product_name;
-                    document.getElementById("productPrice").value = v.product_price;
-                    document.getElementById("productStock").value = v.product_stock;
-                    document.getElementById("productDesc").value = v.product_desc;
-                    document.getElementById("productNutri").value = v.product_nutri;
-                    document.getElementById("productAllergy").value = v.product_allergy;
-                    document.querySelector("#img").setAttribute("src", `../../..${v.product_img}`);
-                    // document.querySelector("#profileImg").files[0] = `../../..${v.product_img}`
-
-                    // console.log(document.querySelector("#profileImg").files[0]);
-                })
+                // 데이터를 출력합니다.
+                dataOutput(data);
             })();
             // 저장버튼의 이름을 수정으로 바꿉니다.
             document.querySelector("#save").innerHTML = "수정";
-            // 유효성검사
+            // 전송이벤트
             document.querySelector("#formData").addEventListener("submit", e => {
-
                 e.preventDefault();
-
-                const dropdown = document.querySelector("#productCategorie");
-
-                // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
-                const choose = dropdown.selectedIndex;
-
-                // 이미지파일 소스
-                const productImg = document.querySelector("#img").getAttribute("src");
-
-                // 선택된 option의 value 및 카테고리 
-                const productCategorie = dropdown[choose].value;
-
-
-                const productName = document.querySelector("#productName").value;
-                console.log(productName);
-                const productPrice = document.querySelector("#productPrice").value;
-                const productStock = document.querySelector("#productStock").value;
-                const productDesc = document.querySelector("#productDesc").value;
-                const productNutri = document.querySelector("#productNutri").value;
-                const productAllergy = document.querySelector("#productAllergy").value;
-
-                if (!productCategorie) {
-                    Swal.fire({
-                        text: "카테고리 값을 입력해주세요",
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    });
-                    return false;
-                }
-
-                if (!productImg) {
-                    Swal.fire({
-                        text: "상품 이미지를 입력해주세요",
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    });
-                    return false;
-                }
-
-                if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-                if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-
-
-                if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-
-                if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-                if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-                if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
+                // 값을 할당합니다.
+                setValues();
+                // 유효성검사
+                regexHelpers();
                 // 알럿 팝업
                 Swal.fire({
                     title: '상품을 수정하시겠습니까?',
@@ -247,27 +266,26 @@
                     showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
                     confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
                     cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-                    confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+                    confirmButtonText: '확인', // confirm 버튼 텍스트 지정
                     cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-
                     reverseButtons: true, // 버튼 순서 거꾸로
-
                 }).then(async result => {
                     // 이미지가 없을경우
-                    if (imgUrl == null) {
+                    if (values.productImage == null) {
+                        console.log(values.productName);
                         // form데이터에 코드 값 추가
                         console.log("이미지가 없거나, 수정버튼일시 실행");
                         try {
                             // 백엔드 통신
                             await axios.put('/product', {
-                                productName: productName,
-                                productPrice: productPrice,
-                                productStock: productStock,
-                                productCategorie: productCategorie,
-                                productDesc: productDesc,
-                                productNutri: productNutri,
-                                productAllergy: productAllergy,
-                                prod: prod
+                                productName: values.productName,
+                                productPrice: values.productPrice,
+                                productStock: values.productStock,
+                                productCategorie: values.productCategorie,
+                                productDesc: values.productDesc,
+                                productNutri: values.productNutri,
+                                productAllergy: values.productAllergy,
+                                prod: values.productCode
                             });
                             // 통신이 성공했을 경우
                             // sweetalert
@@ -286,21 +304,21 @@
                             });
                         }
                         // 이미지가 있을경우
-                    } else if (imgUrl) {
+                    } else {
                         let formData = new FormData();
                         // 폼 데이터를 넘깁니다.
-                        formData.append('productName', productName);
-                        formData.append('productPrice', productPrice);
-                        formData.append('productStock', productStock);
-                        formData.append('productCategorie', productCategorie);
-                        formData.append('productDesc', productDesc);
-                        formData.append('productNutri', productNutri);
-                        formData.append('productAllergy', productAllergy);
-                        formData.append('prod', prod);
+                        formData.append('productName', values.productName);
+                        formData.append('productPrice', values.productPrice);
+                        formData.append('productStock', values.productStock);
+                        formData.append('productCategorie', values.productCategorie);
+                        formData.append('productDesc', values.productDesc);
+                        formData.append('productNutri', values.productNutri);
+                        formData.append('productAllergy', values.productAllergy);
+                        formData.append('prod', values.productCode);
+                        formData.append('photo', values.productImage);
                         // form데이터에 코드 값 추가
                         console.log("이미지가 있거나 수정버튼일시");
-                        formData.append('photo', imgUrl);
-                        console.log(imgUrl);
+                        console.log(values.productImage);
                         try {
                             // 백엔드 통신
                             await axios.put('/productImg', formData, {
@@ -313,7 +331,6 @@
                                 icon: 'success',
                                 confirmButtonText: '확인'
                             });
-
                         } catch (error) {
                             Swal.fire({
                                 title: "수정이 되지 않았습니다.",
@@ -327,147 +344,51 @@
             });
             // URL 파라미터가 없을 때
         } else {
+            // 전송이벤트
             document.querySelector("#formData").addEventListener("submit", async e => {
-
                 e.preventDefault();
-
-                const dropdown = document.querySelector("#productCategorie");
-
-                // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
-                const choose = dropdown.selectedIndex;
-
-                // 이미지파일 소스
-                const productImg = document.querySelector("#img").getAttribute("src");
-
-                // 선택된 option의 value 및 카테고리 
-                const productCategorie = dropdown[choose].value;
-
-
-                const productName = document.querySelector("#productName").value;
-                console.log(productName);
-                const productPrice = document.querySelector("#productPrice").value;
-                const productStock = document.querySelector("#productStock").value;
-                const productDesc = document.querySelector("#productDesc").value;
-                const productNutri = document.querySelector("#productNutri").value;
-                const productAllergy = document.querySelector("#productAllergy").value;
-
-                if (!productCategorie) {
-                    Swal.fire({
-                        text: "카테고리 값을 입력해주세요",
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    });
-                    return false;
-                }
-
-                if (!productImg) {
-                    Swal.fire({
-                        text: "상품 이미지를 입력해주세요",
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    });
-                    return false;
-                }
-
-                if (!regexHelper.value("#productName", "상품명을 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productName", 30, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-                if (!regexHelper.value("#productPrice", "판매가격을 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.num("#productPrice", "숫자로 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productPrice", 11, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-
-
-                if (!regexHelper.value("#productStock", "재고를 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.num("#productStock", "숫자로 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productStock", 11, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-
-                if (!regexHelper.value("#productDesc", "부가설명을 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productDesc", 255, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-                if (!regexHelper.value("#productNutri", "영양 정보를 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productNutri", 255, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-                if (!regexHelper.value("#productAllergy", "알레르기 정보를 입력하세요.")) {
-                    return false;
-                }
-                if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
-                    return false;
-                }
-
-
-
-
+                // 값 할당
+                setValues();
+                // 유효성검사
+                regexHelpers();
+                // formData 준비
                 let formData = new FormData();
                 // 폼 데이터를 넘깁니다.
-                formData.append('productName', productName);
-                formData.append('productPrice', productPrice);
-                formData.append('productStock', productStock);
-                formData.append('productCategorie', productCategorie);
-                formData.append('productDesc', productDesc);
-                formData.append('productNutri', productNutri);
-                formData.append('productAllergy', productAllergy);
-
+                formData.append('productName', values.productName);
+                formData.append('productPrice', values.productPrice);
+                formData.append('productStock', values.productStock);
+                formData.append('productCategorie', values.productCategorie);
+                formData.append('productDesc', values.productDesc);
+                formData.append('productNutri', values.productNutri);
+                formData.append('productAllergy', values.productAllergy);
+                formData.append('photo', values.productImage);
+                // 통신
                 try {
-                    // await axios.post('/product', formData, {
-                    formData.append('photo', imgUrl);
-                    // })
                     await axios.post('/product', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         }
-                    })
+                    });
                 } catch (e) {
                     console.log(e);
                 }
-
             });
-
         }
 
-        // 파일 업로드를 감지합니다.
+        // 파일 업로드를 감지합니다.(썸네일 및 파일 객체 전송)
         document.querySelector("#profileImg").addEventListener("change", e => {
-
             e.preventDefault();
             let img = document.querySelector("#img");
+            // 만약 현재 이벤트의 타겟에 값이 없다면
             if (!e.currentTarget.files[0]) {
                 img.src = ""
                 return;
             } else {
                 img.src = URL.createObjectURL(e.currentTarget.files[0]);
             }
-            imgUrl = e.currentTarget.files[0]
-            console.log(imgUrl);
+            values.productImage = e.currentTarget.files[0]
+            console.log(values.productImage);
         });
-
-
 
         // 삭제버튼 이벤트
         document.getElementById("delete").addEventListener("click", async e => {
@@ -475,66 +396,58 @@
                 title: '상품을 삭제하시겠습니까?',
                 text: '삭제된 상품은 복구할 수 없습니다.',
                 icon: 'warning',
-
                 showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
                 confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
                 cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-                confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+                confirmButtonText: '확인', // confirm 버튼 텍스트 지정
                 cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-
                 reverseButtons: true, // 버튼 순서 거꾸로
-
             }).then(async result => {
+                // 통신에 사용할 값이 담긴 객체
                 let keys = {
-                    key: [prod]
+                    key: [values.productCode]
                 }
+                // 통신
                 try {
                     const response = await axios.delete('/product', {
                         data: keys
                     })
                     console.log(response);
-
                 } catch (err) {
                     Swal.fire({
                         title: '서버와 통신이 되지 않았습니다.',
                         icon: 'warning',
                         confirmButtonText: '확인', // confirm 버튼 텍스트 지정
-                    })
+                    });
                 }
                 Swal.fire({
                     title: '삭제되었습니다.',
                     icon: 'warning',
                     confirmButtonText: '확인', // confirm 버튼 텍스트 지정
                 }).then(result => {
-
                     // 상품페이지로 강제이동합니다.
                     location.href = "/html/admin/product.html"
                 });
             });
         });
+
         // 취소버튼 이벤트
         document.getElementById("cancel").addEventListener("click", e => {
-
+            // 스위트알럿2
             Swal.fire({
                 title: '취소하시겠습니까?',
                 icon: 'warning',
-
                 showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
                 confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
                 cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-                confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+                confirmButtonText: '확인', // confirm 버튼 텍스트 지정
                 cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-
                 reverseButtons: true, // 버튼 순서 거꾸로
-
             }).then(result => {
-
                 // 상품페이지로 강제이동합니다.
                 location.href = "/html/admin/product.html"
             });
-        })
-
-
+        });
     </script>
 </body>
 
