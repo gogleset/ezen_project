@@ -39,10 +39,10 @@
             </div>
             <div class="form-group">
                 <h1 id="prodName">상품명</h1>
-                <div id="prodDesc"class="ex-description">
+                <div id="prodDesc" class="ex-description">
                     부가설명
                 </div>
-                <div id="prodPrice"class="total-price">
+                <div id="prodPrice" class="total-price">
                     <h2>00000원</h2>
                 </div>
                 <hr />
@@ -54,16 +54,16 @@
             </div>
 
             <div class="form-group">
-                <h2 class="detail-form" >영양정보</h2>
+                <h2 class="detail-form">영양정보</h2>
                 <hr />
-                <div id ="prodNutri" class="detail">
+                <div id="prodNutri" class="detail">
                     총 내용량 : ---g 100g당 1회 제공 칼로리 : ---kcal 100g당 (% : 1일 영양성분기준치에 대한 비율) - 나트륨 : ---mg / --% · 당류 : -g
                     /-% · 포화지방 : -g / --% · 단백질 : -g / --%
                 </div>
 
                 <h2 class="detail-form">알레르기 정보</h2>
                 <hr />
-                <div id="prodAllergy"class="detail">
+                <div id="prodAllergy" class="detail">
                     밀,우유,대두, 쇠고기 함유
                 </div>
             </div>
@@ -113,14 +113,21 @@
         const prod = params.get('prod');
 
         let data = null;
-        // prodDesc prodPrice prodNutri prodAllergy
+        let data1 = null;
+
+
         if (prod) {
             (async () => {
                 try {
                     const response = await axios.get(`/product/${prod}`)
-                    
+                    const response1 = await axios.get('/product',{
+                        params:{
+                            cate: "random"
+                        }
+                    })
                     data = response.data.item[0];
-                    console.log(data);
+                    data1 = response1.data.item;
+                    console.log(data1);
                 } catch (e) {
                     Swal.fire({
                         title: "서버와 접속이 실패했습니다.",
@@ -135,10 +142,23 @@
                 document.getElementById("prodNutri").innerHTML = data.product_nutri;
                 document.getElementById("prodAllergy").innerHTML = data.product_allergy;
                 document.getElementById("prodImg").setAttribute("src", `../..${data.product_img}`)
+
+                // 값 출력
+                document.querySelectorAll(".product-img").forEach((v, i) => {
+                    v.innerHTML = `
+                    <a href=./productDetail.html?prod=${data1[i].product_code} target="_blank">
+                        <img src="../..${data1[i].product_img}" alt="" />
+                        <div class="product-name">${data1[i].product_name}</div>
+                    </a>`;  
+                })
+
             })();
         }
 
-        
+
+
+
+
         document.querySelector("#addBasket").addEventListener("click", () => {
 
         });

@@ -52,6 +52,24 @@ module.exports = (app) => {
       }
       // 모든 처리에 성공했으므로 정상 조회 결과를 구성
       res.sendJson({ item: json });
+      // cate의 값이 랜덤일 경우
+    } else if (cate === "random") {
+      try {
+        dbcon = await mysql2.createConnection(config.database);
+        await dbcon.connect();
+
+        // 데이터 조회
+        let sql =
+          "SELECT product_code, product_img, product_name FROM products ORDER BY rand() limit 0,6;";
+        const [result] = await dbcon.query(sql);
+        json = result;
+      } catch (e) {
+        next(e);
+      } finally {
+        dbcon.end();
+      }
+      // 모든 처리에 성공했으므로 정상 조회 결과를 구성
+      res.sendJson({ item: json });
     } else {
       try {
         // 데이터베이스 접속
