@@ -10,6 +10,7 @@ const regexHelper = require("../../helper/regex_helper");
 const BadRequestException = require('../exceptions/BadRequestException')
 const router = require('express').Router();
 const mysql2 = require('mysql2/promise');
+const util = require("../../helper/UtillHelper");
 
 module.exports = (app) => {
     let dbcon = null;
@@ -283,7 +284,7 @@ module.exports = (app) => {
         res.status(200).send("ok");
     })//로그인 쿠키 읽어오기
         .get((req, res, next) => {
-           
+
             // 암호화 된 쿠키값들은 req.signedCookies 객체의 하위 데이터로 저장된다.
             for (key in req.signedCookies) {
                 const str = "[signedCookies]" + key + "=" + req.signedCookies[key];
@@ -299,6 +300,100 @@ module.exports = (app) => {
 
             res.status(200).send(result_data);
         })
+
+    //관리자 페이지 멤버목록조회
+    router.get("/admin/list", async (req, res, next) => {
+
+        // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
+        const query = req.get("query");
+
+        // 현재 페이지 번호 받기(기본값은 1)
+        const page = req.get("page", 1);
+
+        // 한 페이지에 보여질 목록 수 받기 (기본값은 10, 최소 10, 최대 30)
+        const rows = req.get("rows", 5);
+
+        // 데이터 조회 결과가 저장될 빈 변수
+        let json = null;
+        let pagenation = null;
+
+        try {
+            dbcon = await mysql2.createConnection(config.database);
+            await dbcon.connect();
+
+            let sql1 = "select count(*) as cnt from members ";
+
+            let args1 = [];
+
+            if (query != null) {
+                sql1 += "where member_name like concat('%', ?, '%')";
+                args1.push(query);
+            }
+            const [result1] = await dbcon.query(sql1, args1);
+            console.log([result1]);
+            const totalCount = result1[0].cnt;
+
+            //페이지번호 정보 계산
+            pagenation = util.pagenation(totalCount, page, rows);
+            logger.debug(JSON.stringify(pagenation));
+
+            // 데이터 조회
+            let sql2 = "SELECT member_code, member_name, member_id, member_email, member_phone, concat(member_postcode,' ',member_addr1,' ',member_addr2) as totalAdd, reg_date FROM members ";
+
+            // SQL문에 설정할 치환값
+            let args2 = [];
+
+            if (query != null) {
+                sql2 += "WHERE member_name LIKE concat('%', ?, '%')";
+                args2.push(query);
+            }
+            sql2 += " LIMIT ?, ?";
+            args2.push(pagenation.offset);
+            args2.push(pagenation.listCount);
+
+            const [result2] = await dbcon.query(sql2, args2);
+
+            // 조회 결과를 미리 준비한 변수에 저장함
+            json = result2;
+        } catch (e) {
+            return next(e);
+        } finally {
+            dbcon.end();
+        }
+
+        res.sendJson({pagenation: pagenation, item: json});
+    });
+
+    //회원정보 이름으로 검색하기
+    router.get("/admin/list/:member_name", async (req, res, next) => {
+        const member_name = req.get("member_name");
+    
+        if (member_name == null) {
+          // 400 Bad Request -> 잘못된 요청
+          return next(new Error(400));
+        }
+    
+        // 데이터 조회 결과가 저장될 빈 변수
+        let json = null;
+        try {
+          // 데이터 베이스 접속
+          dbcon = await mysql2.createConnection(config.database);
+          await dbcon.connect();
+    
+          // 데이터 조회
+          const sql = "SELECT * FROM members WHERE member_name=?";
+          const [result] = await dbcon.query(sql, [member_name]);
+    
+          // 조회 결과를 미리 준비한 변수에 저장함
+          json = result;
+        } catch (e) {
+          return next(e);
+        } finally {
+          dbcon.end();
+        }
+        // 모든 처리에 성공했으므로 정상 조회 결과 구성
+        res.sendJson({ item: json });
+      });
 
     return router;
 }
