@@ -4,13 +4,13 @@
  * @description : members 테이블
  **/
 
-const config = require('../../helper/_config');
-const logger = require('../../helper/LogHelper');
-const regexHelper = require("../../helper/regex_helper");
+const config = require('../helper/_config');
+const logger = require('../helper/LogHelper');
+const regexHelper = require("../helper/regex_helper");
 const BadRequestException = require('../exceptions/BadRequestException')
 const router = require('express').Router();
 const mysql2 = require('mysql2/promise');
-const util = require("../../helper/UtillHelper");
+const util = require("../helper/UtillHelper");
 
 module.exports = (app) => {
     let dbcon = null;

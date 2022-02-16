@@ -4,14 +4,14 @@
  * @description : product 데이터베이스에 값 보내기
  **/
 
-const config = require("../../helper/_config");
-const logger = require("../../helper/LogHelper");
+const config = require("../helper/_config");
+const logger = require("../helper/LogHelper");
 const router = require("express").Router();
 const mysql2 = require("mysql2/promise");
-const regexHelper = require("../../helper/regex_helper");
+const regexHelper = require("../helper/regex_helper");
 const MultipartException = require("../exceptions/MultipartException");
 const BadRequestException = require("../exceptions/BadRequestException");
-const util = require("../../helper/UtillHelper");
+const util = require("../helper/UtillHelper");
 const multer = require("multer");
 
 // 라우팅 정의 부분

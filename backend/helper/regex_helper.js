@@ -5,7 +5,7 @@
  *
  *
  */
- const BadRequestException = require("../Node/exceptions/BadRequestException");
+ const BadRequestException = require("../exceptions/BadRequestException");
 
  class RegexHelper {
    // constructor(){}

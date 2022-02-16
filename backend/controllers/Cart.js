@@ -12,7 +12,7 @@ const mysql2 = require("mysql2/promise");
 const logger = require('../helper/LogHelper');
 const config = require('../helper/_config');
 const utilHelper = require('../helper/UtillHelper');
-const regexHelper = require("../../helper/regex_helper.js");
+const regexHelper = require("../helper/regex_helper.js");
 
 
 module.exports = (app) => {

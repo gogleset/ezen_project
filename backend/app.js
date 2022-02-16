@@ -3,11 +3,11 @@
  * @author    : 정한슬 (seul5106@gmail.com)
  * @description : node의 앱 기본 설정
  **/
-const config = require('../helper/_config');
-const logger = require('../helper/LogHelper');
-const util = require("../helper/UtillHelper");
-const fileHelper = require('../helper/FileHelper');
-const webHelper = require('../helper/WebHelper');
+const config = require('./helper/_config');
+const logger = require('./helper/LogHelper');
+const util = require("./helper/UtillHelper");
+const fileHelper = require('./helper/FileHelper');
+const webHelper = require('./helper/WebHelper');
 
 const url = require("url");
 const path = require("path");
@@ -101,6 +101,7 @@ app.use(require('./controllers/Product')(app)); //상품 테이블
 app.use(require('./controllers/Event')(app)); // 이벤트 테이블
 app.use(require('./controllers/QnA')(app)); // QnA 테이블
 app.use(require('./controllers/Order')(app)); // Order 테이블
+app.use(require('./controllers/Cart')(app)); // 장바구니 테이블
 
 app.use((err, req, res, next) => {
     if (err instanceof BadRequestException) {

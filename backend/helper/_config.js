@@ -18,8 +18,8 @@ module.exports = {
     },
     server_port: 3217,
 
-    public_path: path.join(__dirname, "../html"),
-    favicon_path: path.join(__dirname, "../public/img/favicon.png"),
+    public_path: path.join(__dirname, "../../html"),
+    favicon_path: path.join(__dirname, "../../html/img/favicon.png"),
     cookie_domain: "",
 
     secure: {
@@ -36,14 +36,14 @@ module.exports = {
 
     upload: {
         path: "/upload",
-        dir: path.join(__dirname, "../_files/upload"),
+        dir: path.join(__dirname, "./_files/upload"),
         max_size: 1024 * 1024 * 20,
         max_count: 10
     },
 
     thumbnail: {
         sizes: [640, 750, 1020],
-        dir: path.join(__dirname, "../_files/thumb")
+        dir: path.join(__dirname, "./_files/thumb")
     },
 
     database: {
