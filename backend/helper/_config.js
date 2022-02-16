@@ -18,7 +18,7 @@ module.exports = {
     },
     server_port: 3217,
 
-    public_path: path.join(__dirname, "../public"),
+    public_path: path.join(__dirname, "../html"),
     favicon_path: path.join(__dirname, "../public/img/favicon.png"),
     cookie_domain: "",
 
@@ -50,7 +50,7 @@ module.exports = {
         host: 'localhost',
         port: 3306,
         user: 'root',
-        password: 'root',
+        password: 'Chlwls@213468',
         database: "dessert40",
         dateStrings: 'date',
 

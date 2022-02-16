@@ -56,7 +56,8 @@
                 <div class="col-md-5">
                     <div class="col-md-8 imageRender">
                         <label for="img" class="prodImage">상품 이미지</label>
-                        <img src="" name="img" id="img" style="border:1px solid rgb(167, 163, 163)">
+                        <img src="http://placehold.it/130x130" name="img" id="img" style="border:1px solid 
+                        rgb(167, 163, 163)">
                     </div>
                     <!-- 상품 이미지를 전송합니다 -->
                     <input type="file" id="profileImg" name="profileImg" accept=".jpg, .jpeg, .png">
@@ -91,7 +92,7 @@
                 <input type="text" class="form-control" name="productAllergy" id="productAllergy"></input>
             </div>
             <button class="btn btn-primary pull-right btn-admin-setting" id="cancel" type="button">취소</button>
-            <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="reset">삭제</button>
+            <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">삭제</button>
             <button class="btn btn-primary pull-right btn-admin-setting" type="submit" id="save">저장</button>
         </form>
     </div>
@@ -118,6 +119,7 @@
             productCode: null
         }
 
+
         // URL 파라미터를 가져옵니다.
         const params = new URLSearchParams(window.location.search);
         values.productCode = params.get('prod');
@@ -140,9 +142,14 @@
         const regexHelpers = () => {
             // 유효성검사 클래스를 가져옵니다.
             const regexHelper = new RegexHelper();
-            const productImg = document.querySelector("#img").src;
+            let productImg = document.querySelector("#img").src;
+            let dropdown = document.querySelector("#productCategorie");
+            // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
+            let choose = dropdown.selectedIndex;
+            // 선택된 option의 value 및 카테고리 
+            let productCategorie = dropdown[choose].value;
 
-            if (!values.productCategorie) {
+            if (!productCategorie) {
                 Swal.fire({
                     text: "카테고리 값을 입력해주세요",
                     icon: 'error',
@@ -151,7 +158,7 @@
                 return false;
             }
 
-            if (!productImg) {
+            if (productImg == "http://placehold.it/130x130") {
                 Swal.fire({
                     text: "상품 이미지를 입력해주세요",
                     icon: 'error',
@@ -212,10 +219,12 @@
             if (!regexHelper.max_length("#productAllergy", 255, "최대 글자수를 넘겼습니다.")) {
                 return false;
             }
+
+            return true;
         }
         // 값을 저장합니다.
         const setValues = () => {
-            // 드롭다운의 값을 가져옵니다
+            // 드롭다운의 값을 가져옵니다.
             let dropdown = document.querySelector("#productCategorie");
             // 선택된 항목의 index --> <option>의 순서대로 0,1,2,3
             let choose = dropdown.selectedIndex;
@@ -230,7 +239,11 @@
             values.productNutri = document.querySelector("#productNutri").value;
             values.productAllergy = document.querySelector("#productAllergy").value;
         }
-        
+        // URL을 강제 이동 합니다.
+        const goLocation = (url) => {
+            return location.href = `${url}`
+        }
+
         //URL에 파라미터가 있을때 
         if (values.productCode) {
             // 값 불러오기
@@ -255,122 +268,162 @@
             // 전송이벤트
             document.querySelector("#formData").addEventListener("submit", e => {
                 e.preventDefault();
-                // 값을 할당합니다.
-                setValues();
-                // 유효성검사
-                regexHelpers();
-                // 알럿 팝업
-                Swal.fire({
-                    title: '상품을 수정하시겠습니까?',
-                    icon: 'warning',
-                    showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-                    confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-                    cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-                    confirmButtonText: '확인', // confirm 버튼 텍스트 지정
-                    cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-                    reverseButtons: true, // 버튼 순서 거꾸로
-                }).then(async result => {
-                    // 이미지가 없을경우
-                    if (values.productImage == null) {
-                        console.log(values.productName);
-                        // form데이터에 코드 값 추가
-                        console.log("이미지가 없거나, 수정버튼일시 실행");
-                        try {
-                            // 백엔드 통신
-                            await axios.put('/product', {
-                                productName: values.productName,
-                                productPrice: values.productPrice,
-                                productStock: values.productStock,
-                                productCategorie: values.productCategorie,
-                                productDesc: values.productDesc,
-                                productNutri: values.productNutri,
-                                productAllergy: values.productAllergy,
-                                prod: values.productCode
-                            });
-                            // 통신이 성공했을 경우
-                            // sweetalert
-                            Swal.fire({
-                                text: "수정이 완료되었습니다!",
-                                icon: 'success',
-                                confirmButtonText: '확인'
-                            });
-                        } catch (error) {
-                            // sweetalert
-                            Swal.fire({
-                                title: "수정이 되지 않았습니다.",
-                                text: `${error}`,
-                                icon: 'warning',
-                                confirmButtonText: '확인'
-                            });
-                        }
-                        // 이미지가 있을경우
-                    } else {
-                        let formData = new FormData();
-                        // 폼 데이터를 넘깁니다.
-                        formData.append('productName', values.productName);
-                        formData.append('productPrice', values.productPrice);
-                        formData.append('productStock', values.productStock);
-                        formData.append('productCategorie', values.productCategorie);
-                        formData.append('productDesc', values.productDesc);
-                        formData.append('productNutri', values.productNutri);
-                        formData.append('productAllergy', values.productAllergy);
-                        formData.append('prod', values.productCode);
-                        formData.append('photo', values.productImage);
-                        // form데이터에 코드 값 추가
-                        console.log("이미지가 있거나 수정버튼일시");
-                        console.log(values.productImage);
-                        try {
-                            // 백엔드 통신
-                            await axios.put('/productImg', formData, {
-                                headers: {
-                                    'Content-Type': 'multipart/form-data',
+
+                // 유효성검사가 맞다면
+                if (regexHelpers()) {
+                    // 값을 할당합니다.
+                    setValues();
+                    // 알럿 팝업
+                    Swal.fire({
+                        title: '상품을 수정하시겠습니까?',
+                        icon: 'warning',
+                        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                        confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+                        reverseButtons: true, // 버튼 순서 거꾸로
+                    }).then(async result => {
+                        // 확인버튼을 눌렀을 경우
+                        if (result.isConfirmed) {
+                            // 이미지가 없을경우
+                            if (values.productImage == null) {
+                                console.log(values.productName);
+                                // form데이터에 코드 값 추가
+                                console.log("이미지가 없거나, 수정버튼일시 실행");
+                                try {
+                                    // 백엔드 통신
+                                    await axios.put('/product', {
+                                        productName: values.productName,
+                                        productPrice: values.productPrice,
+                                        productStock: values.productStock,
+                                        productCategorie: values.productCategorie,
+                                        productDesc: values.productDesc,
+                                        productNutri: values.productNutri,
+                                        productAllergy: values.productAllergy,
+                                        prod: values.productCode
+                                    });
+                                    // 통신이 성공했을 경우
+
+                                } catch (error) {
+                                    // sweetalert
+                                    Swal.fire({
+                                        title: "수정이 되지 않았습니다.",
+                                        text: `${error}`,
+                                        icon: 'warning',
+                                        confirmButtonText: '확인'
+                                    });
                                 }
-                            });
-                            Swal.fire({
-                                text: "수정이 완료되었습니다!",
-                                icon: 'success',
-                                confirmButtonText: '확인'
-                            });
-                        } catch (error) {
-                            Swal.fire({
-                                title: "수정이 되지 않았습니다.",
-                                text: `${error}`,
-                                icon: 'warning',
-                                confirmButtonText: '확인'
-                            });
+                                Swal.fire({
+                                    text: "수정이 완료되었습니다!",
+                                    icon: 'success',
+                                    confirmButtonText: '확인'
+                                }).then(result => {
+                                    goLocation("/html/admin/product.html");
+                                });
+
+                                // 이미지가 있을경우
+                            } else {
+                                let formData = new FormData();
+                                // 폼 데이터를 넘깁니다.
+                                formData.append('productName', values.productName);
+                                formData.append('productPrice', values.productPrice);
+                                formData.append('productStock', values.productStock);
+                                formData.append('productCategorie', values.productCategorie);
+                                formData.append('productDesc', values.productDesc);
+                                formData.append('productNutri', values.productNutri);
+                                formData.append('productAllergy', values.productAllergy);
+                                formData.append('prod', values.productCode);
+                                formData.append('photo', values.productImage);
+                                // form데이터에 코드 값 추가
+                                console.log("이미지가 있거나 수정버튼일시");
+                                console.log(values.productImage);
+                                try {
+                                    // 백엔드 통신
+                                    await axios.put('/productImg', formData, {
+                                        headers: {
+                                            'Content-Type': 'multipart/form-data',
+                                        }
+                                    });
+                                } catch (error) {
+                                    Swal.fire({
+                                        title: "수정이 되지 않았습니다.",
+                                        text: `${error}`,
+                                        icon: 'warning',
+                                        confirmButtonText: '확인'
+                                    });
+                                }
+                                Swal.fire({
+                                    text: "수정이 완료되었습니다!",
+                                    icon: 'success',
+                                    confirmButtonText: '확인'
+                                }).then(result => {
+                                    goLocation("/html/admin/product.html");
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+                };
             });
             // URL 파라미터가 없을 때
         } else {
+            // 삭제버튼을 없앱니다.
+            document.getElementById("delete").style = "display: none";
             // 전송이벤트
-            document.querySelector("#formData").addEventListener("submit", async e => {
+            document.querySelector("#formData").addEventListener("submit", e => {
                 e.preventDefault();
-                // 값 할당
-                setValues();
-                // 유효성검사
-                regexHelpers();
-                // formData 준비
-                let formData = new FormData();
-                // 폼 데이터를 넘깁니다.
-                formData.append('productName', values.productName);
-                formData.append('productPrice', values.productPrice);
-                formData.append('productStock', values.productStock);
-                formData.append('productCategorie', values.productCategorie);
-                formData.append('productDesc', values.productDesc);
-                formData.append('productNutri', values.productNutri);
-                formData.append('productAllergy', values.productAllergy);
-                formData.append('photo', values.productImage);
-                // 통신
-                try {
-                    await axios.post('/product', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        }
+                // 유효성검사가 맞다면
+                if (regexHelpers()) {
+                    // 값 할당
+                    setValues();
+                    // formData 준비
+                    let formData = new FormData();
+                    // 폼 데이터를 넘깁니다.
+                    formData.append('productName', values.productName);
+                    formData.append('productPrice', values.productPrice);
+                    formData.append('productStock', values.productStock);
+                    formData.append('productCategorie', values.productCategorie);
+                    formData.append('productDesc', values.productDesc);
+                    formData.append('productNutri', values.productNutri);
+                    formData.append('productAllergy', values.productAllergy);
+                    formData.append('photo', values.productImage);
+
+                    //스위트 알럿
+                    Swal.fire({
+                        title: '상품을 저장하시겠습니까?',
+                        icon: 'warning',
+                        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+                        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+                        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+                        confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+                        reverseButtons: true, // 버튼 순서 거꾸로
+                    }).then(async result => {
+                        // 확인 시
+                        if (result.isConfirmed) {
+                            // 통신
+                            try {
+                                await axios.post('/product', formData, {
+                                    headers: {
+                                        'Content-Type': 'multipart/form-data',
+                                    }
+                                });
+                            } catch (e) {
+                                Swal.fire({
+                                    title: '서버와 통신이 되지 않았습니다.',
+                                    icon: 'warning',
+                                    confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                                });
+                            }
+                            Swal.fire({
+                                text: "저장이 완료되었습니다!",
+                                icon: 'success',
+                                confirmButtonText: '확인'
+                            }).then(result => {
+                                goLocation("/html/admin/product.html");
+                            });
+                        };
                     });
-                } catch (e) {
-                    console.log(e);
                 }
             });
         }
@@ -391,7 +444,7 @@
         });
 
         // 삭제버튼 이벤트
-        document.getElementById("delete").addEventListener("click", async e => {
+        document.getElementById("delete").addEventListener("click", e => {
             Swal.fire({
                 title: '상품을 삭제하시겠습니까?',
                 text: '삭제된 상품은 복구할 수 없습니다.',
@@ -403,31 +456,35 @@
                 cancelButtonText: '취소', // cancel 버튼 텍스트 지정
                 reverseButtons: true, // 버튼 순서 거꾸로
             }).then(async result => {
-                // 통신에 사용할 값이 담긴 객체
-                let keys = {
-                    key: [values.productCode]
-                }
-                // 통신
-                try {
-                    const response = await axios.delete('/product', {
-                        data: keys
-                    })
-                    console.log(response);
-                } catch (err) {
+                // 확인버튼을 눌렀을시
+                if (result.isConfirmed) {
+                    // 통신에 사용할 값이 담긴 객체
+                    let keys = {
+                        key: [values.productCode]
+                    }
+                    // 통신
+                    try {
+                        const response = await axios.delete('/product', {
+                            data: keys
+                        })
+                        console.log(response);
+                    } catch (err) {
+                        Swal.fire({
+                            title: '서버와 통신이 되지 않았습니다.',
+                            icon: 'warning',
+                            confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                        });
+                    }
                     Swal.fire({
-                        title: '서버와 통신이 되지 않았습니다.',
+                        title: '삭제되었습니다.',
                         icon: 'warning',
                         confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+                    }).then(result => {
+                        // 상품페이지로 강제이동합니다.
+                        goLocation("/html/admin/product.html");
                     });
                 }
-                Swal.fire({
-                    title: '삭제되었습니다.',
-                    icon: 'warning',
-                    confirmButtonText: '확인', // confirm 버튼 텍스트 지정
-                }).then(result => {
-                    // 상품페이지로 강제이동합니다.
-                    location.href = "/html/admin/product.html"
-                });
+
             });
         });
 
@@ -445,7 +502,7 @@
                 reverseButtons: true, // 버튼 순서 거꾸로
             }).then(result => {
                 // 상품페이지로 강제이동합니다.
-                location.href = "/html/admin/product.html"
+                goLocation("/html/admin/product.html");
             });
         });
     </script>

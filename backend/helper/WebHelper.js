@@ -3,7 +3,7 @@
  * @author    : 정한슬 (seul5106@gmail.com)
  * @description : GET, URL, POST, PUT, DELETE 파라미터를 수신하여 값을 리턴하는 함수 모듈
  **/
-const config = require('../helper/_config');
+const config = require('./_config');
 const logger = require('./LogHelper');
 const fileHelper = require('./FileHelper');
 const multer = require("multer");
