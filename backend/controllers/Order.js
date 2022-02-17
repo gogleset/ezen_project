@@ -24,7 +24,6 @@ module.exports = (app) => {
 
         // 검색어 파라미터 받기
         const query = req.get('query');
-
         // 현재 페이지 번호 받기 (기본값 : 1)
         const page = req.get('page', 1);
         // 한 페이지에 보여질 목록 수 (기본값 : 10)

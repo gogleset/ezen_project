@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 50
+    },
+    "auditLog": "/Users/choijin/ezen_project/Backend/_files/_logs/.afad465c541fe3a4a520ad08c370a310e341ca56-audit.json",
+    "files": [
+        {
+            "date": 1644980445065,
+            "name": "/Users/choijin/ezen_project/Backend/_files/_logs/log_220216.log",
+            "hash": "3e52e972eb1841f7005e2baeb60a08cf"
+        },
+        {
+            "date": 1645087256055,
+            "name": "/Users/choijin/ezen_project/Backend/_files/_logs/log_220217.log",
+            "hash": "7d57af4aabfc03200636d97aa4a28033"
+        }
+    ],
+    "hashType": "md5"
+}

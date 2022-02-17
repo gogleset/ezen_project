@@ -22,14 +22,12 @@ module.exports = (app) => {
 
     //데이터 조회
     router.get('/event', async (req, res, next) => {
-
         // 검색어 파라미터 받기
         const query = req.get('query');
-
         // 현재 페이지 번호 받기 (기본값 : 1)
         const page = req.get('page', 1);
         // 한 페이지에 보여질 목록 수 (기본값 : 10)
-        const rows = req.get('rows', 10);
+        const rows = req.get('rows',10);
         // 데이터 조회 결과가 저장될 빈 변수
         let json = null;
         let pagenation = null;
@@ -70,7 +68,6 @@ module.exports = (app) => {
             const [result2] = await dbcon.query(sql2, args2);
 
             json = result2;
-
         } catch (err) {
             return next(err);
         } finally {

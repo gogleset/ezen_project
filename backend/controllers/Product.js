@@ -20,6 +20,7 @@ module.exports = (app) => {
   router.get("/product", async (req, res, next) => {
     // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
     const query = req.get("query");
+    // 카테고리 파라미터 받기
     const cate = req.get("cate");
     console.log(cate);
     // 현재 페이지 번호 받기(기본값은 1)
@@ -33,7 +34,7 @@ module.exports = (app) => {
     let json = null;
     let pagenation = null;
 
-    // 카테의 값이 all일 경우
+    // 카테의 값이 all일 경우(전체 데이터 조회지만, pagenation에 대응되는 값은 보내지 않는다.)
     if (cate === "all") {
       try {
         dbcon = await mysql2.createConnection(config.database);
@@ -57,11 +58,41 @@ module.exports = (app) => {
       try {
         dbcon = await mysql2.createConnection(config.database);
         await dbcon.connect();
-
         // 데이터 조회
         let sql =
           "SELECT product_code, product_img, product_name FROM products ORDER BY rand() limit 0,6;";
         const [result] = await dbcon.query(sql);
+        json = result;
+      } catch (e) {
+        next(e);
+      } finally {
+        dbcon.end();
+      }
+      // 모든 처리에 성공했으므로 정상 조회 결과를 구성
+      res.sendJson({ item: json });
+      // 카테고리에만 값이 있을 때
+    } else if (cate != null && query == null) {
+      // 카테고리값 유효성 검사
+      switch (cate) {
+        case "t":
+        case "v":
+        case "m":
+        case "c":
+        case "b":
+          logger.debug(`카테고리의 값은 ${cate} 입니다.`);
+          break;
+        default:
+          return next(new BadRequestException("잘못된 카테고리 값입니다."));
+      }
+      try {
+        dbcon = await mysql2.createConnection(config.database);
+        await dbcon.connect();
+        // 데이터 조회
+        let sql =
+          "SELECT product_code, product_name, product_img, product_price FROM products WHERE product_categorie = ?";
+        let args = [];
+        args.push(cate);
+        const [result] = await dbcon.query(sql, args);
         json = result;
       } catch (e) {
         next(e);
@@ -103,7 +134,7 @@ module.exports = (app) => {
 
         // SQL문에 설정할 치환값
         let args2 = [];
-
+        // 검색조건 검색어 + 카테고리가 아니면 검색 안되게
         if (query != null && cate != null) {
           sql2 += " WHERE product_name LIKE concat('%', ?, '%')";
           sql2 += " AND product_categorie LIKE concat('%', ?, '%')";
