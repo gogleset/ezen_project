@@ -112,16 +112,6 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="../fake_data/menus.js"></script>
   <script>
-    // fake_data에서 menus 데이터를 가져와 이동하는 링크를 생성 - 디저트 메뉴에 대해서만 생성.  
-    const menuUlElement = document.querySelector("#main-menu");
-    for (let menuId in menus) {
-      const newLiElement = document.createElement("li");
-      newLiElement.innerHTML = `<a href="./main.html?menu=${menuId}">
-        <span class="text">${menus[menuId]}</span>
-        </a>`;
-      menuUlElement.appendChild(newLiElement);
-    }
-
     // 회원정보 수정 클릭시 파라미터 넘김
     document.querySelector("#signUpdate").addEventListener("click", e => {
       (async () => {
