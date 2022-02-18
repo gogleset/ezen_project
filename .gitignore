@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# 노드 설정파일
+backend/helper/_config.js
+
