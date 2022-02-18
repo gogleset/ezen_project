@@ -63,6 +63,8 @@
     <script src="./assets/layout.js"></script>
     <!-- 가격 이쁘게 보여주는 함수 가져오기 -->
     <script type="text/javascript" src="../js/number_utils.js"></script>
+    <!-- sweetAlert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         // URL에 담겨있는 cate라는 값을 가져옵니다.
@@ -76,6 +78,8 @@
 
         // 통신
         (async () => {
+            let data = null;
+
             try {
                 // 통신값을 가져와서 response 변수에 저장합니다.
                 const response = await axios.get('/product', {
@@ -84,8 +88,8 @@
                     }
                 });
 
-                console.log(response.data);
-            } catch (error) {
+                data = response.data.item;
+            } catch (e) {
                 Swal.fire({
                     title: "서버와 접속이 실패했습니다.",
                     text: `${e}`,
@@ -93,38 +97,59 @@
                     confirmButtonText: '확인'
                 });
             }
+
+            // 상품 카테고리를 검색어 파라미터 명으로 분류하여 생성
+            switch (params) {
+                case "t":
+                    document.getElementById("menu-name").innerHTML = "케이크&티라미슈"
+                    break;
+                case "v":
+                    document.getElementById("menu-name").innerHTML = "빙수&파르페"
+                    break;
+                case "m":
+                    document.getElementById("menu-name").innerHTML = "마카롱&오믈렛"
+                    break;
+                case "c":
+                    document.getElementById("menu-name").innerHTML = "쿠키&파이"
+                    break;
+                case "b":
+                    document.getElementById("menu-name").innerHTML = "베이커리"
+                    break;
+                default:
+                    console.log("값이 없습니다.");
+                    break;
+            }
+
+            // 동적으로 돔을 생성할 부모요소입니다.
+            const target = document.querySelector(".menu-wrap");
+
+            data.map((value, index) => {
+                // 가격 3자리마다 , 찍어주기
+                const localePrice = formatPrice(value.product_price);
+
+                // target안에 넣을 자식요소입니다.
+                const element = document.createElement("div");
+                element.classList.add("product");
+                element.innerHTML = `<div class="frame">
+                <img src="${value.product_img}" alt="" />
+                </div>
+                <div class="txt">
+                <span>${value.product_name}</span>
+                <span>${localePrice}원</span>
+                </div>
+                <button class="btn-detail" data-id=${value.product_code}>자세히보기</button>`;
+                target.appendChild(element);
+            })
+
+            // 자세히보기 버튼 눌렀을 때 동작
+            document.querySelectorAll(".btn-detail").forEach((v, i) => {
+                // DOM같은 배열 요소 하나하나의 클릭 이벤트를 감지합니다.
+                v.addEventListener("click", e => {
+                    // 버튼에 담겨있는 dataset의 id값을 추출해서 가져옵니다.
+                    window.location.href = `./productDetail.html?prod=${v.dataset.id}`;
+                })
+            })
         })();
-
-        // const items = menuItems[menuId];
-
-        // // 해당 items 출력하기
-        // const target = document.querySelector(".menu-wrap");
-
-        // for (let i = 0; i < items.length; i++) {
-        //     const item = items[i];
-
-        //     // 가격 3자리마다 , 찍어주기
-        //     const localePrice = formatPrice(item.price);
-
-        //     const element = document.createElement("div");
-        //     element.classList.add("product");
-
-        //     element.innerHTML = `<div class="frame">
-        //     <img src="${item.image}" alt="" />
-        // </div>
-        // <div class="txt">
-        //     <span>상품명:${item.name}</span>
-        //     <span>${localePrice}원</span>
-        // </div>
-        // <button class="btn-detail">자세히보기</button>`;
-        //     target.appendChild(element);
-
-        //     // 자세히보기 버튼 눌렀을 때 동작
-        //     const detailBtn = element.querySelector("button");
-        //     detailBtn.addEventListener("click", (e) => {
-        //         window.location.href = `./goods_detail.html?menu=${menuId}&itemId=${i}`;
-        //     });
-        // };
     </script>
 </body>
 
