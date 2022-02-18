@@ -61,57 +61,70 @@
     <!-- menus 데이터 불러오기 -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./assets/layout.js"></script>
-
-    <script type="text/javascript" src="../fake_data/menus.js"></script>
-    <!-- menus 데이터와 query parameter를 이용해서 메뉴명 등록하기 -->
-    <script>
-        const searchParams = new URLSearchParams(decodeURI(window.location.search));
-
-        // 사용자가 메인 페이지 진입시엔 케이크&티라미슈 상품 노출
-        // 만약 다른 상품이 보고싶다면 메뉴 탭을 눌러 다른 카테고리로 이동
-        const menuId = (searchParams.get("menu") !== null) ? parseInt(searchParams.get("menu")) : 1;
-        const menuName = menus[menuId];
-        console.log(menuName);
-
-        document.querySelector("#menu-name").innerText = menuName;
-    </script>
-
     <!-- 가격 이쁘게 보여주는 함수 가져오기 -->
     <script type="text/javascript" src="../js/number_utils.js"></script>
-    <!-- menuItems 데이터 불러오기 -->
-    <script type="text/javascript" src="../fake_data/menu_items.js"></script>
+
     <script>
-        // menuId에 해당하는 items 불러오기
-        const items = menuItems[menuId];
+        // URL에 담겨있는 cate라는 값을 가져옵니다.
+        const searchParams = new URLSearchParams(window.location.search);
+        const params = searchParams.get('cate');
 
-        // 해당 items 출력하기
-        const target = document.querySelector(".menu-wrap");
+        console.log(params);
+        // 사용자가 메인 페이지 진입시엔 케이크&티라미슈 상품 노출
+        // 만약 다른 상품이 보고싶다면 메뉴 탭을 눌러 다른 카테고리로 이동
+        // // menuId에 해당하는 items 불러오기
 
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
+        // 통신
+        (async () => {
+            try {
+                // 통신값을 가져와서 response 변수에 저장합니다.
+                const response = await axios.get('/product', {
+                    params: {
+                        cate: params
+                    }
+                });
 
-            // 가격 3자리마다 , 찍어주기
-            const localePrice = formatPrice(item.price);
+                console.log(response.data);
+            } catch (error) {
+                Swal.fire({
+                    title: "서버와 접속이 실패했습니다.",
+                    text: `${e}`,
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            }
+        })();
 
-            const element = document.createElement("div");
-            element.classList.add("product");
+        // const items = menuItems[menuId];
 
-            element.innerHTML = `<div class="frame">
-            <img src="${item.image}" alt="" />
-        </div>
-        <div class="txt">
-            <span>상품명:${item.name}</span>
-            <span>${localePrice}원</span>
-        </div>
-        <button class="btn-detail">자세히보기</button>`;
-            target.appendChild(element);
+        // // 해당 items 출력하기
+        // const target = document.querySelector(".menu-wrap");
 
-            // 자세히보기 버튼 눌렀을 때 동작
-            const detailBtn = element.querySelector("button");
-            detailBtn.addEventListener("click", (e) => {
-                window.location.href = `./goods_detail.html?menu=${menuId}&itemId=${i}`;
-            });
-        };
+        // for (let i = 0; i < items.length; i++) {
+        //     const item = items[i];
+
+        //     // 가격 3자리마다 , 찍어주기
+        //     const localePrice = formatPrice(item.price);
+
+        //     const element = document.createElement("div");
+        //     element.classList.add("product");
+
+        //     element.innerHTML = `<div class="frame">
+        //     <img src="${item.image}" alt="" />
+        // </div>
+        // <div class="txt">
+        //     <span>상품명:${item.name}</span>
+        //     <span>${localePrice}원</span>
+        // </div>
+        // <button class="btn-detail">자세히보기</button>`;
+        //     target.appendChild(element);
+
+        //     // 자세히보기 버튼 눌렀을 때 동작
+        //     const detailBtn = element.querySelector("button");
+        //     detailBtn.addEventListener("click", (e) => {
+        //         window.location.href = `./goods_detail.html?menu=${menuId}&itemId=${i}`;
+        //     });
+        // };
     </script>
 </body>
 
