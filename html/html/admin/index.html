@@ -179,7 +179,7 @@
             const a1 = document.createElement("a");
             a1.innerHTML = "&laquo;";
             a1.classList.add('page-link');
-            a1.setAttribute("href", "/professor/list.html?page=" + data.prevGroupLastPage + "&query=" + query);
+            a1.setAttribute("href", "/html/admin/index.html?page=" + data.prevGroupLastPage + "&query=" + query);
 
             if (data.prevGroupLastPage == 0) {
                 li1.classList.add('disabled');
@@ -200,7 +200,7 @@
                 const a2 = document.createElement("a");
                 a2.innerHTML = i;
                 a2.classList.add('page-link');
-                a2.setAttribute('href', '/professor/list.html?page=' + i + '&query=' + query);
+                a2.setAttribute('href', '/html/admin/index.html?page=' + i + '&query=' + query);
 
                 if (data.nowPage == i) {
                     li2.classList.add('active');

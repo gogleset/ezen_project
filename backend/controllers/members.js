@@ -11,6 +11,7 @@ const BadRequestException = require('../exceptions/BadRequestException')
 const router = require('express').Router();
 const mysql2 = require('mysql2/promise');
 const util = require("../helper/UtillHelper");
+const { default: Swal } = require('sweetalert2');
 
 module.exports = (app) => {
     let dbcon = null;
@@ -51,6 +52,7 @@ module.exports = (app) => {
 
             if (totalCount > 0) {
                 throw new BadRequestException("이미 사용중인 아이디 입니다.");
+               
             }
 
             let sql = "insert into members (";
@@ -311,7 +313,7 @@ module.exports = (app) => {
         const page = req.get("page", 1);
 
         // 한 페이지에 보여질 목록 수 받기 (기본값은 10, 최소 10, 최대 30)
-        const rows = req.get("rows", 5);
+        const rows = req.get("rows", 10);
 
         // 데이터 조회 결과가 저장될 빈 변수
         let json = null;

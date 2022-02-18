@@ -54,7 +54,7 @@
                             <button type="submit" class="btn-signin-btn" id="signin-btn">로그인하기</button>
                         </div>
                         <div class="util-menu">
-                            <a href="#" class="join-box">회원가입하기</a>
+                            <a href="join.html" class="join-box">회원가입하기</a>
                         </div>
                     </form>
                 </div>
@@ -77,7 +77,7 @@
                 try {
                     // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
                     const response = await axios.post('/members/login', { member_id: member_id, member_pw: member_pw });
-                    location.href = "index.html";
+                    location.href = "main.html";
                 } catch (error) {
                     const errorMsg = '[' + error.response.status + '] ' + error.response.statusText;
                     console.error(errorMsg);

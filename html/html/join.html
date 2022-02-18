@@ -292,53 +292,70 @@
             if (!regexHelper.value("#user_date", "생년월일을 선택해주세요.")) {
                 return false;
             }
-            Swal.fire({
-                text: "회원가입을 환영합니다.",
-                icon: 'success',
-                confirmButtonText: '확인'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                   
-                    //Node에 넘겨줄 값
-                    const member_id = document.getElementById("user_id").value;
-                    const member_email = document.getElementById("email").value;
-                    const member_pw = document.getElementById("user_pw").value;
-                    const member_name = document.getElementById("user_name").value;
-                    const member_phone = document.getElementById("tel").value;
-                    const member_postcode = document.getElementById("postcode").value;
-                    const member_addr1 = document.getElementById("address").value;
-                    const member_addr2 = document.getElementById("detailAddress").value;
-                    const member_birth = document.getElementById("user_date").value;
-                    const admin = "N";
-                   
-                    const is_out = "N";
 
-                    console.log(member_id);
-                    //즉시실행 비동기 처리 함수
-                    (async () => {
-                        try {
-                            // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
-                            const response = await axios.post('/members/signup', {
-                                member_id: member_id,
-                                member_email: member_email,
-                                member_pw: member_pw,
-                                member_name: member_name,
-                                member_phone: member_phone,
-                                member_postcode: member_postcode,
-                                member_addr1: member_addr1,
-                                member_addr2: member_addr2,
-                                member_birth: member_birth,
-                                admin: admin,
-                               
-                                is_out: is_out
-                            });
+
+            //Node에 넘겨줄 값
+            const member_id = document.getElementById("user_id").value;
+            const member_email = document.getElementById("email").value;
+            const member_pw = document.getElementById("user_pw").value;
+            const member_name = document.getElementById("user_name").value;
+            const member_phone = document.getElementById("tel").value;
+            const member_postcode = document.getElementById("postcode").value;
+            const member_addr1 = document.getElementById("address").value;
+            const member_addr2 = document.getElementById("detailAddress").value;
+            const member_birth = document.getElementById("user_date").value;
+            const admin = "N";
+
+            const is_out = "N";
+
+            console.log(member_id);
+            //즉시실행 비동기 처리 함수
+            (async () => {
+                try {
+                    // Ajax 요청 보내기 -> 백엔드가 전달한 결과값이 response.data에 저장된다.
+                    const response = await axios.post('/members/signup', {
+                        member_id: member_id,
+                        member_email: member_email,
+                        member_pw: member_pw,
+                        member_name: member_name,
+                        member_phone: member_phone,
+                        member_postcode: member_postcode,
+                        member_addr1: member_addr1,
+                        member_addr2: member_addr2,
+                        member_birth: member_birth,
+                        admin: admin,
+                        is_out: is_out
+                    });
+
+                    Swal.fire({
+                        text: "회원가입을 환영합니다.",
+                        icon: 'success',
+                        confirmButtonText: '확인'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                             location.href = "signin.html"; //넘어갈 페이지 설정해야됨
-                        } catch (error) {
-                            console.log(error);
                         }
-                    })();
+                    })
+                } catch (error) {
+                    const errorMsg = '[' + error.response.status + '] ' + error.response.statusText;
+                    if (error.response.status == 400) {
+                        Swal.fire({
+                            text: "사용중인 아이디입니다.",
+                            icon: 'error'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                            document.getElementById("user_id").value = "";
+                            document.getElementById('user_id').focus();
+                        }
+                        })
+                    } else {
+                        Swal.fire({
+                            text: errorMsg,
+                            icon: 'error'
+                        });
+                    }
                 }
-            });
+            })();
         });
     </script>
 
