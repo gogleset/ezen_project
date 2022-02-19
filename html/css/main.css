@@ -6,13 +6,24 @@
 
 
 /* 이벤트 배너 영역  */
+.swiper-notice{
+  margin-top: -20px;
+  margin-bottom: 20px;
+  height: 180px;
+}
 .event-box{
   width: 95%;
-  height: 200px;
+  height: 100%;
   margin: 30px auto;
 }
 
-.event-box img{
+.eventBanner{
+  width: 100%;
+  height: 100%;
+  background-color:transparent !important;
+}
+
+.eventBanner img{
   width: 100%;
   height: 100%;
 }
@@ -55,7 +66,7 @@
 }
 
 /* 스위퍼 페이지 1개 영역 크기 설정 */
-.swiper-slide{
+.mainMenu{
   width: 100%;
   height: 100%;
   flex-direction: row;
@@ -90,7 +101,7 @@
 }
 
 /* 이미지 사이즈 */
-.swiper-slide img{
+.mainMenu img{
   display: block;
   width: 90%;
   margin: auto;
@@ -100,7 +111,7 @@
 }
 
 /* 메뉴 글자 사이즈 */
-.swiper-slide span{
+.mainMenu span{
   display: block;
   line-height: 35px;
   font-size: 0.7em;

@@ -41,7 +41,11 @@
             <div class="wrap">
                 <!-- 제목부분입니다. -->
                 <h2 class="title">Event</h2>
-                <div class="event-box"></div>
+                <!-- 이벤트 배너 영역 -->
+                <div class="swiper swiper-notice">
+                    <div class="swiper-wrapper event-box">
+                    </div>
+                </div>
                 <div class="box-home-event div-center">
                 </div>
                 <!-- 상품설명 부분입니다. -->
@@ -99,92 +103,105 @@
 
             if (items != null) {
                 const eventBox = document.querySelector('.event-box')
-                eventBox.innerHTML = `<img src="${items[1].event_img}">`
+                // eventBox.innerHTML = `<img src="${items[1].event_img}">`
 
-                /*                 for(let i in items){
-                                    if(items[i].event_show === `Y`){
-                                    eventBox.innerHTML += `<img src="${items[i].event_img}">`
-                                }
-                            } */
+                for (let i in items) {
+                    if (items[i].event_show === `Y`) {
+                        eventBox.innerHTML += `<div class="swiper-slide eventBanner"><a href="${items[i].event_link}"><img src="${items[i].event_img}"></a></div>`
+                    }
+                }
 
             }
         })();
+
+        /* 이벤트 베너 (Swiper)*/
+        let swiper = new Swiper(".swiper-notice", {
+            direction: "vertical",
+            slidesPerView: 1,
+            spaceBetween: 30,
+            observer: true, // dom에 변화가 있으면 초기화 
+            observeParents: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            }, //false로 해놔야 스와이프 후 자동재생이 멈추지 않음
+        });
     </script>
 
     <script>
 
-        // 통신요청
-        (async () => {
-            let json = null;
+            // 통신요청
+            (async () => {
+                let json = null;
 
-            // 카테고리들
-            const menus = ["케이크&티라미슈", "빙수&파르페", "마카롱&오믈렛", "쿠키&파이", "베이커리"];
+                // 카테고리들
+                const menus = ["케이크&티라미슈", "빙수&파르페", "마카롱&오믈렛", "쿠키&파이", "베이커리"];
 
-            // 카테고리가 담길 메뉴객체
-            let menuData = {
-                t: [], //케이크&티라미슈
-                v: [], // 빙수&파르페
-                m: [], //마카롱&오믈렛
-                c: [], //쿠키&파이
-                b: [] //베이커리
-            }
-            // 통신
-            try {
-                const response = await axios.get('/product', {
-                    params: {
-                        cate: "all"
+                // 카테고리가 담길 메뉴객체
+                let menuData = {
+                    t: [], //케이크&티라미슈
+                    v: [], // 빙수&파르페
+                    m: [], //마카롱&오믈렛
+                    c: [], //쿠키&파이
+                    b: [] //베이커리
+                }
+                // 통신
+                try {
+                    const response = await axios.get('/product', {
+                        params: {
+                            cate: "all"
+                        }
+                    });
+                    json = response.data.item;
+                    console.log(json);
+                    // 실패시
+                } catch (err) {
+                    Swal.fire({
+                        text: "서버와 연결에 실패했습니다.",
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                }
+                // 통신성공시 동적으로 값을 바꿔줌
+                json.map((value, index) => {
+                    // 밸류 값을 바꿔주고 배열에 넣어주기
+                    switch (value.product_categorie) {
+                        case "t":
+                            value.product_categorie = "케이크&티라미슈"
+                            menuData.t.push(value);
+                            break;
+                        case "v":
+                            value.product_categorie = "빙수&파르페"
+                            menuData.v.push(value);
+                            break;
+                        case "m":
+                            value.product_categorie = "마카롱&오믈렛"
+                            menuData.m.push(value);
+                            break;
+                        case "c":
+                            value.product_categorie = "쿠키&파이"
+                            menuData.c.push(value);
+                            break;
+                        case "b":
+                            value.product_categorie = "베이커리"
+                            menuData.b.push(value);
+                            break;
+                        default:
+                            console.log("값이 없습니다.");
+                            break;
                     }
                 });
-                json = response.data.item;
-                console.log(json);
-                // 실패시
-            } catch (err) {
-                Swal.fire({
-                    text: "서버와 연결에 실패했습니다.",
-                    icon: 'error',
-                    confirmButtonText: '확인'
-                });
-            }
-            // 통신성공시 동적으로 값을 바꿔줌
-            json.map((value, index) => {
-                // 밸류 값을 바꿔주고 배열에 넣어주기
-                switch (value.product_categorie) {
-                    case "t":
-                        value.product_categorie = "케이크&티라미슈"
-                        menuData.t.push(value);
-                        break;
-                    case "v":
-                        value.product_categorie = "빙수&파르페"
-                        menuData.v.push(value);
-                        break;
-                    case "m":
-                        value.product_categorie = "마카롱&오믈렛"
-                        menuData.m.push(value);
-                        break;
-                    case "c":
-                        value.product_categorie = "쿠키&파이"
-                        menuData.c.push(value);
-                        break;
-                    case "b":
-                        value.product_categorie = "베이커리"
-                        menuData.b.push(value);
-                        break;
-                    default:
-                        console.log("값이 없습니다.");
-                        break;
-                }
-            });
 
 
 
-            // 상품 이미지 영역
-            const menuContainer = document.querySelector("#menu-container");
+                // 상품 이미지 영역
+                const menuContainer = document.querySelector("#menu-container");
 
-            // 카테고리 만큼 영역생성
-            menus.map((value, index) => {
-                // 임시로 만든 div에 menu-wrap을 넣음
-                const template = document.createElement("div");
-                template.innerHTML = `<div class="menu-wrap div-center">
+                // 카테고리 만큼 영역생성
+                menus.map((value, index) => {
+                    // 임시로 만든 div에 menu-wrap을 넣음
+                    const template = document.createElement("div");
+                    template.innerHTML = `<div class="menu-wrap div-center">
                          <span class="menu-title">${value}</span>
                          <div class="swiper-${index} swiper-container">
                              <div class="swiper-wrapper">
@@ -193,15 +210,16 @@
                              <div class="swiper-pagination swiper-pagination-${index}"></div>
                          </div>
                      </div>`;
-                // menu-wrap만 사용할거니까 firstChild로 꺼냄
-                const menuWrapElement = template.firstChild;
+                    // menu-wrap만 사용할거니까 firstChild로 꺼냄
+                    const menuWrapElement = template.firstChild;
 
-                // 동적으로 만들어주는 지역함수
-                const menuArray = (object) => {
-                    Array.from(object).map((v, i) => {
-                        const element = document.createElement("div");
-                        element.classList.add("swiper-slide")
-                        element.innerHTML = `
+                    // 동적으로 만들어주는 지역함수
+                    const menuArray = (object) => {
+                        Array.from(object).map((v, i) => {
+                            const element = document.createElement("div");
+                            element.classList.add("swiper-slide")
+                            element.classList.add("mainMenu")
+                            element.innerHTML = `
                                  <div class="slide-inner">
                                    <a href="./productDetail.html?prod=${v.product_code}">
                                     <img src="../..${v.product_img}" alt="">
@@ -210,87 +228,87 @@
                                     </span>
                                    </a>
                                  </div>`;
-                        target.appendChild(element);
-                        return console.log(object);
+                            target.appendChild(element);
+                            return console.log(object);
+                        });
+                    }
+
+                    // 카테고리별로 판단하여 동적으로 생성
+                    const target = menuWrapElement.querySelector(".swiper-wrapper");
+                    switch (value) {
+                        case "케이크&티라미슈":
+                            menuArray(menuData.t);
+                            break;
+                        case "빙수&파르페":
+                            menuArray(menuData.v);
+                            break;
+                        case "마카롱&오믈렛":
+                            menuArray(menuData.m);
+                            break;
+                        case "쿠키&파이":
+                            menuArray(menuData.c);
+                            break;
+                        case "베이커리":
+                            menuArray(menuData.b);
+                            break;
+                        default:
+                            console.log("값이 없습니다.");
+                            break;
+                    }
+                    menuContainer.appendChild(menuWrapElement);
+
+                    let swiper = new Swiper(`.swiper-${index}`, {
+                        //기본 셋팅 
+                        slidesPerView: 'auto', // 한 슬라이드에 보여줄 갯수
+                        //방향 셋팅 vertical 수직, horizontal 수평 설정이 없으면 수평 
+                        direction: 'horizontal',
+                        //한번에 보여지는 페이지 숫자 
+                        slidesPerView: 2,
+                        //페이지와 페이지 사이의 간격 
+                        spaceBetween: 15,
+                        //드레그 기능 true 사용가능 false 사용불가 
+                        debugger: true,
+                        //마우스 휠기능 true 사용가능 false 사용불가 
+                        mousewheel: true,
+                        //반복 기능 true 사용가능 false 사용불가 
+                        /* loop: true, */
+                        //선택된 슬라이드를 중심으로 true 사용가능 false 사용불가 djqt 
+                        centeredSlides: false,
+                        // 페이지 전환효과 slidesPerView효과와 같이 사용 불가 
+                        // effect: 'fade', 
+                        //자동 스크를링 
+                        /*autoplay: {
+                            //시간 1000 이 1초 
+                            delay: 3000,
+                            disableOnInteraction: false,
+                        },*/
+
+                        //페이징 
+                        pagination: {
+                            //페이지 기능 
+                            el: `.swiper-pagination-${index}`,
+                            //클릭 가능여부 
+                            clickable: false,
+                            dynamicBullets: true,
+                            type: "progressbar",
+                        },
+                        breakpoints: {
+                            640: {
+                                slidesPerView: 2,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 4,
+                                spaceBetween: 40,
+                            },
+                            1024: {
+                                slidesPerView: 5,
+                                spaceBetween: 50,
+                            },
+                        },
                     });
-                }
-
-                // 카테고리별로 판단하여 동적으로 생성
-                const target = menuWrapElement.querySelector(".swiper-wrapper");
-                switch (value) {
-                    case "케이크&티라미슈":
-                        menuArray(menuData.t);
-                        break;
-                    case "빙수&파르페":
-                        menuArray(menuData.v);
-                        break;
-                    case "마카롱&오믈렛":
-                        menuArray(menuData.m);
-                        break;
-                    case "쿠키&파이":
-                        menuArray(menuData.c);
-                        break;
-                    case "베이커리":
-                        menuArray(menuData.b);
-                        break;
-                    default:
-                        console.log("값이 없습니다.");
-                        break;
-                }
-                menuContainer.appendChild(menuWrapElement);
-
-                let swiper = new Swiper(`.swiper-${index}`, {
-                    //기본 셋팅 
-                    slidesPerView: 'auto', // 한 슬라이드에 보여줄 갯수
-                    //방향 셋팅 vertical 수직, horizontal 수평 설정이 없으면 수평 
-                    direction: 'horizontal',
-                    //한번에 보여지는 페이지 숫자 
-                    slidesPerView: 2,
-                    //페이지와 페이지 사이의 간격 
-                    spaceBetween: 15,
-                    //드레그 기능 true 사용가능 false 사용불가 
-                    debugger: true,
-                    //마우스 휠기능 true 사용가능 false 사용불가 
-                    mousewheel: true,
-                    //반복 기능 true 사용가능 false 사용불가 
-                    /* loop: true, */
-                    //선택된 슬라이드를 중심으로 true 사용가능 false 사용불가 djqt 
-                    centeredSlides: false,
-                    // 페이지 전환효과 slidesPerView효과와 같이 사용 불가 
-                    // effect: 'fade', 
-                    //자동 스크를링 
-                    /*autoplay: {
-                        //시간 1000 이 1초 
-                        delay: 3000,
-                        disableOnInteraction: false,
-                    },*/
-
-                    //페이징 
-                    pagination: {
-                        //페이지 기능 
-                        el: `.swiper-pagination-${index}`,
-                        //클릭 가능여부 
-                        clickable: false,
-                        dynamicBullets: true,
-                        type: "progressbar",
-                    },
-                    breakpoints: {
-                        640: {
-                            slidesPerView: 2,
-                            spaceBetween: 20,
-                        },
-                        768: {
-                            slidesPerView: 4,
-                            spaceBetween: 40,
-                        },
-                        1024: {
-                            slidesPerView: 5,
-                            spaceBetween: 50,
-                        },
-                    },
                 });
-            });
-        })(); //async 통신 성공 시
+            })(); //async 통신 성공 시
     </script>
 </body>
 
