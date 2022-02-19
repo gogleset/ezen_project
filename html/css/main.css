@@ -17,13 +17,7 @@
   margin: 30px auto;
 }
 
-.eventBanner{
-  width: 100%;
-  height: 100%;
-  background-color:transparent !important;
-}
-
-.eventBanner img{
+.event-box img{
   width: 100%;
   height: 100%;
 }
