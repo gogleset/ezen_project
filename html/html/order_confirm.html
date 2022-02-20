@@ -63,7 +63,6 @@
                             <span class="box-cart-money pull-right">100000원</span>
                             <span class="cart-count-name">상품갯수:</span>
                             <span class="cart-count">1</span>
-
                         </div>
                     </div>
                     <div class="box-cart div-center clearfix">
@@ -88,19 +87,19 @@
                     <div class="delivery-info-name">
                         <div class="delivery-form">
                             <span class="text-indent">주문자 전화번호:</span>
-                            <span class="flex-grow">000-0000-0000</span>
+                            <span id = "orderer_phone" class="flex-grow">000-0000-0000</span>
                         </div>
                         <div class="delivery-form">
                             <span class="text-indent">주문자 이름:</span>
-                            <span class="flex-grow">홍길동</span>
+                            <span id = "orderer_name" class="flex-grow">홍길동</span>
                         </div>
                         <div class="delivery-form">
                             <span class="text-indent">주문자 주소:</span>
-                            <span class="flex-grow">서울 특별시 00구 00동 00번지 000아파트 000동 000호</span>
+                            <span id = "orderer_addr" class="flex-grow">서울 특별시 00구 00동 00번지 000아파트 000동 000호</span>
                         </div>
                         <div class="delivery-form">
                             <span class="text-indent">주문자 이메일 주소:</span>
-                            <span class="flex-grow">ezen@gmail.com</span>
+                            <span id = "orderer_email" class="flex-grow">ezen@gmail.com</span>
                         </div>
                     </div>
                 </div>
@@ -131,6 +130,85 @@
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="./assets/layout.js"></script>    
+
+        <script>
+            // box-cart가 있는지 없는지 감지하는 변수입니다.
+            let content = document.querySelector(".inner-content .box-cart");
+            // // 상품 목록 박스입니다.
+            let boxMoney = document.querySelectorAll(".box-cart-money");
+
+            // // 상품 플러스 버튼입니다.
+            let btnPlus = document.querySelectorAll(".btn-plus-01-on");
+            // // 상품 마이너스 버튼입니다.
+            let btnMinus = document.querySelectorAll(".btn-minus-01-on");
+            // // 상품 갯수 입니다.
+            let countProdNum = document.querySelectorAll(".cart-count");
+            // 상품의 가격입니다.
+            let cartMoney = document.querySelectorAll(".box-cart-money");
+            // // 상품의 총 갯수입니다.
+            let count = 0;
+            // // 상품의 총 금액입니다.
+            let money = 0;
+            // 상품 갯수가 들어있는 배열입니다.
+            let countArray = [];
+            // 상품 가격이 들어있는 배열입니다.
+            let moneyArray = [];
+
+            // 상품목록이 있다면
+            if (content != null) {
+                // box-cart-content의 자식 갯수를 파악합니다.
+                let contentCount = document.querySelector(".box-cart-content").childElementCount;
+                // console.log(contentCount);
+
+                // // 상품 금액입니다.
+                let cartMoney = document.querySelectorAll(".box-cart-money");
+                // // 총 합산한 금액입니다.
+                let totalMoney = document.querySelector(".money-total-number");
+                // // 총 결제할 금액입니다.
+                let payMoney = document.querySelector(".paid-money-number");
+                // // 총 전체 상품 개수 입니다.
+                let totalProdNum = document.querySelector(".prod-total-number");
+                // // 총 전체 상품 이름.
+                let totalName = document.querySelector("box-cart-prod-name");
+
+                const result = () => {
+                    countArray = [];
+                    moneyArray = [];
+                    count = 0;
+                    money = 0;
+                    
+                    // 상품갯수을 재할당하여 초기화 합니다.
+                    countProdNum = document.querySelectorAll(".cart-count");
+                    // 상품의 갯수를 배열에 넣습니다.
+                    countProdNum.forEach((v) => {
+                        countArray.push(parseInt(v.innerHTML));
+                    })
+                    // 상품가격을 재할당하여 초기화 합니다.
+                    boxMoney = document.querySelectorAll(".box-cart-money");
+                    // 상품의 가격을 배열에 넣습니다.
+                    boxMoney.forEach((v) => {
+                        moneyArray.push(parseInt(v.innerHTML));
+                    })
+
+                    // 전체상품의 총 갯수는
+                    countArray.forEach((v) => {
+                        count += v
+                    })
+                    console.log(count);
+                    // 전체상품의 총 가격은
+                    moneyArray.forEach((v, i) => {
+                        money += moneyArray[i] * countArray[i]
+                    })
+                    console.log(money);
+                    // 장바구니 합계에 출력됩니다.
+                    totalProdNum.innerHTML = count + "개";
+                    totalMoney.innerHTML = money + "원";
+                    payMoney.innerHTML = parseInt(money + (money / 100)) + "원";
+                    // 서버로 보낼 가격입니다.
+                }
+                result();
+            }
+        </script>
 </body>
 
 </html>
