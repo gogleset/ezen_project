@@ -18,7 +18,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <!-- 폰트어썸 -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <!-- 구글 마테리얼 아이콘 -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -137,7 +138,7 @@
                     </div>
                 </div>
 
-                <hr/>
+                <hr />
 
                 <div class="delivery-view">
                     <h1>배송</h1>
@@ -154,14 +155,24 @@
                     </div>
                 </div>
 
+                <!-- 이메일-->
+                <div class="delivery-view">
+                    <label for="email" class="labeltag">결제자 이메일</label>
+                    <div class="input-100">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="이메일 입력" />
+                    </div>
+                </div>
+
                 <div class="delivery-view">
                     <label for="postcode" class="labeltag">주소지</label>
                     <div class="flex">
                         <div class="input-100">
-                            <input type="text" name="postcode" id="postcode" class="form-control justify" placeholder="우편번호" readonly />
+                            <input type="text" name="postcode" id="postcode" class="form-control justify"
+                                placeholder="우편번호" readonly />
                         </div>
                         <div class="input-100">
-                            <button type="button" onclick="sample3_execDaumPostcode()" class="form-control">우편번호찾기</button>
+                            <button type="button" onclick="sample3_execDaumPostcode()"
+                                class="form-control">우편번호찾기</button>
                         </div>
                     </div>
                     <div class="input-100">
@@ -169,20 +180,24 @@
                     </div>
                     <div class="flex">
                         <div class="input-100">
-                            <input type="text" name="detailAddress" id="detailAddress" class="form-control justify" placeholder="상세주소" />
+                            <input type="text" name="detailAddress" id="detailAddress" class="form-control justify"
+                                placeholder="상세주소" />
                         </div>
                         <div class="input-100">
-                            <input type="text" name="extraAddress" id="extraAddress" class="form-control" placeholder="참고항목" readonly />
+                            <input type="text" name="extraAddress" id="extraAddress" class="form-control"
+                                placeholder="참고항목" readonly />
                         </div>
                     </div>
                     <div id="wrap">
-                        <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+                        <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap"
+                            style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1"
+                            onclick="foldDaumPostcode()" alt="접기 버튼">
                     </div>
                 </div>
-                <hr/>
+                <hr />
                 <div class="form-group order-number">
                     <h1>결제</h1>
-                    <div>주문번호:</div>
+                    <div>주문번호: <span id="orderNumber"></span></div>
                 </div>
                 <!-- 장바구니 합계 부분입니다. -->
                 <div class="box-cart-total">
@@ -214,7 +229,7 @@
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="./assets/layout.js"></script>
-    
+
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script>
             // 우편번호 찾기 찾기 화면을 넣을 element
@@ -229,7 +244,7 @@
                 // 현재 scroll 위치를 저장해놓는다.
                 var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
                 new daum.Postcode({
-                    oncomplete: function(data) {
+                    oncomplete: function (data) {
                         // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
                         // 각 주소의 노출 규칙에 따라 주소를 조합한다.
@@ -280,7 +295,7 @@
                         document.body.scrollTop = currentScroll;
                     },
                     // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
-                    onresize: function(size) {
+                    onresize: function (size) {
                         element_wrap.style.height = size.height + 'px';
                     },
                     width: '100%',
@@ -318,8 +333,8 @@
             let countArray = [];
             // 상품 가격이 들어있는 배열입니다.
             let moneyArray = [];
-
-            let iamPort1 = null;
+            // 이름배열
+            let totalNameLength = [];
 
             // 상품목록이 있다면
             if (content != null) {
@@ -335,8 +350,8 @@
                 let payMoney = document.querySelector(".paid-money-number");
                 // // 총 전체 상품 개수 입니다.
                 let totalProdNum = document.querySelector(".prod-total-number");
-
-
+                // // 총 전체 상품 이름.
+                let totalName = document.querySelector("box-cart-prod-name");
 
                 // 상품 추가/삭제버튼 이벤트입니다.
                 btnPlus.forEach((v) => {
@@ -370,9 +385,9 @@
                     countProdNum = document.querySelectorAll(".cart-count");
                     // 상품의 갯수를 배열에 넣습니다.
                     countProdNum.forEach((v) => {
-                            countArray.push(parseInt(v.innerHTML));
-                        })
-                        // 상품가격을 재할당하여 초기화 합니다.
+                        countArray.push(parseInt(v.innerHTML));
+                    })
+                    // 상품가격을 재할당하여 초기화 합니다.
                     boxMoney = document.querySelectorAll(".box-cart-money");
                     // 상품의 가격을 배열에 넣습니다.
                     boxMoney.forEach((v) => {
@@ -395,13 +410,26 @@
                     payMoney.innerHTML = parseInt(money + (money / 100)) + "원";
                     // 서버로 보낼 가격입니다.
                     submitMoney.setAttribute("value", `${parseInt(money + (money / 100))}원 결제하기`)
-                    iamPort1 = parseInt(money + (money / 100));
-                    console.log(iamPort1);
+                    iamPort_total_price = parseInt(money + (money / 100));
+
+
+                    totalName = document.querySelectorAll(".box-cart-prod-name");
+
+                    totalName.forEach((v) => {
+                        totalNameLength += v.innerHTML + ", ";
+                    })
+
+                    // 끝 ", " 문자열을 제거
+                    totalNameLength = totalNameLength.substring(0, totalNameLength.length - 2);
+
                 }
                 result();
             }
 
+            const merchant_uid = 'merchant_' + new Date().getTime()
 
+            //주문번호
+            document.getElementById("orderNumber").innerHTML = merchant_uid
 
             document.querySelector("#payment_form").addEventListener("submit", e => {
                 e.preventDefault();
@@ -429,6 +457,14 @@
                     return false;
                 }
 
+                //이메일 유효성 검사
+                if (!regexHelper.value("#email", "이메일을 입력하세요.")) {
+                    return false;
+                }
+                if (!regexHelper.email("#email", "이메일 주소가 잘못되었습니다.")) {
+                    return false;
+                }
+
                 //우편번호 유효성 검사
                 if (!regexHelper.value("#postcode", "받는분의 우편번호를 입력하세요.")) {
                     return false;
@@ -443,6 +479,7 @@
                 //에이싱크로 넘겨줄 값 적어놔야됨
                 const user_tel = document.getElementById("tel").value;
                 const user_name = document.getElementById("user_name").value;
+                const payer_email = document.getElementById("email").value;
                 const user_postCord = document.getElementById("postcode").value;
                 const user_address = document.getElementById("address").value + " " + document.getElementById("detailAddress").value;
 
@@ -457,16 +494,16 @@
                         IMP.request_pay({
                             pg: 'inicis', // version 1.1.0부터 지원.
                             pay_method: 'card',
-                            merchant_uid: 'merchant_' + new Date().getTime(),
-                            name: '주문명:결제테스트',
-                            amount: iamPort1, //판매 가격
-                            buyer_email: 'iamport@siot.do',
+                            merchant_uid: merchant_uid,
+                            name: totalNameLength,
+                            amount: iamPort_total_price, //판매 가격
+                            buyer_email: payer_email,
                             buyer_name: user_name,
                             buyer_tel: user_tel,
                             buyer_addr: user_address,
                             buyer_postcode: user_postCord,
-                            m_redirect_url: "{리디렉션 될 URL}" //후에 리디렉션될 페이지 경로 작성해야됨
-                        }, function(rsp) {
+                            m_redirect_url: "{order_confirm.html}" //후에 리디렉션될 페이지 경로 작성해야됨
+                        }, function (rsp) {
                             if (rsp.success) {
                                 var msg = '결제가 완료되었습니다.';
                                 msg += '고유ID : ' + rsp.imp_uid;
