@@ -50,7 +50,7 @@
 
             <div class="flex">
                 <button type="button" class="basket" id="addBasket">장바구니에 추가</button>
-                <button type="button" class="order" id="addOrder">주문</button>
+                <button type="button" class="order" id="addOrder" onclick="orderProd()">주문</button>
             </div>
 
             <div class="form-group">
@@ -106,28 +106,34 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./assets/layout.js"></script>
     <script src="../js/number_utils.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <script>
+        // 주문 연결
+        function orderProd() {
+            location.href = `/html/payment.html?prod=${prod}`
+        }
+
         const params = new URLSearchParams(window.location.search);
         const prod = params.get('prod');
 
         let data = null;
         let data1 = null;
 
-
         if (prod) {
             (async () => {
                 try {
                     const response = await axios.get(`/product/${prod}`)
-                    const response1 = await axios.get('/product',{
-                        params:{
+                    const response1 = await axios.get('/product', {
+                        params: {
                             cate: "random"
                         }
                     })
                     data = response.data.item[0];
                     data1 = response1.data.item;
                     console.log(data1);
+                    console.log(data)
                 } catch (e) {
                     Swal.fire({
                         title: "서버와 접속이 실패했습니다.",
@@ -149,21 +155,41 @@
                     <a href=./productDetail.html?prod=${data1[i].product_code} target="_blank">
                         <img src="../..${data1[i].product_img}" alt="" />
                         <div class="product-name">${data1[i].product_name}</div>
-                    </a>`;  
+                    </a>`;
                 })
             })();
         }
 
+        // 장바구니 저장 이벤트
+        document.querySelector("#addBasket").addEventListener("click", (e) => {
+            e.preventDefault();
 
+            const prodCode = prod;
 
+            // 장바구니에 prduct_code와 member_code가 일치하는 데이터가 있는 경우 중복 저장이 되지 않도록 유효성검사 추가 해야함. 
 
-
-        document.querySelector("#addBasket").addEventListener("click", () => {
-
-        });
-
-        document.querySelector("#addOrder").addEventListener("click", () => {
-
+            Swal.fire({
+                title: "장바구니에 추가하시겠습니까?",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "추가",
+                cancelButtonText: "취소",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await axios.post('/cart', {
+                            product_code: prodCode,
+                            product_count: 1,  // Default = 1 -> 수량 조절하는 기능이 없기때문
+                            member_code: 1  // session member_code로 저장될 수 있게 수정해야 함
+                        });
+                        Swal.fire("저장되었습니다.", "", "success")
+                        item = response.data;
+                    } catch (e) {
+                        console.log(e)
+                    };
+                }
+            })
         });
     </script>
 </body>

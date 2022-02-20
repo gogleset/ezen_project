@@ -78,12 +78,16 @@ module.exports = (app) => {
         const ctPdCode = req.post('product_code');
         const ctMemCode = req.post('member_code');
 
-        try {
+        logger.debug(`카트상품개수 ${ctPdCnt}`)
+        logger.debug(`카트상품코드 ${ctPdCode}`)
+        logger.debug(`카트멤버코드 ${ctMemCode}`)
+
+/*         try {
             regexHelper.value(ctPdCnt, '수량을 선택해주세요.');
             regexHelper.value(ctPdCode, '상품을 선택해주세요.');
         } catch (err) {
             return next(err);
-        }
+        } */
 
         let json = null;
 
@@ -98,13 +102,13 @@ module.exports = (app) => {
             const [result1] = await dbcon.query(sql1, input_data);
 
             // 저장한 데이터를 출력
-            let sql2 = "c.cart_code, product_count, p.product_name, m.member_id FROM carts c";
-                sql2 += " INNER JOIN products p ON c.product_code = p.product_code";
-                sql2 += " INNER JOIN members m ON c.member_code = m.member_code";
-                sql2 += " WHERE m.member_id = ?";
-            const [result2] = await dbcon.query(sql2, sessionInfo.member_id)
+            // let sql2 = "c.cart_code, product_count, p.product_name, m.member_id FROM carts c";
+            //     sql2 += " INNER JOIN products p ON c.product_code = p.product_code";
+            //     sql2 += " INNER JOIN members m ON c.member_code = m.member_code";
+            //     sql2 += " WHERE m.member_id = ?";
+            // const [result2] = await dbcon.query(sql2, 'woody')
 
-            json = result2;
+            // json = result2;
 
         } catch (err) {
             return next(err);
