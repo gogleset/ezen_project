@@ -79,7 +79,7 @@
                      element.classList.add('list-gallery');
                      console.log(item[i].event_img)
  
-                     element.innerHTML = `<li class="listItem"><a href="#"><img src="${item[i].event_img}" alt=""></a></li>`
+                     element.innerHTML = `<li class="listItem"><a href="${item[i].event_link}"><img src="${item[i].event_img}" alt=""></a></li>`
                      target.appendChild(element);
                      }
                  };
