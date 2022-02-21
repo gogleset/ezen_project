@@ -243,7 +243,6 @@ module.exports = (app) => {
         sql += "?,";
       });
 
-      console.log(sql);
       const [result1] = await dbcon.query(sql, cartCode);
 
       if (result1.affectedRows < 1) {
