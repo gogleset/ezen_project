@@ -75,6 +75,8 @@ module.exports = (app) => {
     // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]
     router.post('/order', async (req, res, next) => {
 
+        let sessionInfo = req.session.memberInfo;
+
         const merchantUid = req.post('merchant_uid');
         const orderState = req.post('order_state');
         const orderDate = req.post('order_date');
@@ -84,49 +86,52 @@ module.exports = (app) => {
         const rcvAddr1 = req.post('receiver_addr1');
         const rcvAddr2 = req.post('receiver_addr2');
         const rcvAddr3 = req.post('receiver_addr3');
-        const memberCode = req.post('member_code');
+        const memberCode = sessionInfo.member_code;
         const impUid = req.post('imp_uid');
-        const odPdCnt = req.post('product_count');
+        
+       /*  const odPdCnt = req.post('product_count');
         const odPdPrice = req.post('product_price');
         const odPdCode = req.post('product_code');
-        const odOdcode = req.post('order_code');
+        const odOdcode = req.post('order_code'); */
         
 
-        try {
+        /* try {
             regexHelper.value(orderTtPrice, '값을 넣어주세요.');
         } catch (err) {
             return next(err);
-        }
+        } */
 
         let json = null;
 
         let data = null;
 
         try {
-
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
             // 데이터 저장
-            const sql1 = 'INSERT INTO orders (merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-            const input_data1 = [merchantUid, orderState, orderDate, orderTtPrice, rcvNm, rcvPhone, rcvAddr1, rcvAddr2, rcvAddr3, memberCode, impUid];
+            const sql1 = 'INSERT INTO orders (merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid) VALUES (?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?)';
+            const input_data1 = [merchantUid, orderState, orderTtPrice, rcvNm, rcvPhone, rcvAddr1, rcvAddr2, rcvAddr3, memberCode, impUid];
             const [result1] = await dbcon.query(sql1, input_data1);
 
+            
 
-            const sql2 = 'INSERT INTO order_details (product_count, product_price, product_code, order_code) VALUES (?, ?, ?, ?)'
-            const input_data2 = [odPdCnt, odPdPrice, odPdCode, odOdcode]
-            const [result2] = await dbcon.query(sql2, input_data2);
+            //const sql2 = 'INSERT INTO order_details (product_count, product_price, product_code, order_code) VALUES (?, ?, ?, ?)'
+            //const input_data2 = [odPdCnt, odPdPrice, odPdCode, odOdcode]
+            //const [result2] = await dbcon.query(sql2, input_data2);
 
             // 저장한 데이터를 출력
-            let sql3 = "merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_id = ?";
-            const [result3] = await dbcon.query(sql3, sessionInfo.member_id)
+            let sql3 = "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_code = ?";
+            const [result3] = await dbcon.query(sql3, sessionInfo.member_code)
+
+            logger.warn("에러가난다요")
 
             json = result3;
 
-            let sql4 = "d_product_count, product_price, product_code, o_order_code FROM order_details d INNER JOIN orders o ON d.order_code = o.order_code WHERE order_code =?";
-            const [result4] = await dbcon.query(sql4, result3.order_code);
+            //let sql4 = "select d_product_count, product_price, product_code, o_order_code FROM order_details d INNER JOIN orders o ON d.order_code = o.order_code WHERE order_code =?";
+            //const [result4] = await dbcon.query(sql4, result3.order_code);
 
-            data = result4
+            //data = result4;
 
         } catch (err) {
             return next(err);
@@ -134,8 +139,7 @@ module.exports = (app) => {
             dbcon.end();
         }
 
-        res.sendJson({ 'item': json , 'data': data});
-
+        res.sendJson({ 'item': json /*, 'data': data*/});
     });
 
     // 데이터 수정 => 주문 취소 완료  //*수정되어야 할 항목 : orderState (주문 상태) Y -> C *//
@@ -226,6 +230,10 @@ module.exports = (app) => {
 
         res.sendJson();
     });    
+
+
+
+
 
     return router;
 };
