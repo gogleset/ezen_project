@@ -26,6 +26,11 @@ h1 {
     flex-direction: column;
 }
 
+/* 최소 높이 */
+.min-height-payment{
+    min-height: 305px;
+}
+
 
 /*상품정보 레이아웃*/
 
@@ -75,7 +80,7 @@ h1 {
     border-radius: 8px;
     width: 95%;
     height: 150px;
-    background-color: rgb(236, 236, 236);
+    border: 2px solid rgb(236, 236, 236);
     margin-bottom: 10px;
     overflow: hidden;
 }
@@ -116,6 +121,10 @@ h1 {
     display: block;
     margin-top: 25px;
     font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
 }
 
 
