@@ -81,7 +81,6 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
         </section>
     </div>
     <script src="../js/number_utils.js"></script>
-    <script src="../fake_data/menu_items.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./assets/layout.js"></script>
     <!-- 아임포트 부분 -->
@@ -92,26 +91,28 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
 
         let data = null;
 
-
+        // 통신
         (async () => {
-
+            // 성공
             try {
-                const response = await axios.get(`/cart`)
-                Data = response.data.item
+                const response = await axios.get(`/cart`);
+                data = response.data.item;
+                console.log(data);
+                // 실패
             } catch (e) {
-                console.log(e)
+                console.log(e);
             };
-
-            Data.map((v) => {
+            // data
+            data.map((v) => {
                 console.log(v);
-                let innerBox = document.querySelector(".box-cart-content")
+                let innerBox = document.querySelector(".box-cart-content");
                 innerBox.innerHTML += `
     <div class="box-cart div-center clearfix">
                 <a href="#">
                     <img class="pull-left" src="${v.product_img}" alt="#">
                 </a>
                 <div class="box-cart-inner pull-right">
-                    <input type="checkbox" class="check-prod pull-right" name="check" value="1">
+                    <input type="checkbox" class="check-prod pull-right" name="check" value=${v.cart_code}>
                     <span class="box-cart-prod-name">${v.product_name}</span>
                     <span class="box-cart-money pull-right" data-money="${v.product_price}">${(formatPrice(v.product_price))}원</span>
                     <input type="button" class="btn-plus-01-on pull-right" value="+">
@@ -120,23 +121,25 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                     <a href="#" class="btn-basketModifyQuanity" onClick="basketModifyQuanity()"><img src="../img/btn_quantity_modify.gif" alt="변경" /></a>
                 </div>
             </div>`
-            })
+            });
 
-            getPaymentData()
+            // 장바구니 로직
+            getPaymentData();
+
 
         })();
+        // 수량을 체크합니다.
+        // const CartCount = document.querySelector('').value;
 
-        const CartCount = document.querySelector('').value
-
-        async function basketModifyQuanity() {
-            try {
-                const response = await axios.patch(`/cart/${no}`, {
-                    no: CartCount
-                })
-            } catch (e) {
-                console.log(e)
-            };
-        }
+        // async function basketModifyQuanity() {
+        //     try {
+        //         const response = await axios.patch(`/cart/${no}`, {
+        //             no: CartCount
+        //         })
+        //     } catch (e) {
+        //         console.log(e);
+        //     };
+        // }
         // 1. 상품 디비에서 상품 json 받아오기
         // 1. 끝
 
@@ -249,13 +252,27 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 // 로고를 생성하고 감춥니다.
                 logos();
                 // 선택상품삭제 버튼을 눌렀을 시 실행될 이벤트 함수입니다.
-                document.querySelector(".btn-cancle-01-on").addEventListener("click", (e) => {
+                document.querySelector(".btn-cancle-01-on").addEventListener("click", async (e) => {
                     let check = document.querySelectorAll("input[name=check]:checked");
+                    // 백엔드에 값을 넘겨줄 keys 입니다.
                     //check를 검사합니다.
-                    check.forEach((v) => {
+
+
+                    let keys = Array.from(check).map((v) => {
                         // box-cart를 지웁니다.
                         v.closest(".box-cart").remove();
+                        // 숫자형식으로 된 밸류를 배열형식으로 리턴
+                        return parseInt(v.value);
                     });
+
+
+                    try {
+                        await axios.delete('/cart', {
+                            data: { cart_code: keys }
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
 
                     //상품목록이 없다면 로고를 생성합니다
                     notContentLogo();

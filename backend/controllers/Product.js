@@ -485,10 +485,11 @@ module.exports = (app) => {
       let sql = "DELETE FROM products WHERE product_code IN (";
       key.map((v, i) => {
         if (i == key.length - 1) {
-          return (sql += "?)");
+          return (sql += "?");
         }
         sql += "?,";
       });
+      sql += ")";
       const [result1] = await dbcon.query(sql, key);
       logger.debug([result1]);
       if (result1.affectedRows < 1) {

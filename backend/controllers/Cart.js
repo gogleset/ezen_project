@@ -18,33 +18,32 @@ module.exports = (app) => {
   let dbcon = null;
 
   //데이터 조회
-  router.get('/cart', async (req, res, next) => {
-
+  router.get("/cart", async (req, res, next) => {
     // 데이터 조회 결과가 저장될 빈 변수
     let json = null;
 
-    let sessionInfo = req.session.memberInfo
+    let sessionInfo = req.session.memberInfo;
 
     try {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
       // 장바구니 전체 데이터 조회
-      let sql2 = 'SELECT c.cart_code, c.product_count, p.product_name, p.product_price, p.product_img, m.member_id FROM carts c';
-      sql2 += ' INNER JOIN products p ON c.product_code = p.product_code';
-      sql2 += ' INNER JOIN members m ON c.member_code = m.member_code';
-      sql2 += ' WHERE c.member_code = ?';
+      let sql2 =
+        "SELECT c.cart_code, c.product_count, p.product_name, p.product_price, p.product_img, m.member_id FROM carts c";
+      sql2 += " INNER JOIN products p ON c.product_code = p.product_code";
+      sql2 += " INNER JOIN members m ON c.member_code = m.member_code";
+      sql2 += " WHERE c.member_code = ?";
 
-      const [result2] = await dbcon.query(sql2, sessionInfo.member_code);  //sessionInfo.member_code
+      const [result2] = await dbcon.query(sql2, sessionInfo.member_code); //sessionInfo.member_code
 
       json = result2;
-
     } catch (err) {
       return next(err);
     } finally {
       dbcon.end();
     }
-    res.sendJson({ 'item': json });
+    res.sendJson({ item: json });
   });
 
   // 데이터 추가
@@ -179,12 +178,12 @@ module.exports = (app) => {
     }
   });
 
-  // 데이터 수정
-  router.patch('/cart/:no', async (req, res, next) => {
-    const ctCode = req.get('no');
-    const ctPdCnt = req.post('product_count');
-    const ctPdCode = req.post('product_code');
-    const ctMemCode = req.post('member_code');
+  // 데이터 수정(cart.js 변경 버튼)
+  router.patch("/cart/:no", async (req, res, next) => {
+    const ctCode = req.get("no");
+    const ctPdCnt = req.post("product_count");
+    const ctPdCode = req.post("product_code");
+    const ctMemCode = req.post("member_code");
 
     let json = null;
 
@@ -192,59 +191,60 @@ module.exports = (app) => {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
-      let sql = 'UPDATE carts SET'
+      let sql = "UPDATE carts SET";
       let input_data = [];
 
       if (ctPdCnt != null) {
-        sql += ' product_count = ?'
-        input_data.push(ctPdCnt)
+        sql += " product_count = ?";
+        input_data.push(ctPdCnt);
       }
 
       if (ctPdCode != null) {
-        sql += ' product_code = ?'
-        input_data.push(ctPdCode)
+        sql += " product_code = ?";
+        input_data.push(ctPdCode);
       }
       if (ctMemCode != null) {
-        sql += ' member_code = ?'
-        input_data.push(ctMemCode)
+        sql += " member_code = ?";
+        input_data.push(ctMemCode);
       }
 
       if (ctCode != null) {
-        sql += ' WHERE cart_code = ?'
-        input_data.push(ctCode)
+        sql += " WHERE cart_code = ?";
+        input_data.push(ctCode);
       }
 
       const [result1] = await dbcon.query(sql, input_data);
 
       if (result1.affectedRows < 1) {
-        throw new Error(' 수정된 데이터가 없습니다. ');
+        throw new Error(" 수정된 데이터가 없습니다. ");
       }
-
-
-
     } catch (err) {
       return next(err);
     } finally {
       dbcon.end();
     }
-    res.sendJson({ 'item': json });
+    res.sendJson({ item: json });
   });
 
   // 데이터 삭제
-  router.delete("/cart/:no", async (req, res, next) => {
-    const ctCode = req.get("no");
+  router.delete("/cart", async (req, res, next) => {
+    const cartCode = req.post("cart_code");
 
-    if (ctCode === null) {
-      return next(new Error(400));
-    }
-
+    console.log(cartCode);
     try {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
-      const sql = "DELETE FROM carts WHERE cart_code = ?";
+      let sql = "DELETE FROM carts WHERE cart_code IN (";
+      cartCode.map((v, i) => {
+        if (i == cartCode.length - 1) {
+          return (sql += "?)");
+        }
+        sql += "?,";
+      });
 
-      const [result1] = await dbcon.query(sql, ctCode);
+      console.log(sql);
+      const [result1] = await dbcon.query(sql, cartCode);
 
       if (result1.affectedRows < 1) {
         throw new Error("삭제된 데이터가 없습니다");
