@@ -23,7 +23,7 @@ module.exports = (app) => {
 
     // 데이터 조회 결과가 저장될 빈 변수
     let json = null;
-   
+
     let sessionInfo = req.session.memberInfo;
 
     try {
@@ -86,7 +86,7 @@ module.exports = (app) => {
       args.push(ctPdCode);
 
       const [result1] = await dbcon.query(sql1, args);
-      console.log(result1[0].cnt);
+    //   console.log(result1[0].cnt);
       // 중복값이 있을 경우
       if (result1[0].cnt > 0) {
         //   프론트에게 메세지 중복값이 있다는 메세지를 보냄
@@ -157,7 +157,7 @@ module.exports = (app) => {
       } finally {
         dbcon.end();
       }
-      res.sendJson({ item: json });
+      return res.sendJson({ item: json });
     } else {
       try {
         dbcon = await mysql2.createConnection(config.database);
@@ -176,8 +176,8 @@ module.exports = (app) => {
       } finally {
         dbcon.end();
       }
+      return res.sendJson({ item: json });
     }
-    res.sendJson({ item: json });
   });
 
   // 데이터 삭제
