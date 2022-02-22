@@ -112,7 +112,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                     <img class="pull-left" src="${v.product_img}" alt="#">
                 </a>
                 <div class="box-cart-inner pull-right">
-                    <input type="checkbox" class="check-prod pull-right" name="check" value="1">
+                    <input type="checkbox" class="check-prod pull-right" name="check" value=${v.cart_code}>
                     <span class="box-cart-prod-name">${v.product_name}</span>
                     <span class="box-cart-money pull-right" data-money="${v.product_price}">${(formatPrice(v.product_price))}원</span>
                     <input type="button" class="btn-plus-01-on pull-right" value="+">
@@ -160,7 +160,7 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             });
             return countArray;
         }
-        
+
         // 2. 장바구니 로직
         function getPaymentData() {
             // box-cart가 있는지 없는지 감지하는 변수입니다.
@@ -347,23 +347,6 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                     location.href = '/html/payment.html'
 
                 })
-
-                // 3. 장바구니 데이터 DB로 넘겨주기
-
-                // document.getElementById("cart-total").addEventListener("click", async e => {
-                //     e.preventDefault();
-
-                //     console.log(count);
-                //     try {
-                //         await axios.post('/cart',{
-                //             count: count
-                //         });
-                //     } catch (error) {
-                //         alert(error+"서버 전송에 실패했습니다.");
-                //     }
-
-                // })
-
 
             }
         }
