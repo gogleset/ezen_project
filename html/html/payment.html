@@ -290,6 +290,9 @@
                     startPayment()
                 })()
             }
+
+
+
             function startPayment() {
                 // box-cart가 있는지 없는지 감지하는 변수입니다.
                 let content = document.querySelector(".inner-content .box-cart");
@@ -355,7 +358,6 @@
                         })
                     })
 
-
                     const result = () => {
                         countArray = [];
                         moneyArray = [];
@@ -406,6 +408,12 @@
                     }
                     result();
                 }
+
+                let productNum = [];
+                Data.map((v,i) => {
+                    productNum.push(document.querySelector(".cart-count").innerText);
+                })
+                console.log(productNum);
 
                 const merchant_uid = 'merchant_' + new Date().getTime()
 
@@ -464,14 +472,13 @@
                     const user_postCord = document.getElementById("postcode").value;
                     const user_address = document.getElementById("address").value + " " + document.getElementById("detailAddress").value;
 
-                    //order테이블에 데이터 저장
-                    const orderState = "Y";
+                    //order테이블에 데이터 저장 상태값은 D 고정
                     (async () => {
                         let json = null;
                         try {
                             const response = await axios.post("/order", {
                                 merchant_uid: merchant_uid,
-                                order_state: orderState,
+                                order_state: "D",
                                 order_date: new Date(),
                                 order_total_price: iamPort_total_price,
                                 receiver_name: user_name,
@@ -480,7 +487,7 @@
                                 receiver_addr2: document.getElementById("address").value,
                                 receiver_addr3: document.getElementById("detailAddress").value,
                                 imp_uid: null,
-                                rq_cancel: "Q"
+                                rq_cancel: "N"
                             });
                         } catch (error) {
                             const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
@@ -491,6 +498,32 @@
                             return;
                         }
                     })();
+
+
+
+
+                    //주문번호를 키값으로 데이터 갯수만큼 상품저장
+                    Data.map((v,i) => {
+                        (async () => {
+                            let json = null;
+                            try {
+                                const response = await axios.post("/cart/save", {
+                                    ordered_code: merchant_uid,
+                                    ordered_product_count: prodNum[i],
+
+                                });
+                            } catch (error) {
+                                const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
+                                Swal.fire({
+                                    text: errorMsg,
+                                    icon: "error"
+                                })
+                                return;
+                            }
+                        })();
+                    })
+
+
 
                     Swal.fire({
                         text: "아임포트 결제페이지로 넘어갑니다.",
@@ -520,11 +553,7 @@
                                         text: msg,
                                         icon: 'error',
                                         confirmButtonText: '확인'
-                                    })/* .then((result) => {
-                                    if (result.isConfirmed) {
-                                      location.href = "order_confirm";
-                                    }
-                                }); */
+                                    })
                                 }
 
                             });
