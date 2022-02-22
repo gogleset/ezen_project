@@ -409,13 +409,9 @@
                     result();
                 }
 
-                let productNum = [];
-                Data.map((v,i) => {
-                    productNum.push(document.querySelector(".cart-count").innerText);
-                })
-                console.log(productNum);
 
-                const merchant_uid = 'merchant_' + new Date().getTime()
+
+                const merchant_uid = 'merchant_' + new Date().getTime();
 
                 //주문번호
                 document.getElementById("orderNumber").innerHTML = merchant_uid
@@ -498,19 +494,21 @@
                             return;
                         }
                     })();
-
-
-
-
+                    let productNum = Array.from(document.querySelectorAll(".cart-count")).map((v) => {
+                        return parseInt(v.innerHTML);
+                    });
+                    console.log(productNum);
                     //주문번호를 키값으로 데이터 갯수만큼 상품저장
-                    Data.map((v,i) => {
+                    Data.map((v, i) => {
                         (async () => {
                             let json = null;
                             try {
                                 const response = await axios.post("/cart/save", {
-                                    ordered_code: merchant_uid,
-                                    ordered_product_count: prodNum[i],
-
+                                    merchant_uid: merchant_uid,
+                                    ordered_product_name: v.product_name,
+                                    ordered_product_img: v.product_img,
+                                    ordered_product_count: productNum[i],
+                                    ordered_product_price: v.product_price
                                 });
                             } catch (error) {
                                 const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
@@ -522,8 +520,6 @@
                             }
                         })();
                     })
-
-
 
                     Swal.fire({
                         text: "아임포트 결제페이지로 넘어갑니다.",
