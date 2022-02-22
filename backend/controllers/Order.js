@@ -14,6 +14,7 @@ const utilHelper = require("../helper/UtillHelper");
 const regexHelper = require("../helper/regex_helper.js");
 
 module.exports = (app) => {
+<<<<<<< HEAD
   let dbcon = null;
 //  저장된 order 데이터 불러오기
   router.get("/order", async (req, res, next) => {
@@ -89,6 +90,58 @@ module.exports = (app) => {
     const impUid = req.post("imp_uid");
 
     /*  const odPdCnt = req.post('product_count');
+=======
+    let dbcon = null;
+
+    
+
+    //데이터 조회 [주문서 작성 페이지에서 출력할 DT]
+    router.get('/basket', async (req, res, next) => {
+
+        let sessionInfo = req.session.memberInfo
+
+        try {
+            dbcon = await mysql2.createConnection(config.database);
+            await dbcon.connect();
+
+            // 장바구니 전체 데이터 조회
+            let sql2 = 'SELECT c.product_code, c.product_count, p.product_price, p.product_name, p.product_img, m.member_name, m.member_phone, m.member_postcode, m.member_addr1, m.member_addr2';
+                sql2 += ' FROM carts c';
+                sql2 += ' INNER JOIN products p ON c.product_code = p.product_code';
+                sql2 += ' INNER JOIN members m ON c.member_code = m.member_code';
+                sql2 += ' WHERE member_code = ?';
+
+            const [result2] = await dbcon.query(sql2, sessionInfo.member_code);
+
+            json = result2;
+
+        } catch (err) {
+            return next(err);
+        } finally {
+            dbcon.end();
+        }
+        res.sendJson({'item': json });
+    });
+
+    // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]
+    router.post('/order', async (req, res, next) => {
+
+        let sessionInfo = req.session.memberInfo;
+
+        const merchantUid = req.post('merchant_uid');
+        const orderState = req.post('order_state');
+        const orderDate = req.post('order_date');
+        const orderTtPrice = req.post('order_total_price');
+        const rcvNm = req.post('receiver_name');
+        const rcvPhone = req.post('receiver_phone');
+        const rcvAddr1 = req.post('receiver_addr1');
+        const rcvAddr2 = req.post('receiver_addr2');
+        const rcvAddr3 = req.post('receiver_addr3');
+        const memberCode = sessionInfo.member_code;
+        const impUid = req.post('imp_uid');
+        
+       /*  const odPdCnt = req.post('product_count');
+>>>>>>> 8ac53e6e52437ae79d77fa1aa3ba43644e986a6b
         const odPdPrice = req.post('product_price');
         const odPdCode = req.post('product_code');
         const odOdcode = req.post('order_code'); */
