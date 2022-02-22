@@ -49,14 +49,14 @@
     <div class="container table-container">
         <table class="table table-bordered table-hover table-condensed table-striped">
             <colgroup>
-                <col width="1%">
+                <col width="5%">
                 <col width="15%">
-                <col width="15%">
+                <col width="10%">
                 <col width="15%">
                 <col width="15%">
                 <col width="15%">
                 <col width="12%">
-                <col width="12%">
+                <col width="5%">
             </colgroup>
             <thead>
                 <tr>
@@ -70,71 +70,193 @@
                     <th>취소요청</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr id="contentValue">
-                    <td id="check"><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td id="orderNumber">&nbsp;</td>
-                    <td id="orderState">&nbsp;</td>
-                    <td id="orderName">&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td >&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+            <tbody id="content">
+
             </tbody>
         </table>
     </div>
     <!-- 페이지 네이션 영역입니다. -->
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
+
         </ul>
     </nav>
 
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../assets/layout.js"></script>
+    <script src="../../js/number_utils.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get('query') || "";
+        const page = params.get('page') || 1;
+
+        (async () => {
+            let data = null;    
+            let pageData = null;
+            try {
+                const response = await axios.get('/order', {
+                    params: {
+                        page: page,
+                        query: query
+                    }
+                });
+                data = response.data.item;
+                pageData = response.data.pagenation
+
+            } catch (error) {
+                Swal.fire({
+                    title: "서버와 통신이 실패했습니다.",
+                    text: `${error}`,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "확인",
+
+                });
+            }
+            data.map((v, i) => {
+                // 결제 상태 가공
+                switch (v.order_state) {
+                    case "Y":
+                        v.order_state = "결제 완료"
+                        break;
+                    case "D":
+                        v.order_state = "결제 대기"
+                        break;
+                    case "N":
+                        v.order_state = "결제 실패"
+                        break;
+                    default:
+                        console.log("값이 없습니다.");
+                        break;
+
+                }
+                // 취소 요청 가공
+                switch (v.rq_cancel) {
+                    case "N":
+                        v.rq_cancel = "X"
+                        break;
+                    case "Y":
+                        v.rq_cancel = "O"
+                        break;
+                    default:
+                        console.log("값이 없습니다.");
+                        break;
+                }
+
+                document.querySelector("#content").innerHTML += `
+                <tr id="contentValue" onclick="location.href='orderDetail.html?order=${v.order_code}'" style="cursor:pointer">
+                    <td id="check"><input type="checkbox" name="mycheckbox" id="checkbox" value=${v.order_code} /></td>
+                    <td id="orderNumber">${v.merchant_uid}</td>
+                    <td id="orderState">${v.order_state}</td>
+                    <td id="orderName">${v.receiver_name}</td>
+                    <td id="orderPhone">${v.receiver_phone}</td>
+                    <td id="orderTotalPrice">${formatPrice(v.order_total_price)}원</td>
+                    <td id="orderDate">${v.order_date}</td>
+                    <td id="orderCancel">${v.rq_cancel}</td>
+                </tr>`
+
+            });
+
+            // 취소 요청한 데이터에만 빨간색 표시
+            document.querySelectorAll("#orderCancel").forEach((v, i) => {
+                console.log(v.innerHTML);
+                switch (v.innerHTML) {
+                    case "O":
+                        v.style.color = "red";
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            // 주문상태에 따른 색깔 표시
+            document.querySelectorAll("#orderState").forEach((v, i) => {
+                console.log(v.innerHTML);
+                switch (v.innerHTML) {
+                    case "결제 실패":
+                        v.style.color = "red";
+                        break;
+                    case "결제 완료":
+                        v.style.color = "green";
+                        break;
+                    default:
+                        break;
+                }
+            })
+            pagenation(".pagination", pageData);
+
+        })();
+        function pagenation(selector, data) {
+            //페이지 번호가 출력될 대상
+            const container = document.querySelector(selector);
+            console.log(data);
+
+            // 1) 이전 그룹 링크 : <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+            const li1 = document.createElement("li");
+            li1.classList.add("page-item");
+
+            console.log(query);
+            const a1 = document.createElement("a");
+            a1.innerHTML = "&laquo;";
+            a1.classList.add("page-link");
+            a1.setAttribute(
+                "href",
+                "./order.html?page=" + data.prevGroupLastPage + "&query=" + query
+            );
+            // + "&query=" + query
+            if (data.prevGroupLastPage == 0) {
+                li1.classList.add("disabled");
+                a1.removeAttribute("href");
+            }
+
+            console.log(li1);
+            li1.appendChild(a1);
+            console.log(li1);
+            container.appendChild(li1);
+
+            // 페이지 번호 링크들 :<li class="page-item"><a class="page-link" href="#">3</a></li>
+            for (let i = data.groupStart; i <= data.groupEnd; i++) {
+                const li2 = document.createElement("li");
+                li2.classList.add("page-link");
+
+                const a2 = document.createElement("a");
+                a2.innerHTML = i;
+                a2.classList.add("page-link");
+                a2.setAttribute("href", "./order.html?page=" + i + '&query=' + query);
+                // + '&query=' + query
+
+                if (data.nowPage == i) {
+                    li2.classList.add("active");
+                }
+                li2.appendChild(a2);
+                container.appendChild(li2);
+            }
+
+            // 페이지 번호 링크들 : <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+            const li3 = document.createElement("li");
+            li3.classList.add("page-item");
+
+            const a3 = document.createElement("a");
+            a3.innerHTML = "&raquo;";
+            a3.classList.add("page-link");
+            a3.setAttribute(
+                "href",
+                "./order.html?page=" + data.nextGroupFirstPage + '&query=' + query
+            );
+            //   +"&query=" + query;
+            if (data.nextGroupFirstPage == 0) {
+                li3.classList.add("disabled");
+                a3.removeAttribute("href");
+            }
+
+            li3.appendChild(a3);
+            container.appendChild(li3);
+        }
+
+    </script>
 
 </body>
 
