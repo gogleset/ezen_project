@@ -103,45 +103,64 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
                 console.log(e);
             };
             // data
-            data.map((v) => {
+            data.map((v, i) => {
                 console.log(v);
                 let innerBox = document.querySelector(".box-cart-content");
                 innerBox.innerHTML += `
-    <div class="box-cart div-center clearfix">
+                <div class="box-cart div-center clearfix">
                 <a href="#">
                     <img class="pull-left" src="${v.product_img}" alt="#">
                 </a>
                 <div class="box-cart-inner pull-right">
-                    <input type="checkbox" class="check-prod pull-right" name="check" value=${v.cart_code}>
+                    <input type="checkbox" class="check-prod pull-right" name="check" value="1">
                     <span class="box-cart-prod-name">${v.product_name}</span>
                     <span class="box-cart-money pull-right" data-money="${v.product_price}">${(formatPrice(v.product_price))}원</span>
                     <input type="button" class="btn-plus-01-on pull-right" value="+">
-                    <span class="cart-count" value ="${v.product_count}" >${v.product_count}</span>
+                    <span class="cart-count">${v.product_count}</span>
                     <input type="button" class="btn-minus-01-on pull-right" value="–">
-                    <a href="#" class="btn-basketModifyQuanity" onClick="basketModifyQuanity()"><img src="../img/btn_quantity_modify.gif" alt="변경" /></a>
+                    <button class="btn-basketModifyQuanity" data-cart_code=${v.cart_code}><img src="../img/btn_quantity_modify.gif" alt="변경" /></button>
                 </div>
             </div>`
-            });
+            })
+
+            //변경 버튼 이벤트
+            const basketModifyQuanity = document.querySelectorAll('.btn-basketModifyQuanity');
+
+            Array.from(basketModifyQuanity).map((v, i) => {
+                v.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    const current = e.currentTarget;
+
+                    const cartCode = current.dataset.cart_code;
+                    const countArray = getProdNum()
+                    const prodCount = countArray[i]
+
+                    try {
+                        const response = await axios.patch(`/cart/${cartCode}`, {
+                            no: cartCode,
+                            product_count: prodCount
+                        })
+                    } catch (e) {
+                        console.log(e)
+                    };
+                })
+            })
 
             // 장바구니 로직
             getPaymentData();
         })();
-        // 수량을 체크합니다.
-        // const CartCount = document.querySelector('').value;
-
-        // async function basketModifyQuanity() {
-        //     try {
-        //         const response = await axios.patch(`/cart/${no}`, {
-        //             no: CartCount
-        //         })
-        //     } catch (e) {
-        //         console.log(e);
-        //     };
-        // }
-        // 1. 상품 디비에서 상품 json 받아오기
-        // 1. 끝
 
 
+        // 상품 갯수가 들어있는 배열을 리턴합니다.
+        function getProdNum() {
+            let countArray = [];
+            document.querySelectorAll(".cart-count").forEach((v) => {
+                countArray.push(parseInt(v.innerHTML));
+            });
+            return countArray;
+        }
+        
         // 2. 장바구니 로직
         function getPaymentData() {
             // box-cart가 있는지 없는지 감지하는 변수입니다.
@@ -153,14 +172,6 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
             // // 상품의 총 갯수입니다.
             let count = 0;
 
-            // 상품 갯수가 들어있는 배열을 리턴합니다.
-            const getProdNum = () => {
-                let countArray = [];
-                document.querySelectorAll(".cart-count").forEach((v) => {
-                    countArray.push(parseInt(v.innerHTML));
-                });
-                return countArray;
-            }
             // 상품 목록의 데이터머니에있는 값을 가져와 상품가격 배열에 순차적으로 넣습니다.
             const getProdPrice = () => {
                 let moneyArray = [];
@@ -328,6 +339,14 @@ cart 페이지의 적용될 html 구조 파일입니다.  -->
 
                 result();
                 // 장바구니 로직 끝
+
+                // 결제하기 버튼 클릭 시 주문서 작성 페이지로 연결
+                document.getElementById("cart-total").addEventListener("click", async e => {
+                    e.preventDefault();
+
+                    location.href = '/html/payment.html'
+
+                })
 
                 // 3. 장바구니 데이터 DB로 넘겨주기
 

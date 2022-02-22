@@ -115,6 +115,7 @@
 
 .btn-basketModifyQuanity{
   position: absolute;
+  border: none;
 }
 
 .btn-basketModifyQuanity img{
@@ -122,7 +123,7 @@
   height: 26px;
   position: relative;
   top: 74px;
-  left: 96px;
+  left: 89px;
 }
 
 /* 장바구니 합계 박스입니다. */
