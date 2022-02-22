@@ -39,7 +39,7 @@
     <form class="container">
         <div class="setting-container">
             <div class="admin-box-setting">
-                <input type="text" class="form-control admin-searchbar pull-left" placeholder="검색">
+                <input type="text" class="form-control admin-searchbar pull-left" placeholder="주문자 명을 입력하세요">
                 <button class="btn btn-primary pull-left btn-admin-setting" id="logout" type="button">검색</button>
                 <button class="btn btn-primary pull-right btn-admin-setting" id="logout" type="button">결제취소</button>
             </div>
@@ -60,17 +60,27 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th><input type="checkbox" name="mycheckbox" id="checkbox" value="" /></th>
+                    <th>선택</th>
                     <th>주문번호</th>
                     <th>주문상태</th>
                     <th>주문자</th>
                     <th>연락처</th>
-                    <th>결제수단</th>
                     <th>주문합계</th>
-                    <th>배송일시</th>
+                    <th>주문일시</th>
+                    <th>취소요청</th>
                 </tr>
             </thead>
             <tbody>
+                <tr id="contentValue">
+                    <td id="check"><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
+                    <td id="orderNumber">&nbsp;</td>
+                    <td id="orderState">&nbsp;</td>
+                    <td id="orderName">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
                 <tr>
                     <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
                     <td>&nbsp;</td>
@@ -92,18 +102,8 @@
                     <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td><input type="checkbox" name="mycheckbox" id="checkbox" value=""/>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
                     <td><input type="checkbox" name="mycheckbox" id="checkbox" value="" />&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td >&nbsp;</td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>

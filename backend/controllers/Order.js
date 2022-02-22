@@ -8,232 +8,382 @@
 const axios = require("axios");
 const router = require("express").Router();
 const mysql2 = require("mysql2/promise");
-const logger = require('../helper/LogHelper');
-const config = require('../helper/_config');
-const utilHelper = require('../helper/UtillHelper');
+const logger = require("../helper/LogHelper");
+const config = require("../helper/_config");
+const utilHelper = require("../helper/UtillHelper");
 const regexHelper = require("../helper/regex_helper.js");
 
-
 module.exports = (app) => {
-    let dbcon = null;
+  let dbcon = null;
+//  저장된 order 데이터 불러오기
+  router.get("/order", async (req, res, next) => {
+     // 검색어 파라미터 받기
+     const query = req.get('query');
+     // 현재 페이지 번호 받기 (기본값 : 1)
+     const page = req.get('page', 1);
+     // 한 페이지에 보여질 목록 수 (기본값 : 10)
+     const rows = req.get('rows',7);
+     // 데이터 조회 결과가 저장될 빈 변수
+     let json = null;
+     let pagenation = null;
 
-    
+     try {
+         dbcon = await mysql2.createConnection(config.database);
+         await dbcon.connect();
 
-    //데이터 조회 [주문서 작성 페이지에서 출력할 DT]
-    router.get('/basket', async (req, res, next) => {
+         // 전체 데이터수 조회 - 페이지 번호구현에 쓰일dt
+         let sql1 = 'SELECT COUNT(*) AS cnt FROM orders'
+         let args1 = [];
 
-        // 검색어 파라미터 받기
-        const query = req.get('query');
-        // 현재 페이지 번호 받기 (기본값 : 1)
-        const page = req.get('page', 1);
-        // 한 페이지에 보여질 목록 수 (기본값 : 10)
-        const rows = req.get('rows', 10);
-        // 데이터 조회 결과가 저장될 빈 변수
-        let json = null;
+         if (query != null) {
+             sql1 += " WHERE receiver_name Like concat('%', ?, '%')";
+             args1.push(query);
+         }
 
-        let pagenation = null;
+         const [result1] = await dbcon.query(sql1, args1);
+         const totalCount = result1[0].cnt;
 
-        let sessionInfo = req.session.memberInfo
-
-        try {
-            dbcon = await mysql2.createConnection(config.database);
-            await dbcon.connect();
-
-            // 장바구니 전체 데이터수 조회 - 페이지 번호구현에 쓰일DT
-            let sql1 = 'SELECT COUNT(*) AS cnt FROM orders WHERE member_code = ?'
-
-            const [result1] = await dbcon.query(sql1, sessionInfo.member_code);
-            const totalCount = result1[0].cnt;
-
-            pagenation = utilHelper.pagenation(totalCount, page, rows);
-            logger.debug(JSON.stringify(pagenation));
+         pagenation = utilHelper.pagenation(totalCount, page, rows);
+         logger.debug(JSON.stringify(pagenation));
 
 
-            // 장바구니 전체 데이터 조회
-            let sql2 = 'SELECT c.product_code, c.product_count, p.product_price, p.product_name, p.product_img, m.member_name, m.member_phone, m.member_postcode, m.member_addr1, m.member_addr2';
-                sql2 += ' FROM carts c';
-                sql2 += ' INNER JOIN products p ON c.product_code = p.product_code';
-                sql2 += ' INNER JOIN members m ON c.member_code = m.member_code';
-                sql2 += ' WHERE member_code = ?';
+         // 전체 데이터 조회
+         let sql2 = 'SELECT order_code, merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, imp_uid, rq_cancel, member_code FROM orders';
+         let args2 = [];
 
-            sql2 += " LIMIT ?, ?";
-            args2.push(pagenation.offset);
-            args2.push(pagenation.listCount);
+         if (query != null) {
+             sql2 += " WHERE receiver_name Like concat('%', ?, '%')";
+             args2.push(query);
+         }
 
-            const [result2] = await dbcon.query(sql2, sessionInfo.member_code);
+         sql2 += " LIMIT ?, ?";
+         args2.push(pagenation.offset);
+         args2.push(pagenation.listCount);
 
-            json = result2;
+         const [result2] = await dbcon.query(sql2, args2);
 
-        } catch (err) {
-            return next(err);
-        } finally {
-            dbcon.end();
-        }
-        res.sendJson({ 'pagenation': pagenation, 'item': json });
-    });
+         json = result2;
+     } catch (err) {
+         return next(err);
+     } finally {
+         dbcon.end();
+     }
+     res.sendJson({ 'pagenation': pagenation, 'item': json });
+  });
 
-    // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]
-    router.post('/order', async (req, res, next) => {
+  //데이터 조회 [주문서 작성 페이지에서 출력할 DT]
+  router.get("/basket", async (req, res, next) => {
+    // 검색어 파라미터 받기
+    const query = req.get("query");
+    // 현재 페이지 번호 받기 (기본값 : 1)
+    const page = req.get("page", 1);
+    // 한 페이지에 보여질 목록 수 (기본값 : 10)
+    const rows = req.get("rows", 10);
+    // 데이터 조회 결과가 저장될 빈 변수
+    let json = null;
 
-        let sessionInfo = req.session.memberInfo;
+    let pagenation = null;
 
-        const merchantUid = req.post('merchant_uid');
-        const orderState = req.post('order_state');
-        const orderDate = req.post('order_date');
-        const orderTtPrice = req.post('order_total_price');
-        const rcvNm = req.post('receiver_name');
-        const rcvPhone = req.post('receiver_phone');
-        const rcvAddr1 = req.post('receiver_addr1');
-        const rcvAddr2 = req.post('receiver_addr2');
-        const rcvAddr3 = req.post('receiver_addr3');
-        const memberCode = sessionInfo.member_code;
-        const impUid = req.post('imp_uid');
-        
-       /*  const odPdCnt = req.post('product_count');
+    let sessionInfo = req.session.memberInfo;
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 장바구니 전체 데이터수 조회 - 페이지 번호구현에 쓰일DT
+      let sql1 = "SELECT COUNT(*) AS cnt FROM orders WHERE member_code = ?";
+
+      const [result1] = await dbcon.query(sql1, sessionInfo.member_code);
+      const totalCount = result1[0].cnt;
+
+      pagenation = utilHelper.pagenation(totalCount, page, rows);
+      logger.debug(JSON.stringify(pagenation));
+
+      // 장바구니 전체 데이터 조회
+      let sql2 =
+        "SELECT c.product_code, c.product_count, p.product_price, p.product_name, p.product_img, m.member_name, m.member_phone, m.member_postcode, m.member_addr1, m.member_addr2";
+      sql2 += " FROM carts c";
+      sql2 += " INNER JOIN products p ON c.product_code = p.product_code";
+      sql2 += " INNER JOIN members m ON c.member_code = m.member_code";
+      sql2 += " WHERE member_code = ?";
+
+      sql2 += " LIMIT ?, ?";
+      args2.push(pagenation.offset);
+      args2.push(pagenation.listCount);
+
+      const [result2] = await dbcon.query(sql2, sessionInfo.member_code);
+
+      json = result2;
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
+    res.sendJson({ pagenation: pagenation, item: json });
+  });
+
+  router.get("/basket", async (req, res, next) => {
+    // 검색어 파라미터 받기
+    const query = req.get("query");
+    // 현재 페이지 번호 받기 (기본값 : 1)
+    const page = req.get("page", 1);
+    // 한 페이지에 보여질 목록 수 (기본값 : 10)
+    const rows = req.get("rows", 10);
+    // 데이터 조회 결과가 저장될 빈 변수
+    let json = null;
+
+    let pagenation = null;
+
+    let sessionInfo = req.session.memberInfo;
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 장바구니 전체 데이터수 조회 - 페이지 번호구현에 쓰일DT
+      let sql1 = "SELECT COUNT(*) AS cnt FROM orders WHERE member_code = ?";
+
+      const [result1] = await dbcon.query(sql1, sessionInfo.member_code);
+      const totalCount = result1[0].cnt;
+
+      pagenation = utilHelper.pagenation(totalCount, page, rows);
+      logger.debug(JSON.stringify(pagenation));
+
+      // 장바구니 전체 데이터 조회
+      let sql2 =
+        "SELECT c.product_code, c.product_count, p.product_price, p.product_name, p.product_img, m.member_name, m.member_phone, m.member_postcode, m.member_addr1, m.member_addr2";
+      sql2 += " FROM carts c";
+      sql2 += " INNER JOIN products p ON c.product_code = p.product_code";
+      sql2 += " INNER JOIN members m ON c.member_code = m.member_code";
+      sql2 += " WHERE member_code = ?";
+
+      sql2 += " LIMIT ?, ?";
+      args2.push(pagenation.offset);
+      args2.push(pagenation.listCount);
+
+      const [result2] = await dbcon.query(sql2, sessionInfo.member_code);
+
+      json = result2;
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
+    res.sendJson({ pagenation: pagenation, item: json });
+  });
+
+  //데이터 조회 [주문서 작성 페이지에서 출력할 DT]
+  router.get("/basket", async (req, res, next) => {
+    // 검색어 파라미터 받기
+    const query = req.get("query");
+    // 현재 페이지 번호 받기 (기본값 : 1)
+    const page = req.get("page", 1);
+    // 한 페이지에 보여질 목록 수 (기본값 : 10)
+    const rows = req.get("rows", 10);
+    // 데이터 조회 결과가 저장될 빈 변수
+    let json = null;
+
+    let pagenation = null;
+
+    let sessionInfo = req.session.memberInfo;
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 장바구니 전체 데이터수 조회 - 페이지 번호구현에 쓰일DT
+      let sql1 = "SELECT COUNT(*) AS cnt FROM orders WHERE member_code = ?";
+
+      const [result1] = await dbcon.query(sql1, sessionInfo.member_code);
+      const totalCount = result1[0].cnt;
+
+      pagenation = utilHelper.pagenation(totalCount, page, rows);
+      logger.debug(JSON.stringify(pagenation));
+
+      // 장바구니 전체 데이터 조회
+      let sql2 =
+        "SELECT c.product_code, c.product_count, p.product_price, p.product_name, p.product_img, m.member_name, m.member_phone, m.member_postcode, m.member_addr1, m.member_addr2";
+      sql2 += " FROM carts c";
+      sql2 += " INNER JOIN products p ON c.product_code = p.product_code";
+      sql2 += " INNER JOIN members m ON c.member_code = m.member_code";
+      sql2 += " WHERE member_code = ?";
+
+      sql2 += " LIMIT ?, ?";
+      args2.push(pagenation.offset);
+      args2.push(pagenation.listCount);
+
+      const [result2] = await dbcon.query(sql2, sessionInfo.member_code);
+
+      json = result2;
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
+    res.sendJson({ pagenation: pagenation, item: json });
+  });
+
+  // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]
+  router.post("/order", async (req, res, next) => {
+    let sessionInfo = req.session.memberInfo;
+
+    const merchantUid = req.post("merchant_uid");
+    const orderState = req.post("order_state");
+    const orderDate = req.post("order_date");
+    const orderTtPrice = req.post("order_total_price");
+    const rcvNm = req.post("receiver_name");
+    const rcvPhone = req.post("receiver_phone");
+    const rcvAddr1 = req.post("receiver_addr1");
+    const rcvAddr2 = req.post("receiver_addr2");
+    const rcvAddr3 = req.post("receiver_addr3");
+    const memberCode = sessionInfo.member_code;
+    const impUid = req.post("imp_uid");
+
+    /*  const odPdCnt = req.post('product_count');
         const odPdPrice = req.post('product_price');
         const odPdCode = req.post('product_code');
         const odOdcode = req.post('order_code'); */
-        
 
-        /* try {
+    /* try {
             regexHelper.value(orderTtPrice, '값을 넣어주세요.');
         } catch (err) {
             return next(err);
         } */
 
-        let json = null;
+    let json = null;
 
-        let data = null;
+    let data = null;
 
-        try {
-            dbcon = await mysql2.createConnection(config.database);
-            await dbcon.connect();
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
 
-            // 데이터 저장
-            const sql1 = 'INSERT INTO orders (merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid) VALUES (?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?)';
-            const input_data1 = [merchantUid, orderState, orderTtPrice, rcvNm, rcvPhone, rcvAddr1, rcvAddr2, rcvAddr3, memberCode, impUid];
-            const [result1] = await dbcon.query(sql1, input_data1);
+      // 데이터 저장
+      const sql1 =
+        "INSERT INTO orders (merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid) VALUES (?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?)";
+      const input_data1 = [
+        merchantUid,
+        orderState,
+        orderTtPrice,
+        rcvNm,
+        rcvPhone,
+        rcvAddr1,
+        rcvAddr2,
+        rcvAddr3,
+        memberCode,
+        impUid,
+      ];
+      const [result1] = await dbcon.query(sql1, input_data1);
 
-            
+      //const sql2 = 'INSERT INTO order_details (product_count, product_price, product_code, order_code) VALUES (?, ?, ?, ?)'
+      //const input_data2 = [odPdCnt, odPdPrice, odPdCode, odOdcode]
+      //const [result2] = await dbcon.query(sql2, input_data2);
 
-            //const sql2 = 'INSERT INTO order_details (product_count, product_price, product_code, order_code) VALUES (?, ?, ?, ?)'
-            //const input_data2 = [odPdCnt, odPdPrice, odPdCode, odOdcode]
-            //const [result2] = await dbcon.query(sql2, input_data2);
+      // 저장한 데이터를 출력
+      let sql3 =
+        "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_code = ?";
+      const [result3] = await dbcon.query(sql3, sessionInfo.member_code);
 
-            // 저장한 데이터를 출력
-            let sql3 = "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_code = ?";
-            const [result3] = await dbcon.query(sql3, sessionInfo.member_code)
+      logger.warn("에러가난다요");
 
-            logger.warn("에러가난다요")
+      json = result3;
 
-            json = result3;
+      //let sql4 = "select d_product_count, product_price, product_code, o_order_code FROM order_details d INNER JOIN orders o ON d.order_code = o.order_code WHERE order_code =?";
+      //const [result4] = await dbcon.query(sql4, result3.order_code);
 
-            //let sql4 = "select d_product_count, product_price, product_code, o_order_code FROM order_details d INNER JOIN orders o ON d.order_code = o.order_code WHERE order_code =?";
-            //const [result4] = await dbcon.query(sql4, result3.order_code);
+      //data = result4;
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
 
-            //data = result4;
+    res.sendJson({ item: json /*, 'data': data*/ });
+  });
 
-        } catch (err) {
-            return next(err);
-        } finally {
-            dbcon.end();
-        }
+  // 데이터 수정 => 주문 취소 완료  //*수정되어야 할 항목 : orderState (주문 상태) Y -> C *//
+  router.put("/cancel/:no", async (req, res, next) => {
+    let sessionInfo = req.session.memberInfo;
 
-        res.sendJson({ 'item': json /*, 'data': data*/});
-    });
+    const merchantUid = req.post("merchant_uid");
+    const orderState = req.post("order_state");
+    const orderDate = req.post("order_date");
+    const orderTtPrice = req.post("order_total_price");
+    const rcvNm = req.post("receiver_name");
+    const rcvPhone = req.post("receiver_phone");
+    const rcvAddr1 = req.post("receiver_addr1");
+    const rcvAddr2 = req.post("receiver_addr2");
+    const rcvAddr3 = req.post("receiver_addr3");
+    const memberCode = req.post("member_code");
+    const impUid = req.post("imp_uid");
 
-    // 데이터 수정 => 주문 취소 완료  //*수정되어야 할 항목 : orderState (주문 상태) Y -> C *//
-    router.put('/cancel/:no', async (req, res, next) => {
+    if (merchantUid === null || impUid === null) {
+      return next(new Error(400));
+    }
 
-        let sessionInfo = req.session.memberInfo
+    let json = null;
 
-        const merchantUid = req.post('merchant_uid');
-        const orderState = req.post('order_state');
-        const orderDate = req.post('order_date');
-        const orderTtPrice = req.post('order_total_price');
-        const rcvNm = req.post('receiver_name');
-        const rcvPhone = req.post('receiver_phone');
-        const rcvAddr1 = req.post('receiver_addr1');
-        const rcvAddr2 = req.post('receiver_addr2');
-        const rcvAddr3 = req.post('receiver_addr3');
-        const memberCode = req.post('member_code');
-        const impUid = req.post('imp_uid');
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
 
-        if (merchantUid === null || impUid === null) {
-            return next(new Error(400));
-        }
+      const sql1 = "UPDATE carts SET order_state=? WHERE member_code = ?";
+      const input_data = [orderState, memberInfo.member_code];
+      const [result1] = await dbcon.query(sql1, input_data);
 
-        let json = null;
+      if (result1.affectedRows < 1) {
+        throw new Error(" 수정된 데이터가 없습니다. ");
+      }
 
-        try {
-            dbcon = await mysql2.createConnection(config.database);
-            await dbcon.connect();
+      // 저장한 데이터를 출력
+      let sql2 =
+        "merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_id = ?";
+      const [result2] = await dbcon.query(sql2, sessionInfo.member_id);
 
-            const sql1 = 'UPDATE carts SET order_state=? WHERE member_code = ?'
-            const input_data = [orderState, memberInfo.member_code];
-            const [result1] = await dbcon.query(sql1, input_data);
+      json = result2;
 
-            if (result1.affectedRows < 1) {
-                throw new Error(' 수정된 데이터가 없습니다. ');
-            }
+      let sql3 =
+        "d_product_count, product_price, product_code, o_order_code FROM order_details d INNER JOIN orders o ON d.order_code = o.order_code WHERE order_code =?";
+      const [result3] = await dbcon.query(sql3, result3.order_code);
 
-            // 저장한 데이터를 출력
-            let sql2 = "merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_id = ?";
-            const [result2] = await dbcon.query(sql2, sessionInfo.member_id)
+      data = result3;
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
+    res.sendJson({ item: json, data: data });
+  });
 
-            json = result2;
+  // 카트에서 데이터 삭제 [ 주문 결제 성공 시 카트 상품 DELETE ]
+  router.delete("/basket/:no", async (req, res, next) => {
+    let sessionInfo = req.session.memberInfo;
 
-            let sql3 = "d_product_count, product_price, product_code, o_order_code FROM order_details d INNER JOIN orders o ON d.order_code = o.order_code WHERE order_code =?";
-            const [result3] = await dbcon.query(sql3, result3.order_code);
+    const memberCode = req.get("no");
+    console.log(memberCode);
 
-            data = result3
+    if (memberCode === null) {
+      return next(new Error(400));
+    }
 
-        } catch (err) {
-            return next(err);
-        } finally {
-            dbcon.end();
-        }
-        res.sendJson({ 'item': json , 'data': data});
-    });
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
 
+      const sql1 = "DELETE FROM carts WHERE member_code = ?";
+      const [result1] = await dbcon.query(sql1, memberInfo.member_code);
 
-    // 카트에서 데이터 삭제 [ 주문 결제 성공 시 카트 상품 DELETE ]
-    router.delete('/basket/:no', async (req, res, next) => {
+      if (result1.affectedRows < 1) {
+        throw new Error("삭제된 데이터가 없습니다");
+      }
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
 
-        let sessionInfo = req.session.memberInfo
+    res.sendJson();
+  });
 
-        const memberCode = req.get('no');
-        console.log(memberCode)
-
-        if (memberCode === null) {
-            return next(new Error(400));
-        }
-
-        try {
-
-            dbcon = await mysql2.createConnection(config.database);
-            await dbcon.connect();
-
-            const sql1 = 'DELETE FROM carts WHERE member_code = ?'
-            const [result1] = await dbcon.query(sql1, memberInfo.member_code);
-
-
-            if (result1.affectedRows < 1) {
-                throw new Error('삭제된 데이터가 없습니다');
-            }
-
-        } catch (err) {
-            return next(err);
-        } finally {
-            dbcon.end();
-        }
-
-        res.sendJson();
-    });    
-
-
-
-
-
-    return router;
+  return router;
 };
