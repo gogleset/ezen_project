@@ -22,7 +22,7 @@ module.exports = (app) => {
     // 현재 페이지 번호 받기 (기본값 : 1)
     const page = req.get("page", 1);
     // 한 페이지에 보여질 목록 수 (기본값 : 10)
-    const rows = req.get("rows", 16);
+    const rows = req.get("rows", 13);
     // 데이터 조회 결과가 저장될 빈 변수
     let json = null;
     let pagenation = null;
@@ -102,6 +102,35 @@ module.exports = (app) => {
     }
     res.sendJson();
   });
+
+  // 관리자 결제 취소
+  router.delete("/order", async (req, res, next) => {
+    const odCode = req.post("data");
+    console.log(odCode);
+
+    if (odCode === null) {
+      return next(new Error(400));
+    }
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      const sql1 = "DELETE FROM orders WHERE order_code = ?";
+      const [result1] = await dbcon.query(sql1, odCode)
+
+      if (result1.affectedRows < 1) {
+        throw new Error("삭제된 데이터가 없습니다");
+      }
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
+
+    res.sendJson();
+  });
+
 
   // 카트에서 데이터 삭제 [ 주문 결제 성공 시 카트 상품 DELETE ]
   router.delete("/order/:no", async (req, res, next) => {

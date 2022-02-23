@@ -1,10 +1,20 @@
-
 /* 
 @Filename: admin order.css
 @Author: 임다정 (dazoo0221@gmail.com)
 @description: 관리자 주문page css.
 */
 
-th, td{
-    text-align: center;
+th,
+td {
+  text-align: center;
+}
+tr td {
+  padding-top: 10px;
+}
+
+select {
+  border-radius: 5px;
+  height: 32px;
+  margin: 9px;
+  border: #222;
 }
