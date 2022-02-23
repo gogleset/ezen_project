@@ -138,6 +138,33 @@ LOCK TABLES `order_details` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ordered_product`
+--
+
+DROP TABLE IF EXISTS `ordered_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ordered_product` (
+  `ordered_product_code` int NOT NULL AUTO_INCREMENT COMMENT '카트상품코드',
+  `merchant_uid` varchar(45) NOT NULL COMMENT '주문번호',
+  `ordered_product_name` varchar(255) NOT NULL COMMENT '상품이름',
+  `ordered_product_img` varchar(255) NOT NULL COMMENT '상품사진',
+  `ordered_product_count` int NOT NULL  COMMENT '상품 총 갯수',
+  `ordered_product_price` int NOT NULL  COMMENT '상품 총 가격',
+  PRIMARY KEY (`ordered_product_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ordered_product`
+--
+
+LOCK TABLES `ordered_product` WRITE;
+/*!40000 ALTER TABLE `ordered_product` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ordered_product` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `orders`
 --
 
@@ -146,7 +173,7 @@ DROP TABLE IF EXISTS `orders`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orders` (
   `order_code` int NOT NULL AUTO_INCREMENT COMMENT '주문일련번호',
-  `merchant_uid` varchar(45) DEFAULT NULL,
+  `merchant_uid` varchar(45) DEFAULT NULL COMMENT '주문번호',
   `order_state` enum('Y','N','D') DEFAULT 'D' COMMENT '주문상태 ( Y = 주문완료, N = 주문실패, D = 결제 대기)',
   `order_date` datetime NOT NULL COMMENT '주문날짜',
   `order_total_price` int DEFAULT NULL COMMENT '총가격',
