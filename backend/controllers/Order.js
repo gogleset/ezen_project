@@ -14,7 +14,6 @@ const utilHelper = require("../helper/UtillHelper");
 const regexHelper = require("../helper/regex_helper.js");
 
 module.exports = (app) => {
-<<<<<<< HEAD
   let dbcon = null;
 //  저장된 order 데이터 불러오기
   router.get("/order", async (req, res, next) => {
@@ -90,7 +89,6 @@ module.exports = (app) => {
     const impUid = req.post("imp_uid");
 
     /*  const odPdCnt = req.post('product_count');
-=======
     let dbcon = null;
 
     
@@ -141,7 +139,6 @@ module.exports = (app) => {
         const impUid = req.post('imp_uid');
         
        /*  const odPdCnt = req.post('product_count');
->>>>>>> 8ac53e6e52437ae79d77fa1aa3ba43644e986a6b
         const odPdPrice = req.post('product_price');
         const odPdCode = req.post('product_code');
         const odOdcode = req.post('order_code'); */
