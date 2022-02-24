@@ -4,137 +4,152 @@
 @description: menu HTML
  -->
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
-  <title>Document</title>
-  <!-- 웹폰트(한글) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
-
-  <!-- 폰트어썸 -->
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-    integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-  <!-- CSS 참조 -->
-  <link rel="stylesheet" href="../css/common.css" />
-  <link rel="stylesheet" href="../css/reset.css" />
-  <link rel="stylesheet" href="../css/headerfooter.css">
-  <link rel="stylesheet" href="../css/menu.css" />
-
-  <!-- sweetalert-->
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-
-<body>
-  <div class="container">
-    <div class="gnb">
-      <!-- menu-top 영역  -->
-      <div class="menu-top">
-        <div class="img-box">
-          <a href="#">
-            <img src="../img/headerfooter/btn_logo.png" alt="" />
-          </a>
-        </div>
-        <span class="tit">
-          <h1>Welcome!</h1>
-        </span>
-      </div>
-      <span class="menu-line"></span>
-      <div class="content">
-
-        <!-- menu-list 영역 -->
-        <ul class="menu-list">
-          <li class="menu1">
-            <span class="title">Brand</span>
-            <ul>
-              <li>
-                <a href="./intro.html" class="menu1-1"><span class="text">소개</span></a>
-              </li>
-              <li>
-                <a href="./location.html" class="menu1-2"><span class="text">오시는 길</span></a>
-              </li>
-            </ul>
-          </li>
-          <li class="menu2">
-            <span class="title">Menu</span>
-            <ul id="main-menu">
-              <a href="./product.html?cate=t">
-                <span class="text">케이크&티라미슈</span>
-              </a>
-              <a href="./product.html?cate=v">
-                <span class="text">빙수&파르페</span>
-              </a>
-              <a href="./product.html?cate=m">
-                <span class="text">마카롱&오믈렛</span>
-              </a>
-              <a href="./product.html?cate=c">
-                <span class="text">쿠키&파이</span>
-              </a>
-              <a href="./product.html?cate=b">
-                <span class="text">베이커리</span>
-              </a>
-            </ul>
-          </li>
-          <li class="menu3">
-            <span class="title">Comunity</span>
-            <ul>
-              <li>
-                <a href="#" class="menu3-1"><span class="text">이벤트</span></a>
-              </li>
-            </ul>
-          </li>
-          <li class="menu4">
-            <span class="title">My</span>
-            <ul>
-              <li>
-                <a href="#" class="menu4-1"><span class="text">장바구니</span></a>
-              </li>
-              <li>
-                <a href="#" class="menu4-2"><span class="text">주문내역</span></a>
-              </li>
-              <li>
-                <a href="#" class="menu4-3"><span class="text">나의 QnA</span></a>
-              </li>
-              <li>
-                <a id="signUpdate" class="menu4-4"><span class="text">회원정보 수정</span></a>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="../fake_data/menus.js"></script>
-  <script>
-    // 회원정보 수정 클릭시 파라미터 넘김
-    document.querySelector("#signUpdate").addEventListener("click", e => {
-      (async () => {
-        // ajax 결과가 저장될 json
-        let json = null;
-
-        // ajax 요청
-        try {
-          const response = await axios.post('/members/session');
-          json = response.data;
-          const member_id = json.item[0].member_id;
-          location.href = "/html/modification.html?member_id=" + member_id;
-        } catch {
-          Swal.fire({
-            text: '로그인중이 아닙니다.',
-            icon: 'error'
-          });
-          return;
-        }
-
-      })();
-    })
-  </script>
-</body>
-
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0" />
+   <title>Document</title>
+   <!-- 웹폰트(한글) -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+ 
+   <!-- 폰트어썸 -->
+   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+   <!-- CSS 참조 -->
+   <link rel="stylesheet" href="../css/common.css" />
+   <link rel="stylesheet" href="../css/reset.css" />
+   <link rel="stylesheet" href="../css/headerfooter.css">
+   <link rel="stylesheet" href="../css/menu.css" />
+ 
+   <!-- sweetalert-->
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ </head>
+ 
+ <body>
+   <div class="container">
+     <div class="gnb">
+       <!-- menu-top 영역  -->
+       <div class="menu-top">
+         <div class="img-box">
+           <a href="#">
+             <img src="../img/headerfooter/btn_logo.png" alt="" />
+           </a>
+         </div>
+         <span class="tit">
+           <h1>Welcome!</h1>
+         </span>
+       </div>
+       <span class="menu-line"></span>
+       <div class="content">
+ 
+         <!-- menu-list 영역 -->
+         <ul class="menu-list">
+           <li class="menu1">
+             <span class="title">Brand</span>
+             <ul>
+               <li>
+                 <a href="./intro.html" class="menu1-1"><span class="text">소개</span></a>
+               </li>
+               <li>
+                 <a href="./location.html" class="menu1-2"><span class="text">오시는 길</span></a>
+               </li>
+             </ul>
+           </li>
+           <li class="menu2">
+             <span class="title">Menu</span>
+             <ul id="main-menu">
+               <a href="./product.html?cate=t">
+                 <span class="text">케이크&티라미슈</span>
+               </a>
+               <a href="./product.html?cate=v">
+                 <span class="text">빙수&파르페</span>
+               </a>
+               <a href="./product.html?cate=m">
+                 <span class="text">마카롱&오믈렛</span>
+               </a>
+               <a href="./product.html?cate=c">
+                 <span class="text">쿠키&파이</span>
+               </a>
+               <a href="./product.html?cate=b">
+                 <span class="text">베이커리</span>
+               </a>
+             </ul>
+           </li>
+           <li class="menu3">
+             <span class="title">Comunity</span>
+             <ul>
+               <li>
+                 <a href="#" class="menu3-1"><span class="text">이벤트</span></a>
+               </li>
+             </ul>
+           </li>
+           <li class="menu4">
+             <span class="title">My</span>
+             <ul>
+               <li>
+                 <a class="menu4-1"><span class="text">장바구니</span></a>
+               </li>
+               <li>
+                 <a class="menu4-2"><span class="text">주문내역</span></a>
+               </li>
+               <li>
+                 <a class="menu4-3"><span class="text">나의 QnA</span></a>
+               </li>
+               <li>
+                 <a class="menu4-4"><span class="text">회원정보 수정</span></a>
+               </li>
+             </ul>
+           </li>
+         </ul>
+       </div>
+     </div>
+   </div>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+   <script src="../fake_data/menus.js"></script>
+   <script>
+     // 장바구니
+     document.querySelector(".menu4-1").addEventListener("click", e => {
+           location.href = "cart.html";
+     })
+ 
+     //주문내역
+     document.querySelector(".menu4-2").addEventListener("click", e => {
+           location.href = "ordered.html";
+     })
+ 
+     //나의Q&A
+     document.querySelector(".menu4-3").addEventListener("click", e => {
+           location.href = "qa.html";
+     })
+ 
+     // 회원정보 수정 클릭시 파라미터 넘김
+     document.querySelector(".menu4-4").addEventListener("click", e => {
+       (async () => {
+         // ajax 결과가 저장될 json
+         let json = null;
+ 
+         // ajax 요청
+         try {
+           const response = await axios.post('/members/session');
+           json = response.data;
+           const member_id = json.item[0].member_id;
+           location.href = "/html/modification.html?member_id=" + member_id;
+         } catch {
+           Swal.fire({
+             text: '로그인중이 아닙니다.',
+             icon: 'error'
+           });
+           return;
+         }
+ 
+       })();
+     })
+   </script>
+ </body>
+ 
+ </html>

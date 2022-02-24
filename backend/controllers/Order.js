@@ -135,30 +135,18 @@ module.exports = (app) => {
     const rcvAddr2 = req.post("receiver_addr2");
     const rcvAddr3 = req.post("receiver_addr3");
     const rcvEmail = req.post("receiver_email");
+    const rq_cancel = req.post('rq_cancel');
     const memberCode = sessionInfo.member_code;
     const impUid = req.post("imp_uid");
-
+    
     let json = null;
     try {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
       // 데이터 저장
-      const sql1 =
-        "INSERT INTO orders (merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, receiver_email, member_code, imp_uid) VALUES (?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-      const input_data1 = [
-        merchantUid,
-        orderState,
-        orderTtPrice,
-        rcvNm,
-        rcvPhone,
-        rcvAddr1,
-        rcvAddr2,
-        rcvAddr3,
-        rcvEmail,
-        memberCode,
-        impUid,
-      ];
+      const sql1 = "INSERT INTO orders (merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, receiver_email, rq_cancel, member_code, imp_uid) VALUES (?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      const input_data1 = [merchantUid, orderState, orderTtPrice, rcvNm, rcvPhone, rcvAddr1, rcvAddr2, rcvAddr3, rcvEmail, rq_cancel, memberCode, impUid,];
       const [result1] = await dbcon.query(sql1, input_data1);
 
       // 저장한 데이터를 출력

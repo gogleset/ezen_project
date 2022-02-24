@@ -5,559 +5,590 @@
  * 
  * 
  -->
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-    <title>Document</title>
-    <!-- 웹폰트(한글) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    <!-- 폰트어썸 -->
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-    <!-- 구글 마테리얼 아이콘 -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <!-- sweetalert-->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- CSS 참조 파일 -->
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/headerfooter.css">
-    <link rel="stylesheet" href="../css/payment.css">
-</head>
-
-<body>
-    <!-- 전체 콘테이너입니다 -->
-    <div class="container">
-        <!-- 상단 헤더를 표시합니다 -->
-        <div data-init="./inc/header.html"></div>
-        <!-- 내용부분입니다. -->
-        <section class="content">
-            <form id="payment_form" action="" name="payment_form" method="">
-                <!-- 내용 안쪽부분입니다. -->
-                <div class="inner-content min-height-payment">
-                    <!-- 제목부분입니다. -->
-                    <h1 class="cart-title title">주문서 작성</h1>
-                    <!-- 제목 안쪽 미결제 항목부분입니다. -->
-                    <div class="cart-sub-title">
-                        <span class="unpaid-count">상품정보</span>
-                    </div>
-
-
-
-                    <!-- 장바구니 목록을 카운트합니다. -->
-                    <div class="box-cart-content">
-
-                    </div>
-                </div>
-
-                <hr />
-
-                <div class="delivery-view">
-                    <h1>배송</h1>
-                    <label for="tel" class="labeltag">받는분 전화번호</label>
-                    <div class="input-100">
-                        <input type="text" name="tel" id="tel" class="form-control" placeholder="-는 뺴고 입력해주세요" />
-                    </div>
-                </div>
-
-                <div class="delivery-view">
-                    <label for="name" class="labeltag">받는분 이름</label>
-                    <div class="input-100">
-                        <input type="text" name="user_name" id="user_name" class="form-control" placeholder="홍길동" />
-                    </div>
-                </div>
-
-                <!-- 이메일-->
-                <div class="delivery-view">
-                    <label for="email" class="labeltag">결제자 이메일</label>
-                    <div class="input-100">
-                        <input type="email" name="email" id="email" class="form-control" placeholder="이메일 입력" />
-                    </div>
-                </div>
-
-                <div class="delivery-view">
-                    <label for="postcode" class="labeltag">주소지</label>
-                    <div class="flex">
-                        <div class="input-100">
-                            <input type="text" name="postcode" id="postcode" class="form-control justify"
-                                placeholder="우편번호" readonly />
-                        </div>
-                        <div class="input-100">
-                            <button type="button" onclick="sample3_execDaumPostcode()"
-                                class="form-control">우편번호찾기</button>
-                        </div>
-                    </div>
-                    <div class="input-100">
-                        <input type="text" name="address" id="address" class="form-control" placeholder="주소" readonly />
-                    </div>
-                    <div class="flex">
-                        <div class="input-100">
-                            <input type="text" name="detailAddress" id="detailAddress" class="form-control justify"
-                                placeholder="상세주소" />
-                        </div>
-                        <div class="input-100">
-                            <input type="text" name="extraAddress" id="extraAddress" class="form-control"
-                                placeholder="참고항목" readonly />
-                        </div>
-                    </div>
-                    <div id="wrap">
-                        <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap"
-                            style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1"
-                            onclick="foldDaumPostcode()" alt="접기 버튼">
-                    </div>
-                </div>
-                <hr />
-                <div class="form-group order-number">
-                    <h1>결제</h1>
-                    <div>주문번호: <span id="orderNumber"></span></div>
-                </div>
-                <!-- 장바구니 합계 부분입니다. -->
-                <div class="box-cart-total">
-                    <h2>장바구니 합계</h2>
-                    <hr>
-                    <!-- 갯수 박스들 입니다. -->
-                    <div class="box-total">
-                        <span class="prod-total">전체 상품 개수</span>
-                        <span class="prod-total-number pull-right">0개</span>
-                    </div>
-                    <hr>
-                    <div class="box-total">
-                        <span class="money-total">상품 금액</span>
-                        <span class="money-total-number pull-right">0원</span>
-                    </div>
-                    <hr>
-                    <div class="box-total">
-                        <span class="paid-money">결제 금액</span>
-                        <span class="paid-money-number pull-right">0원</span>
-                    </div>
-                    <hr style="margin-bottom: 0;">
-                    <!-- 결제 버튼 박스입니다. -->
-
-                    <input type="submit" value="00000원 결제하기" class="btn-common btn-cart-submit" id="btn-submit">
-
-                </div>
-            </form>
-        </section>
-
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="./assets/layout.js"></script>
-
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script>
-            // 우편번호 찾기 찾기 화면을 넣을 element
-            var element_wrap = document.getElementById('wrap');
-
-            function foldDaumPostcode() {
-                // iframe을 넣은 element를 안보이게 한다.
-                element_wrap.style.display = 'none';
-            }
-
-            function sample3_execDaumPostcode() {
-                // 현재 scroll 위치를 저장해놓는다.
-                var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
-                new daum.Postcode({
-                    oncomplete: function (data) {
-                        // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                        var addr = ''; // 주소 변수
-                        var extraAddr = ''; // 참고항목 변수
-
-                        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                            addr = data.roadAddress;
-                        } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                            addr = data.jibunAddress;
-                        }
-
-                        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                        if (data.userSelectedType === 'R') {
-                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                                extraAddr += data.bname;
-                            }
-                            // 건물명이 있고, 공동주택일 경우 추가한다.
-                            if (data.buildingName !== '' && data.apartment === 'Y') {
-                                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                            }
-                            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                            if (extraAddr !== '') {
-                                extraAddr = ' (' + extraAddr + ')';
-                            }
-                            // 조합된 참고항목을 해당 필드에 넣는다.
-                            document.getElementById("extraAddress").value = extraAddr;
-
-                        } else {
-                            document.getElementById("extraAddress").value = '';
-                        }
-
-                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                        document.getElementById('postcode').value = data.zonecode;
-                        document.getElementById("address").value = addr;
-                        // 커서를 상세주소 필드로 이동한다.
-                        document.getElementById("detailAddress").focus();
-
-                        // iframe을 넣은 element를 안보이게 한다.
-                        // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
-                        element_wrap.style.display = 'none';
-
-                        // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
-                        document.body.scrollTop = currentScroll;
-                    },
-                    // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
-                    onresize: function (size) {
-                        element_wrap.style.height = size.height + 'px';
-                    },
-                    width: '100%',
-                    height: '100%'
-                }).embed(element_wrap);
-
-                // iframe을 넣은 element를 보이게 한다.
-                element_wrap.style.display = 'block';
-            }
-        </script>
-        <script src="../js/regex_helper.js"></script>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-        <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-        <script>
-            // 단일 상품 결제
-            const params = new URLSearchParams(window.location.search);
-            const prod = params.get('prod');
-
-            let data = null;
-
-            if (prod) {
-                (async () => {
-                    try {
-                        const response = await axios.get(`/product/${prod}`)
-
-                        data = response.data.item[0];
-                    } catch (e) {
-                        console.log(e)
-                    };
-                    console.log(data)
-                    const boxCart = document.querySelector('.box-cart-content')
-                    boxCart.innerHTML = `<div class="box-cart div-center clearfix"><a href="#">
-                                  <img class="pull-left" src="${data.product_img}" alt="#">
-                              </a>
-                              <div class="box-cart-inner pull-right">
-                                  
-                                  <span class="box-cart-prod-name">${data.product_name}</span>
-                                  <span class="box-cart-money pull-right">${data.product_price}원</span>
-                                  <input type="button" class="btn-plus-01-on pull-right" value="+">
-                                  <span class="cart-count">1</span>
-                                  <input type="button" class="btn-minus-01-on pull-right" value="–">
-                              </div></div>`
-
-                    startPayment()
-
-                })();
-            } else {
-                (async () => {
-                    try {
-                        const response = await axios.get(`/cart`)
-                        data = response.data.item;
-                    } catch (e) {
-                        console.log(e)
-                    }
-
-                    console.log(data)
-
-                    data.map((v) => {
-                        console.log(v);
-                        let BoxCart = document.querySelector('.box-cart-content')
-                        BoxCart.innerHTML += `<div class="box-cart div-center clearfix"><a href="#">
-                                  <img class="pull-left" src="${v.product_img}" alt="#">
-                              </a>
-                              <div class="box-cart-inner pull-right">
-                                  
-                                  <span class="box-cart-prod-name">${v.product_name}</span>
-                                  <span class="box-cart-money pull-right">${v.product_price}원</span>
-                                  <input type="button" class="btn-plus-01-on pull-right" value="+">
-                                  <span class="cart-count">${v.product_count}</span>
-                                  <input type="button" class="btn-minus-01-on pull-right" value="–">
-                              </div></div>`
-                    })
-                    startPayment()
-                })()
-            }
-
-
-
-            function startPayment() {
-                // box-cart가 있는지 없는지 감지하는 변수입니다.
-                let content = document.querySelector(".inner-content .box-cart");
-                // // 상품 목록 박스입니다.
-                let boxMoney = document.querySelectorAll(".box-cart-money");
-
-                // // 상품 플러스 버튼입니다.
-                let btnPlus = document.querySelectorAll(".btn-plus-01-on");
-                // // 상품 마이너스 버튼입니다.
-                let btnMinus = document.querySelectorAll(".btn-minus-01-on");
-                // // 상품 갯수 입니다.
-                let countProdNum = document.querySelectorAll(".cart-count");
-                // 상품의 가격입니다.
-                let cartMoney = document.querySelectorAll(".box-cart-money");
-                // 서버로 보낼 가격입니다.
-                let submitMoney = document.querySelector(".btn-cart-submit").value;
-                // // 상품의 총 갯수입니다.
-                let count = 0;
-                // // 상품의 총 금액입니다.
-                let money = 0;
-                // 상품 갯수가 들어있는 배열입니다.
-                let countArray = [];
-                // 상품 가격이 들어있는 배열입니다.
-                let moneyArray = [];
-                // 이름배열
-                let totalNameLength = [];
-
-                // 상품목록이 있다면
-                if (content != null) {
-                    // box-cart-content의 자식 갯수를 파악합니다.
-                    let contentCount = document.querySelector(".box-cart-content").childElementCount;
-                    // console.log(contentCount);
-
-                    // // 상품 금액입니다.
-                    let cartMoney = document.querySelectorAll(".box-cart-money");
-                    // // 총 합산한 금액입니다.
-                    let totalMoney = document.querySelector(".money-total-number");
-                    // // 총 결제할 금액입니다.
-                    let payMoney = document.querySelector(".paid-money-number");
-                    // // 총 전체 상품 개수 입니다.
-                    let totalProdNum = document.querySelector(".prod-total-number");
-                    // // 총 전체 상품 이름.
-                    let totalName = document.querySelector("box-cart-prod-name");
-
-                    // 상품 추가/삭제버튼 이벤트입니다.
-                    btnPlus.forEach((v) => {
-                        v.addEventListener("click", (e) => {
-                            let prodNum = Number(v.nextElementSibling.innerHTML);
-                            prodNum++;
-                            v.nextElementSibling.innerHTML = prodNum;
-                            result();
-                        })
-                    })
-                    btnMinus.forEach((v) => {
-                        v.addEventListener("click", (e) => {
-                            let prodNum = Number(v.previousElementSibling.innerHTML);
-                            prodNum--
-                            if (prodNum <= 0) {
-                                prodNum = 1;
-                            }
-                            v.previousElementSibling.innerHTML = prodNum;
-                            result();
-                        })
-                    })
-
-                    const result = () => {
-                        countArray = [];
-                        moneyArray = [];
-                        count = 0;
-                        money = 0;
-                        submitMoney = document.querySelector(".btn-cart-submit");
-                        // 상품갯수을 재할당하여 초기화 합니다.
-                        countProdNum = document.querySelectorAll(".cart-count");
-                        // 상품의 갯수를 배열에 넣습니다.
-                        countProdNum.forEach((v) => {
-                            countArray.push(parseInt(v.innerHTML));
-                        })
-                        // 상품가격을 재할당하여 초기화 합니다.
-                        boxMoney = document.querySelectorAll(".box-cart-money");
-                        // 상품의 가격을 배열에 넣습니다.
-                        boxMoney.forEach((v) => {
-                            moneyArray.push(parseInt(v.innerHTML));
-                        })
-
-                        // 전체상품의 총 갯수는
-                        countArray.forEach((v) => {
-                            count += v
-                        })
-                        console.log(count);
-                        // 전체상품의 총 가격은
-                        moneyArray.forEach((v, i) => {
-                            money += moneyArray[i] * countArray[i]
-                        })
-                        console.log(money);
-                        // 장바구니 합계에 출력됩니다.
-                        totalProdNum.innerHTML = count + "개";
-                        totalMoney.innerHTML = money + "원";
-                        payMoney.innerHTML = parseInt(money + (money / 100)) + "원";
-                        // 서버로 보낼 가격입니다.
-                        submitMoney.setAttribute("value", `${parseInt(money + (money / 100))}원 결제하기`)
-                        iamPort_total_price = parseInt(money + (money / 100));
-
-
-                        totalName = document.querySelectorAll(".box-cart-prod-name");
-
-                        totalName.forEach((v) => {
-                            totalNameLength += v.innerHTML + ", ";
-                        })
-
-                        // 끝 ", " 문자열을 제거
-                        totalNameLength = totalNameLength.substring(0, totalNameLength.length - 2);
-
-                    }
-                    result();
-                }
-
-
-
-                const merchant_uid = 'merchant_' + new Date().getTime();
-
-                //주문번호
-                document.getElementById("orderNumber").innerHTML = merchant_uid
-
-                document.querySelector("#payment_form").addEventListener("submit", e => {
-                    e.preventDefault();
-                    const regexHelper = new RegexHelper();
-
-                    //연락처 유효성 검사
-                    if (!regexHelper.value("#tel", "받는분 연락처를 입력하세요.")) {
-                        return false;
-                    }
-                    if (!regexHelper.phone("#tel", "받는분 연락처가 잘못되었습니다.")) {
-                        return false;
-                    }
-
-                    //이름 유효성 검사
-                    if (!regexHelper.value("#user_name", "받는분 이름을 입력하세요.")) {
-                        return false;
-                    }
-                    if (!regexHelper.min_length("#user_name", 2, "이름은 최소 2자 이상 입력 가능합니다.")) {
-                        return false;
-                    }
-                    if (!regexHelper.max_length("#user_name", 20, "이름은 최대 20자 까지만 입력 가능합니다.")) {
-                        return false;
-                    }
-                    if (!regexHelper.kor("#user_name", "이름은 한글만 입력 가능합니다.")) {
-                        return false;
-                    }
-
-                    //이메일 유효성 검사
-                    if (!regexHelper.value("#email", "이메일을 입력하세요.")) {
-                        return false;
-                    }
-                    if (!regexHelper.email("#email", "이메일 주소가 잘못되었습니다.")) {
-                        return false;
-                    }
-
-                    //우편번호 유효성 검사
-                    if (!regexHelper.value("#postcode", "받는분의 우편번호를 입력하세요.")) {
-                        return false;
-                    }
-                    if (!regexHelper.value("#address", "받는분의 주소를 입력하세요.")) {
-                        return false;
-                    }
-                    if (!regexHelper.value("#detailAddress", "받는분의 상세주소를 입력하세요.")) {
-                        return false;
-                    }
-
-                    //에이싱크로 넘겨줄 값 적어놔야됨
-                    const user_tel = document.getElementById("tel").value;
-                    const user_name = document.getElementById("user_name").value;
-                    const payer_email = document.getElementById("email").value;
-                    const user_postCord = document.getElementById("postcode").value;
-                    const user_address = document.getElementById("address").value + " " + document.getElementById("detailAddress").value;
-
-                    //order테이블에 데이터 저장 상태값은 D 고정
-                    (async () => {
-                        let json = null;
-                        try {
-                            const response = await axios.post("/order", {
-                                merchant_uid: merchant_uid,
-                                order_state: "D",
-                                order_date: new Date(),
-                                order_total_price: iamPort_total_price,
-                                receiver_name: user_name,
-                                receiver_phone: user_tel,
-                                receiver_addr1: document.getElementById("postcode").value,
-                                receiver_addr2: document.getElementById("address").value,
-                                receiver_addr3: document.getElementById("detailAddress").value,
-                                receiver_email: payer_email,
-                                imp_uid: null,
-                                rq_cancel: "N"
-                            });
-                        } catch (error) {
-                            const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
-                            Swal.fire({
-                                text: errorMsg,
-                                icon: "error"
-                            })
-                            return;
-                        }
-                    })();
-                    let productNum = Array.from(document.querySelectorAll(".cart-count")).map((v) => {
-                        return parseInt(v.innerHTML);
-                    });
-                    console.log(productNum);
-                    //주문번호를 키값으로 데이터 갯수만큼 상품저장
-                    data.map((v, i) => {
-                        (async () => {
-                            let json = null;
-                            try {
-                                const response = await axios.post("/cart/save", {
-                                    merchant_uid: merchant_uid,
-                                    ordered_product_name: v.product_name,
-                                    ordered_product_img: v.product_img,
-                                    ordered_product_count: productNum[i],
-                                    ordered_product_price: v.product_price
-                                });
-                            } catch (error) {
-                                const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
-                                Swal.fire({
-                                    text: errorMsg,
-                                    icon: "error"
-                                })
-                                return;
-                            }
-                        })();
-                    })
-
-                    Swal.fire({
-                        text: "아임포트 결제페이지로 넘어갑니다.",
-                        icon: 'success',
-                        confirmButtonText: '확인'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            IMP.init('imp13107667');
-                            IMP.request_pay({
-                                pg: 'html5_inicis', // version 1.1.0부터 지원.
-                                pay_method: 'card',
-                                merchant_uid: merchant_uid,
-                                name: totalNameLength,
-                                amount: iamPort_total_price, //판매 가격
-                                buyer_email: payer_email,
-                                buyer_name: user_name,
-                                buyer_tel: user_tel,
-                                buyer_addr: user_address,
-                                buyer_postcode: user_postCord,
-                                m_redirect_url: "http://" + `${window.location.host}` + "/html/order_confirm.html" //도메인이 없어서 추후에 도메인이 정해지면 도메인페이지로 설정
-                            }, function (rsp) { //m_redirect_url 있으면 뒤에 콜백함수가 실행이 안됨....................
-                                if (!rsp.success) {
-                                    var msg = '결제에 실패하였습니다.';
-                                    msg += '에러내용 : ' + rsp.error_msg;
-                                    Swal.fire({
-                                        text: msg,
-                                        icon: 'error',
-                                        confirmButtonText: '확인'
-                                    })
-                                }
-
-                            });
-                        }
-                    });
-                });
-            }
-        </script>
-</body>
-
-</html>
+ <!DOCTYPE html>
+ <html lang="en">
+ 
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+     <title>Document</title>
+     <!-- 웹폰트(한글) -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+     <!-- 폰트어썸 -->
+     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+     <!-- 구글 마테리얼 아이콘 -->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ 
+     <!-- sweetalert-->
+     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <!-- CSS 참조 파일 -->
+     <link rel="stylesheet" href="../css/common.css">
+     <link rel="stylesheet" href="../css/reset.css">
+     <link rel="stylesheet" href="../css/headerfooter.css">
+     <link rel="stylesheet" href="../css/payment.css">
+ </head>
+ 
+ <body>
+     <!-- 전체 콘테이너입니다 -->
+     <div class="container">
+         <!-- 상단 헤더를 표시합니다 -->
+         <div data-init="./inc/header.html"></div>
+         <!-- 내용부분입니다. -->
+         <section class="content">
+             <form id="payment_form" action="" name="payment_form" method="">
+                 <!-- 내용 안쪽부분입니다. -->
+                 <div class="inner-content min-height-payment">
+                     <!-- 제목부분입니다. -->
+                     <h1 class="cart-title title">주문서 작성</h1>
+                     <!-- 제목 안쪽 미결제 항목부분입니다. -->
+                     <div class="cart-sub-title">
+                         <span class="unpaid-count">상품정보</span>
+                     </div>
+ 
+ 
+ 
+                     <!-- 장바구니 목록을 카운트합니다. -->
+                     <div class="box-cart-content">
+ 
+                     </div>
+                 </div>
+ 
+                 <hr />
+ 
+                 <div class="delivery-view">
+                     <h1>배송</h1>
+                     <label for="tel" class="labeltag">받는분 전화번호</label>
+                     <div class="input-100">
+                         <input type="text" name="tel" id="tel" class="form-control" placeholder="-는 뺴고 입력해주세요" />
+                     </div>
+                 </div>
+ 
+                 <div class="delivery-view">
+                     <label for="name" class="labeltag">받는분 이름</label>
+                     <div class="input-100">
+                         <input type="text" name="user_name" id="user_name" class="form-control" placeholder="홍길동" />
+                     </div>
+                 </div>
+ 
+                 <!-- 이메일-->
+                 <div class="delivery-view">
+                     <label for="email" class="labeltag">결제자 이메일</label>
+                     <div class="input-100">
+                         <input type="email" name="email" id="email" class="form-control" placeholder="이메일 입력" />
+                     </div>
+                 </div>
+ 
+                 <div class="delivery-view">
+                     <label for="postcode" class="labeltag">주소지</label>
+                     <div class="flex">
+                         <div class="input-100">
+                             <input type="text" name="postcode" id="postcode" class="form-control justify"
+                                 placeholder="우편번호" readonly />
+                         </div>
+                         <div class="input-100">
+                             <button type="button" onclick="sample3_execDaumPostcode()"
+                                 class="form-control">우편번호찾기</button>
+                         </div>
+                     </div>
+                     <div class="input-100">
+                         <input type="text" name="address" id="address" class="form-control" placeholder="주소" readonly />
+                     </div>
+                     <div class="flex">
+                         <div class="input-100">
+                             <input type="text" name="detailAddress" id="detailAddress" class="form-control justify"
+                                 placeholder="상세주소" />
+                         </div>
+                         <div class="input-100">
+                             <input type="text" name="extraAddress" id="extraAddress" class="form-control"
+                                 placeholder="참고항목" readonly />
+                         </div>
+                     </div>
+                     <div id="wrap">
+                         <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap"
+                             style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1"
+                             onclick="foldDaumPostcode()" alt="접기 버튼">
+                     </div>
+                 </div>
+                 <hr />
+                 <div class="form-group order-number">
+                     <h1>결제</h1>
+                     <div>주문번호: <span id="orderNumber"></span></div>
+                 </div>
+                 <!-- 장바구니 합계 부분입니다. -->
+                 <div class="box-cart-total">
+                     <h2>장바구니 합계</h2>
+                     <hr>
+                     <!-- 갯수 박스들 입니다. -->
+                     <div class="box-total">
+                         <span class="prod-total">전체 상품 개수</span>
+                         <span class="prod-total-number pull-right">0개</span>
+                     </div>
+                     <hr>
+                     <div class="box-total">
+                         <span class="money-total">상품 금액</span>
+                         <span class="money-total-number pull-right">0원</span>
+                     </div>
+                     <hr>
+                     <div class="box-total">
+                         <span class="paid-money">결제 금액</span>
+                         <span class="paid-money-number pull-right">0원</span>
+                     </div>
+                     <hr style="margin-bottom: 0;">
+                     <!-- 결제 버튼 박스입니다. -->
+ 
+                     <input type="submit" value="00000원 결제하기" class="btn-common btn-cart-submit" id="btn-submit">
+ 
+                 </div>
+             </form>
+         </section>
+ 
+         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+         <script src="./assets/layout.js"></script>
+ 
+         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+         <script>
+             // 우편번호 찾기 찾기 화면을 넣을 element
+             var element_wrap = document.getElementById('wrap');
+ 
+             function foldDaumPostcode() {
+                 // iframe을 넣은 element를 안보이게 한다.
+                 element_wrap.style.display = 'none';
+             }
+ 
+             function sample3_execDaumPostcode() {
+                 // 현재 scroll 위치를 저장해놓는다.
+                 var currentScroll = Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+                 new daum.Postcode({
+                     oncomplete: function (data) {
+                         // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+ 
+                         // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                         // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                         var addr = ''; // 주소 변수
+                         var extraAddr = ''; // 참고항목 변수
+ 
+                         //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                         if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                             addr = data.roadAddress;
+                         } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                             addr = data.jibunAddress;
+                         }
+ 
+                         // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                         if (data.userSelectedType === 'R') {
+                             // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                             // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                             if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                                 extraAddr += data.bname;
+                             }
+                             // 건물명이 있고, 공동주택일 경우 추가한다.
+                             if (data.buildingName !== '' && data.apartment === 'Y') {
+                                 extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                             }
+                             // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                             if (extraAddr !== '') {
+                                 extraAddr = ' (' + extraAddr + ')';
+                             }
+                             // 조합된 참고항목을 해당 필드에 넣는다.
+                             document.getElementById("extraAddress").value = extraAddr;
+ 
+                         } else {
+                             document.getElementById("extraAddress").value = '';
+                         }
+ 
+                         // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                         document.getElementById('postcode').value = data.zonecode;
+                         document.getElementById("address").value = addr;
+                         // 커서를 상세주소 필드로 이동한다.
+                         document.getElementById("detailAddress").focus();
+ 
+                         // iframe을 넣은 element를 안보이게 한다.
+                         // (autoClose:false 기능을 이용한다면, 아래 코드를 제거해야 화면에서 사라지지 않는다.)
+                         element_wrap.style.display = 'none';
+ 
+                         // 우편번호 찾기 화면이 보이기 이전으로 scroll 위치를 되돌린다.
+                         document.body.scrollTop = currentScroll;
+                     },
+                     // 우편번호 찾기 화면 크기가 조정되었을때 실행할 코드를 작성하는 부분. iframe을 넣은 element의 높이값을 조정한다.
+                     onresize: function (size) {
+                         element_wrap.style.height = size.height + 'px';
+                     },
+                     width: '100%',
+                     height: '100%'
+                 }).embed(element_wrap);
+ 
+                 // iframe을 넣은 element를 보이게 한다.
+                 element_wrap.style.display = 'block';
+             }
+         </script>
+         <script src="../js/regex_helper.js"></script>
+         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+         <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+         <script>
+             // 단일 상품 결제
+             const params = new URLSearchParams(window.location.search);
+             const prod = params.get('prod');
+ 
+             let data = null;
+ 
+             if (prod) {
+                 (async () => {
+                     try {
+                         const response = await axios.get(`/product/${prod}`)
+ 
+                         data = response.data.item[0];
+                     } catch (e) {
+                         console.log(e)
+                     };
+                     console.log(data)
+                     const boxCart = document.querySelector('.box-cart-content')
+                     boxCart.innerHTML = `<div class="box-cart div-center clearfix"><a href="#">
+                                   <img class="pull-left" src="${data.product_img}" alt="#">
+                               </a>
+                               <div class="box-cart-inner pull-right">
+                                   
+                                   <span class="box-cart-prod-name">${data.product_name}</span>
+                                   <span class="box-cart-money pull-right">${data.product_price}원</span>
+                                   <input type="button" class="btn-plus-01-on pull-right" value="+">
+                                   <span class="cart-count">1</span>
+                                   <input type="button" class="btn-minus-01-on pull-right" value="–">
+                               </div></div>`
+ 
+                     startPayment()
+ 
+                 })();
+             } else {
+                 (async () => {
+                     try {
+                         const response = await axios.get(`/cart`)
+                         data = response.data.item;
+                     } catch (e) {
+                         console.log(e)
+                     }
+ 
+                     console.log(data)
+ 
+                     data.map((v) => {
+                         console.log(v);
+                         let BoxCart = document.querySelector('.box-cart-content')
+                         BoxCart.innerHTML += `<div class="box-cart div-center clearfix"><a href="#">
+                                   <img class="pull-left" src="${v.product_img}" alt="#">
+                               </a>
+                               <div class="box-cart-inner pull-right">
+                                   
+                                   <span class="box-cart-prod-name">${v.product_name}</span>
+                                   <span class="box-cart-money pull-right">${v.product_price}원</span>
+                                   <input type="button" class="btn-plus-01-on pull-right" value="+">
+                                   <span class="cart-count">${v.product_count}</span>
+                                   <input type="button" class="btn-minus-01-on pull-right" value="–">
+                               </div></div>`
+                     })
+                     startPayment()
+                 })()
+             }
+ 
+ 
+ 
+             function startPayment() {
+                 // box-cart가 있는지 없는지 감지하는 변수입니다.
+                 let content = document.querySelector(".inner-content .box-cart");
+                 // // 상품 목록 박스입니다.
+                 let boxMoney = document.querySelectorAll(".box-cart-money");
+ 
+                 // // 상품 플러스 버튼입니다.
+                 let btnPlus = document.querySelectorAll(".btn-plus-01-on");
+                 // // 상품 마이너스 버튼입니다.
+                 let btnMinus = document.querySelectorAll(".btn-minus-01-on");
+                 // // 상품 갯수 입니다.
+                 let countProdNum = document.querySelectorAll(".cart-count");
+                 // 상품의 가격입니다.
+                 let cartMoney = document.querySelectorAll(".box-cart-money");
+                 // 서버로 보낼 가격입니다.
+                 let submitMoney = document.querySelector(".btn-cart-submit").value;
+                 // // 상품의 총 갯수입니다.
+                 let count = 0;
+                 // // 상품의 총 금액입니다.
+                 let money = 0;
+                 // 상품 갯수가 들어있는 배열입니다.
+                 let countArray = [];
+                 // 상품 가격이 들어있는 배열입니다.
+                 let moneyArray = [];
+                 // 이름배열
+                 let totalNameLength = [];
+ 
+                 // 상품목록이 있다면
+                 if (content != null) {
+                     // box-cart-content의 자식 갯수를 파악합니다.
+                     let contentCount = document.querySelector(".box-cart-content").childElementCount;
+                     // console.log(contentCount);
+ 
+                     // // 상품 금액입니다.
+                     let cartMoney = document.querySelectorAll(".box-cart-money");
+                     // // 총 합산한 금액입니다.
+                     let totalMoney = document.querySelector(".money-total-number");
+                     // // 총 결제할 금액입니다.
+                     let payMoney = document.querySelector(".paid-money-number");
+                     // // 총 전체 상품 개수 입니다.
+                     let totalProdNum = document.querySelector(".prod-total-number");
+                     // // 총 전체 상품 이름.
+                     let totalName = document.querySelector("box-cart-prod-name");
+ 
+                     // 상품 추가/삭제버튼 이벤트입니다.
+                     btnPlus.forEach((v) => {
+                         v.addEventListener("click", (e) => {
+                             let prodNum = Number(v.nextElementSibling.innerHTML);
+                             prodNum++;
+                             v.nextElementSibling.innerHTML = prodNum;
+                             result();
+                         })
+                     })
+                     btnMinus.forEach((v) => {
+                         v.addEventListener("click", (e) => {
+                             let prodNum = Number(v.previousElementSibling.innerHTML);
+                             prodNum--
+                             if (prodNum <= 0) {
+                                 prodNum = 1;
+                             }
+                             v.previousElementSibling.innerHTML = prodNum;
+                             result();
+                         })
+                     })
+ 
+                     const result = () => {
+                         countArray = [];
+                         moneyArray = [];
+                         count = 0;
+                         money = 0;
+                         submitMoney = document.querySelector(".btn-cart-submit");
+                         // 상품갯수을 재할당하여 초기화 합니다.
+                         countProdNum = document.querySelectorAll(".cart-count");
+                         // 상품의 갯수를 배열에 넣습니다.
+                         countProdNum.forEach((v) => {
+                             countArray.push(parseInt(v.innerHTML));
+                         })
+                         // 상품가격을 재할당하여 초기화 합니다.
+                         boxMoney = document.querySelectorAll(".box-cart-money");
+                         // 상품의 가격을 배열에 넣습니다.
+                         boxMoney.forEach((v) => {
+                             moneyArray.push(parseInt(v.innerHTML));
+                         })
+ 
+                         // 전체상품의 총 갯수는
+                         countArray.forEach((v) => {
+                             count += v
+                         })
+                         console.log(count);
+                         // 전체상품의 총 가격은
+                         moneyArray.forEach((v, i) => {
+                             money += moneyArray[i] * countArray[i]
+                         })
+                         console.log(money);
+                         // 장바구니 합계에 출력됩니다.
+                         totalProdNum.innerHTML = count + "개";
+                         totalMoney.innerHTML = money + "원";
+                         payMoney.innerHTML = parseInt(money + (money / 100)) + "원";
+                         // 서버로 보낼 가격입니다.
+                         submitMoney.setAttribute("value", `${parseInt(money + (money / 100))}원 결제하기`)
+                         iamPort_total_price = parseInt(money + (money / 100));
+ 
+ 
+                         totalName = document.querySelectorAll(".box-cart-prod-name");
+ 
+                         totalName.forEach((v) => {
+                             totalNameLength += v.innerHTML + ", ";
+                         })
+ 
+                         // 끝 ", " 문자열을 제거
+                         totalNameLength = totalNameLength.substring(0, totalNameLength.length - 2);
+ 
+                     }
+                     result();
+                 }
+ 
+ 
+ 
+                 const merchant_uid = 'merchant_' + new Date().getTime();
+ 
+                 //주문번호
+                 document.getElementById("orderNumber").innerHTML = merchant_uid
+ 
+                 document.querySelector("#payment_form").addEventListener("submit", e => {
+                     e.preventDefault();
+                     const regexHelper = new RegexHelper();
+ 
+                     //연락처 유효성 검사
+                     if (!regexHelper.value("#tel", "받는분 연락처를 입력하세요.")) {
+                         return false;
+                     }
+                     if (!regexHelper.phone("#tel", "받는분 연락처가 잘못되었습니다.")) {
+                         return false;
+                     }
+ 
+                     //이름 유효성 검사
+                     if (!regexHelper.value("#user_name", "받는분 이름을 입력하세요.")) {
+                         return false;
+                     }
+                     if (!regexHelper.min_length("#user_name", 2, "이름은 최소 2자 이상 입력 가능합니다.")) {
+                         return false;
+                     }
+                     if (!regexHelper.max_length("#user_name", 20, "이름은 최대 20자 까지만 입력 가능합니다.")) {
+                         return false;
+                     }
+                     if (!regexHelper.kor("#user_name", "이름은 한글만 입력 가능합니다.")) {
+                         return false;
+                     }
+ 
+                     //이메일 유효성 검사
+                     if (!regexHelper.value("#email", "이메일을 입력하세요.")) {
+                         return false;
+                     }
+                     if (!regexHelper.email("#email", "이메일 주소가 잘못되었습니다.")) {
+                         return false;
+                     }
+ 
+                     //우편번호 유효성 검사
+                     if (!regexHelper.value("#postcode", "받는분의 우편번호를 입력하세요.")) {
+                         return false;
+                     }
+                     if (!regexHelper.value("#address", "받는분의 주소를 입력하세요.")) {
+                         return false;
+                     }
+                     if (!regexHelper.value("#detailAddress", "받는분의 상세주소를 입력하세요.")) {
+                         return false;
+                     }
+ 
+                     //에이싱크로 넘겨줄 값 적어놔야됨
+                     const user_tel = document.getElementById("tel").value;
+                     const user_name = document.getElementById("user_name").value;
+                     const payer_email = document.getElementById("email").value;
+                     const user_postCord = document.getElementById("postcode").value;
+                     const user_address = document.getElementById("address").value + " " + document.getElementById("detailAddress").value;
+ 
+                     console.log(payer_email);
+ 
+                     //order테이블에 데이터 저장 상태값은 D 고정
+                     (async () => {
+                         let json = null;
+                         try {
+                             const response = await axios.post("/order", {
+                                 merchant_uid: merchant_uid,
+                                 order_state: "D",
+                                 order_date: new Date(),
+                                 order_total_price: iamPort_total_price,
+                                 receiver_name: user_name,
+                                 receiver_phone: user_tel,
+                                 receiver_addr1: document.getElementById("postcode").value,
+                                 receiver_addr2: document.getElementById("address").value,
+                                 receiver_addr3: document.getElementById("detailAddress").value,
+                                 receiver_email: payer_email,
+                                 imp_uid: null,
+                                 rq_cancel: "N"
+                             });
+                         } catch (error) {
+                             const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
+                             Swal.fire({
+                                 text: errorMsg,
+                                 icon: "error"
+                             })
+                             return;
+                         }
+                     })();
+                     let productNum = Array.from(document.querySelectorAll(".cart-count")).map((v) => {
+                         return parseInt(v.innerHTML);
+                     });
+                     console.log(productNum);
+                     console.log(data);
+ 
+                     //주문번호를 키값으로 데이터 갯수만큼 상품저장
+                     //단일상품일 경우
+                     if(prod){
+                         (async () => {
+                             let json = null;
+                             try {
+                                 const response = await axios.post("/cart/save", {
+                                     merchant_uid: merchant_uid,
+                                     ordered_product_name: data.product_name,
+                                     ordered_product_img: data.product_img,
+                                     ordered_product_count: productNum[0],
+                                     ordered_product_price: data.product_price
+                                 });
+                             } catch (error) {
+                                 console.log(error);
+                                 const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
+                                 Swal.fire({
+                                     text: errorMsg,
+                                     icon: "error"
+                                 })
+                                 return;
+                             }
+                         })();
+                     }
+                     //장바구니에서 데이터를 불러올 경우
+                     else{
+                         data.map((v, i) => {
+                         (async () => {
+                             let json = null;
+                             try {
+                                 const response = await axios.post("/cart/save", {
+                                     merchant_uid: merchant_uid,
+                                     ordered_product_name: v.product_name,
+                                     ordered_product_img: v.product_img,
+                                     ordered_product_count: productNum[i],
+                                     ordered_product_price: v.product_price
+                                 });
+                             } catch (error) {
+                                 const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
+                                 Swal.fire({
+                                     text: errorMsg,
+                                     icon: "error"
+                                 })
+                                 return;
+                             }
+                         })();
+                     })
+                     }
+ 
+                     Swal.fire({
+                         text: "아임포트 결제페이지로 넘어갑니다.",
+                         icon: 'success',
+                         confirmButtonText: '확인'
+                     }).then((result) => {
+                         if (result.isConfirmed) {
+                             IMP.init('imp13107667');
+ 
+                             IMP.request_pay({
+                                 pg: 'html5_inicis', // version 1.1.0부터 지원.
+                                 pay_method: 'card',
+                                 merchant_uid: merchant_uid,
+                                 name: totalNameLength,
+                                 amount: iamPort_total_price, //판매 가격
+                                 buyer_email: payer_email,
+                                 buyer_name: user_name,
+                                 buyer_tel: user_tel,
+                                 buyer_addr: user_address,
+                                 buyer_postcode: user_postCord,
+                                 m_redirect_url: "http://" + `${window.location.host}` + "/html/order_confirm.html" //도메인이 없어서 추후에 도메인이 정해지면 도메인페이지로 설정
+                             }, function (rsp) { //m_redirect_url 있으면 뒤에 콜백함수가 실행이 안됨....................
+                                 if (!rsp.success) {
+                                     var msg = '결제에 실패하였습니다.';
+                                     msg += '에러내용 : ' + rsp.error_msg;
+                                     Swal.fire({
+                                         text: msg,
+                                         icon: 'error',
+                                         confirmButtonText: '확인'
+                                     })
+                                 }
+ 
+                             });
+                         }
+                     });
+                 });
+             }
+         </script>
+ </body>
+ 
+ </html>
