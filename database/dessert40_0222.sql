@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `carts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `carts` (
   `cart_code` int NOT NULL AUTO_INCREMENT,
-  `product_count` varchar(45) DEFAULT NULL,
+  `product_count` int NOT NULL,
   `product_code` int NOT NULL,
   `member_code` int NOT NULL,
   PRIMARY KEY (`cart_code`),
@@ -185,7 +185,6 @@ CREATE TABLE `orders` (
   `receiver_email` varchar(255) DEFAULT NULL COMMENT '주문자 이메일',
   `imp_uid` varchar(45) DEFAULT NULL COMMENT '아임포트 결제번호',
   `rq_cancel` enum('Y','N') DEFAULT NULL COMMENT '결제취소요청 Y=취소요청, N=기본값',
-  `rq` enum('Q','A') DEFAULT NULL COMMENT '결제취소여부 Q=취소요청, A=취소',
   `member_code` int NOT NULL,
   PRIMARY KEY (`order_code`),
   KEY `member_code` (`member_code`),
