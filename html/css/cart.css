@@ -36,8 +36,14 @@
   border-radius: 9px;
   width: 95%;
   height: 150px;
-  background-color: rgb(236, 236, 236);
+/*   background-color: rgb(236, 236, 236); */
+  border: 1px solid rgb(236, 236, 236);
   margin-bottom: 10px;
+}
+
+/* 버튼 배경색을 없앱니다 */
+input, button{
+  background-color:transparent;
 }
 /* 제품 이미지부분입니다. */
 .box-cart img {
@@ -64,6 +70,7 @@
   display: block;
   margin-top: 25px;
   font-size: 15px;
+  text-align: center;
 }
 /* 상품 가격부분입니다. */
 .box-cart-money {
@@ -74,22 +81,13 @@
   bottom: 66px;
   font-size: 0.9em;
 }
-
-/* .box-cart-money {
-  margin-top: 40px;
-  margin-right: 30px;
-  position: absolute;
-  right: 72px;
-  bottom: 15px;
-  font-size: 0.9em;
-} */
 /* 상품 갯수 더하기 버튼입니다. */
 .btn-plus-01-on {
   font-size: 20px;
   position: absolute;
   right: 15px;
   bottom: 35px;
-  border: 1px solid rgb(236, 236, 236);
+  border: none;
 }
 /* 상품 갯수 빼기 버튼입니다. */
 .btn-minus-01-on {
@@ -97,7 +95,7 @@
   position: absolute;
   right: 64px;
   bottom: 37px;
-  border: 1px solid rgb(236, 236, 236);
+  border: none;
 }
 /* 상품 갯수 카운트글자입니다. */
 .cart-count {
@@ -114,16 +112,14 @@
 /* 변경 버튼의 css */
 
 .btn-basketModifyQuanity{
-  position: absolute;
+  margin-top: 73px;
+  margin-right: 20px;
   border: none;
 }
 
 .btn-basketModifyQuanity img{
   width: 50px;
   height: 26px;
-  position: relative;
-  top: 74px;
-  left: 89px;
 }
 
 /* 장바구니 합계 박스입니다. */
