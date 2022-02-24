@@ -15,3 +15,16 @@ table th{
     vertical-align: middle !important;
 }
 
+th, td {
+    line-height: 2em !important;
+    letter-spacing: 0.1em !important;
+}
+
+td{
+    text-indent: 10px;
+}
+
+/* 상품정보와 합계 테이블간 간격 */
+.prodTable{
+    margin-bottom: 2px;
+}

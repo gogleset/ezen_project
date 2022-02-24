@@ -15,7 +15,7 @@ const regexHelper = require("../helper/regex_helper.js");
 
 module.exports = (app) => {
   let dbcon = null;
-  //  저장된 order 데이터 불러오기
+  //  저장된 order 전체 데이터 불러오기
   router.get("/order", async (req, res, next) => {
     // 검색어 파라미터 받기
     const query = req.get("query");
@@ -69,6 +69,56 @@ module.exports = (app) => {
       dbcon.end();
     }
     res.sendJson({ pagenation: pagenation, item: json });
+  });
+
+  // order테이블에서 order코드로 데이터 조회
+  router.get("/order/:order", async (req, res, next) => {
+    const orderCode = req.get('order');
+
+    if (orderCode == null) {
+      return next(new Error(400));
+    }
+
+    let json = null;
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      // 전체 데이터 조회
+      let sql1 =
+        "SELECT o.merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, imp_uid, rq_cancel, m.member_code, member_name FROM orders o INNER JOIN members m ON o.member_code = m.member_code WHERE order_code = ?";
+
+      const [result1] = await dbcon.query(sql1, orderCode);
+
+      json = result1;
+    } catch (err) {
+      return next(err);
+    } finally {
+      dbcon.end();
+    }
+    res.sendJson({ item: json });
+  });
+
+  // ordered_product 테이블에서 주문번호로 데이터 조회
+  router.get('/prod/:getData', async (req, res, next) => {
+
+    const merchantUID = req.get("getData")
+    console.log(merchantUID)
+
+    let json = null;
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      const sql = "SELECT merchant_uid, ordered_product_name, ordered_product_img, ordered_product_count, ordered_product_price FROM ordered_product WHERE merchant_uid = ?";
+      const [result] = await dbcon.query(sql, merchantUID);
+      json = result;
+    } catch (err) {
+      return next(err);
+    }
+    res.sendJson({ 'item': json });
   });
 
   // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]

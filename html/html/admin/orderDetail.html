@@ -1,7 +1,7 @@
 <!--
-    @Filename: layout.css
-    @Author: 최진 (choij2494@gmail.com)
-    @description: The file to be used in the admin-index.html file.
+ * @filename  : orderDetail.html
+ * @author    : 임다정 (dazoo0221@gmail.com)
+ * @description : 주문 상세내역 html
 -->
 
 <!DOCTYPE html>
@@ -22,6 +22,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../../css/admin/layout.css">
+    <link rel="stylesheet" href="../../css/admin/orderDetail.css">
 </head>
 
 <body>
@@ -38,121 +39,161 @@
     <!-- 데이터 테이블 영역입니다. -->
     <div class="container table-container non-height">
         <span>
-            <h3>주문번호 : </h3>
+            <h3>|주문정보</h3>
         </span>
         <table class="table table-bordered table-hover table-condensed table-striped">
             <colgroup>
                 <col width="20%">
                 <col width="80%">
             </colgroup>
-            <thead>
-                <tr>
-                    <th>상품명</th>
-                    <td>생딸기 사보이 티라미수</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>주문상태</th>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <th>주문자명</th>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <th>주문자 ID</th>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <th>주문자 수량</th>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <th>주문 합계</th>
-                    <td>&nbsp;</td>
-                </tr>
+            <tbody class="orderInfo">
+
             </tbody>
         </table>
-        <!-- 데이터 테이블 영역입니다. -->
+
         <span>
-            <h3>결제정보</h3>
+            <h3>|상품정보</h3>
         </span>
-        <table class="table table-bordered table-hover table-condensed table-striped">
+        <table class="table table-bordered table-hover table-condensed table-striped prodTable">
             <colgroup>
-                <col width="30%">
-                <col width="30%">
+                <col width="55%">
                 <col width="15%">
                 <col width="15%">
-                <col width="10%">
+                <col width="15%">
             </colgroup>
             <thead>
                 <tr>
-                    <th>TID</th>
-                    <th>카드번호</th>
-                    <th>결제금액</th>
-                    <th>고객이름</th>
-                    <th>결과</th>
+                    <th class="text-center">상품명</th>
+                    <th class="text-center">판매가</th>
+                    <th class="text-center">수량</th>
+                    <th class="text-center">합계</bold></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
+            <tbody class="prodInfo">
+
             </tbody>
         </table>
+        <table class="table table-bordered table-hover table-condensed table-striped">
+            <tbody class="totalPrice">
+
+            </tbody>
+        </table>
+
         <!-- 데이터 테이블 영역입니다. -->
         <span>
-            <h3>배송지 정보</h3>
+            <h3>|배송지 정보</h3>
         </span>
         <table class="table table-bordered table-hover table-condensed table-striped">
             <colgroup>
                 <col width="20%">
                 <col width="80%">
             </colgroup>
-            <thead>
-                <tr>
-                    <th>수취인명</th>
-                    <td>홍길동</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>연락처</th>
-                    <td>010-1234-5678</td>
-                </tr>
-                <tr>
-                    <th>배송지</th>
-                    <td>&nbsp;</td>
-                </tr>
+            <tbody class="receiverInfo">
+
             </tbody>
         </table>
     </div>
-    <!-- 페이지 네이션 영역입니다. -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"
         integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/layout.js"></script>
+    <script src="../../js/number_utils.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        let order = params.get('order');
+        let getData = null;
+
+        // 주문정보, 배송지 정보 불러오기
+        (async () => {
+            try {
+                const response = await axios.get(`/order/${order}`)
+                data = response.data.item[0]
+                getData = data.merchant_uid;
+            } catch (e) {
+                Swal.fire({
+                    text: "서버와 접속이 실패했습니다.",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            };
+            console.log(data);
+
+            const orderInfo = document.querySelector('.orderInfo')
+            orderInfo.innerHTML = `<tr>
+                    <th class="text-center">주문번호</th>
+                    <td>${data.merchant_uid}</td>
+                </tr>
+                <tr>
+                    <th class="text-center">주문일자</th>
+                    <td>${data.order_date}</td>
+                </tr>
+                <tr>
+                    <th class="text-center">주문자</th>
+                    <td>${data.member_name}</td>
+                </tr>
+                <tr>
+                    <th class="text-center">주문상태</th>
+                    <td>${data.order_state}</td>
+                </tr>`
+
+            const totalPrice = document.querySelector('.totalPrice')
+            totalPrice.innerHTML = ` <td class="text-right"> 합계 : ${formatPrice(data.order_total_price)} 원</td>`
+
+            const receiverInfo = document.querySelector('.receiverInfo')
+            receiverInfo.innerHTML = `<tr>
+                    <th class="text-center">받으시는분</th>
+                    <td>${data.receiver_name}</td>
+                </tr>
+                <tr>
+                    <th class="text-center">우편번호</th>
+                    <td>${data.receiver_addr1}</td>
+                </tr>
+                <tr>
+                    <th class="text-center">주소</th>
+                    <td>${data.receiver_addr2} ${data.receiver_addr3}</td>
+                </tr>
+                <tr>
+                    <th class="text-center">휴대전화</th>
+                    <td>${data.receiver_phone}</td>
+                </tr>`
+
+            ProdInfo(getData)
+        })()
+
+        // 상품 정보 가져오기
+        async function ProdInfo(getData) {
+
+            let Data = null;
+
+            try {
+                console.log(getData)
+                const response = await axios.get(`/prod/${getData}`)
+                Data = response.data.item;
+            } catch (e) {
+                Swal.fire({
+                    text: "서버와 접속이 실패했습니다.",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            };
+            console.log(Data)
+
+            const prodInfo = document.querySelector('.prodInfo')
+            Data.map((v) => {
+                prodInfo.innerHTML += `<tr>
+                    <td class="text-center">${v.ordered_product_name}</td>
+                    <td class="text-center">${formatPrice((v.ordered_product_price / v.ordered_product_count))}</td>
+                    <td class="text-center">${v.ordered_product_count}</td>
+                    <td class="text-center">${formatPrice(v.ordered_product_price)}</td>
+                </tr>`
+            })
+
+        }
+    </script>
 
 </body>
 
