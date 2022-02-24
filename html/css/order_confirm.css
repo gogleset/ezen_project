@@ -11,38 +11,55 @@
     font-weight: bold;
 }
 
-.box-cart-prod {
-    width: 49%;
-    margin: 0;
-    margin-top: 5px;
-}
-
-.box-cart-money {
-    text-align: right;
-    width: 49%;
-    margin: 0;
-    position: absolute;
-    bottom: 125px;
-    right: 5px;
-}
-
-.cart-count {
-    position: absolute;
-    left: 60px;
-    bottom: 39px;
-}
-
-.box-cart-prod-name {
+.box-cart {
+    border-radius: 9px;
+    width: 95%;
+    height: 150px;
+    background-color: rgb(236, 236, 236);
+    margin-bottom: 10px;
+  }
+  /* 제품 이미지부분입니다. */
+  .box-cart img {
     display: block;
-    word-break: break-word;
-    width: 59%;
-}
-
-.cart-count-name {
+    height: 100%;
+    width: 150px;
+  }
+  /* 상품 상세 정보 박스입니다. */
+  .box-cart-inner {
+    display: block;
+    width: 50%;
+    height: 100%;
+    position: relative;
+  }
+  /* 상품명: 부분입니다. */
+  .box-cart-prod {
+    display: block;
+    margin-left: 10px;
+    margin-top: 25px;
     font-size: 15px;
+  }
+  /* ~~~~ 상품 이름이 올 부분입니다. */
+  .box-cart-prod-name {
+    display: block;
+    margin-top: 25px;
+    font-size: 15px;
+  }
+  /* 상품 가격부분입니다. */
+  .box-cart-money {
+    margin-top: 40px;
+    margin-right: 30px;
     position: absolute;
-    top: 90px;
-}
+    right: -9px;
+    bottom: 66px;
+    font-size: 0.9em;
+  }
+
+  .cart-count{
+      position: absolute;
+      top: 90px;
+      left: 105px;
+      width: 40px;
+  }
 
 
 /* 배송정보*/

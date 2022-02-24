@@ -52,34 +52,6 @@
                 <!-- 장바구니 목록을 카운트합니다. -->
                 <div class="box-cart-content">
 
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">ddddddddddddddddddddddddddddddddd</span>
-                            <span class="box-cart-money pull-right">100000원</span>
-                            <span class="cart-count-name">상품갯수:</span>
-                            <span class="cart-count">1</span>
-                        </div>
-                    </div>
-                    <div class="box-cart div-center clearfix">
-                        <!-- 상품이미지 부분입니다. -->
-                        <a href="#">
-                            <img class="pull-left" src="." alt="#">
-                        </a>
-                        <!-- 상품 정보 부분입니다. -->
-                        <div class="box-cart-inner pull-left">
-                            <span class="box-cart-prod pull-left">상품명:</span>
-                            <span class="box-cart-prod-name">~~~</span>
-                            <span class="box-cart-money pull-right">2원</span>
-                            <span class="cart-count-name">상품갯수:</span>
-                            <span class="cart-count">2</span>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="delivery-confirm">
@@ -133,31 +105,57 @@
         <script src="./assets/layout.js"></script>
 
         <script>
+            //http://192.168.55.95:3217/html/order_confirm.html?imp_uid=imp_807998726697&merchant_uid=merchant_1645608980100&imp_success=true
+            const url = new URL(window.location.href);
+
+            const urlParams = url.searchParams;
+            const merchant_uid = urlParams.get('merchant_uid');
+            const imp_uid = urlParams.get('imp_uid');
+            const imp_success = urlParams.get('imp_success');
+
+            //결제결과가 false면 결제페이지로 돌아간다.
+            if (imp_success == false) {
+                location.href("payment.html");
+            }
+
+            let json1 = null;
+            let json2 = null;
             (async () => {
                 try {
-                    const response = await axios.get(`/cart`)
-                    Data = response.data.item;
+                    const response = await axios.post(`/order_confirm`, {
+                        merchant_uid: merchant_uid,
+                        imp_uid: imp_uid
+                    })
+                    json1 = response.data.item1;
+                    [json2] = response.data.item2;
                 } catch (e) {
                     console.log(e)
                 }
 
-                console.log(Data)
+                console.log(json2)
 
-                Data.map((v) => {
+                console.log(json2.receiver_phone);
+                //배송 정보 확인
+                document.getElementById("orderer_phone").innerHTML = json2.receiver_phone;
+                document.getElementById("orderer_name").innerHTML = json2.receiver_name;
+                document.getElementById("orderer_addr").innerHTML = json2.receiver_addr1 + " " + json2.receiver_addr2 + " " + json2.receiver_addr3;
+                document.getElementById("orderer_email").innerHTML = json2.receiver_email;
+
+                json1.map((v) => {
                     console.log(v);
                     let BoxCart = document.querySelector('.box-cart-content')
                     BoxCart.innerHTML += `<div class="box-cart div-center clearfix"><a href="#">
-                                  <img class="pull-left" src="${v.product_img}" alt="#">
+                                  <img class="pull-left" src="${v.ordered_product_img}" alt="#">
                               </a>
                               <div class="box-cart-inner pull-right">
-                                  <span class="box-cart-prod-name">${v.product_name}</span>
-                                  <span class="box-cart-money pull-right">${v.product_price}원</span>
-                                  <span class="cart-count">${v.product_count}개</span>
+                                  <span class="box-cart-prod-name">${v.ordered_product_name}</span>
+                                  <span class="box-cart-money pull-right">${v.ordered_product_price}원</span>
+                                  <span class="cart-count">${v.ordered_product_count}개</span>
                               </div></div>`
                 })
                 startPayment()
             })()
-            
+
             function startPayment() {
                 // box-cart가 있는지 없는지 감지하는 변수입니다.
                 let content = document.querySelector(".inner-content .box-cart");
@@ -231,6 +229,8 @@
                     result();
                 }
             }
+
+
 
 
 

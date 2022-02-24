@@ -482,6 +482,7 @@
                                 receiver_addr1: document.getElementById("postcode").value,
                                 receiver_addr2: document.getElementById("address").value,
                                 receiver_addr3: document.getElementById("detailAddress").value,
+                                receiver_email: payer_email,
                                 imp_uid: null,
                                 rq_cancel: "N"
                             });
@@ -540,7 +541,7 @@
                                 buyer_tel: user_tel,
                                 buyer_addr: user_address,
                                 buyer_postcode: user_postCord,
-                                m_redirect_url: "http://192.168.55.95:3217/html/order_confirm.html" //도메인이 없어서 추후에 도메인이 정해지면 도메인페이지로 설정
+                                m_redirect_url: "http://" + `${window.location.host}` + "/html/order_confirm.html" //도메인이 없어서 추후에 도메인이 정해지면 도메인페이지로 설정
                             }, function (rsp) { //m_redirect_url 있으면 뒤에 콜백함수가 실행이 안됨....................
                                 if (!rsp.success) {
                                     var msg = '결제에 실패하였습니다.';

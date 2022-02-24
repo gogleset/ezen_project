@@ -149,8 +149,8 @@ CREATE TABLE `ordered_product` (
   `merchant_uid` varchar(45) NOT NULL COMMENT '주문번호',
   `ordered_product_name` varchar(255) NOT NULL COMMENT '상품이름',
   `ordered_product_img` varchar(255) NOT NULL COMMENT '상품사진',
-  `ordered_product_count` int NOT NULL  COMMENT '상품 총 갯수',
-  `ordered_product_price` int NOT NULL  COMMENT '상품 총 가격',
+  `ordered_product_count` int NOT NULL  COMMENT '상품하나의 총 갯수',
+  `ordered_product_price` int NOT NULL  COMMENT '상품하나의 총 가격',
   PRIMARY KEY (`ordered_product_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -182,6 +182,7 @@ CREATE TABLE `orders` (
   `receiver_addr1` char(5) DEFAULT NULL COMMENT '배송지 주소1(우편번호)',
   `receiver_addr2` varchar(255) DEFAULT NULL COMMENT '배송지 주소2(검색된 주소)',
   `receiver_addr3` varchar(255) DEFAULT NULL COMMENT '배송지 주소3(나머지 주소)',
+  `receiver_email` varchar(255) DEFAULT NULL COMMENT '주문자 이메일',
   `imp_uid` varchar(45) DEFAULT NULL COMMENT '아임포트 결제번호',
   `rq_cancel` enum('Y','N') DEFAULT NULL COMMENT '결제취소요청 Y=취소요청, N=기본값',
   `rq` enum('Q','A') DEFAULT NULL COMMENT '결제취소여부 Q=취소요청, A=취소',
