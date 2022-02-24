@@ -32,7 +32,10 @@ h1 {
 }
 
 
-/*상품정보 레이아웃*/
+/* 버튼 배경색을 없앱니다 */
+input{
+    background-color:transparent;
+  }
 
 
 /* 제목부분입니다. */
@@ -143,8 +146,7 @@ h1 {
     position: absolute;
     right: 15px;
     bottom: 20px;
-    background-color: rgb(236, 236, 236);
-    border: 1px solid rgb(236, 236, 236);
+    border: none;
 }
 
 
@@ -155,8 +157,7 @@ h1 {
     position: absolute;
     right: 64px;
     bottom: 21px;
-    background-color: rgb(236, 236, 236);
-    border: 1px solid rgb(236, 236, 236);
+    border: none;
 }
 
 
@@ -289,7 +290,7 @@ button:active {
 }
 
 
-/* 결제 */
+/* 결제 번호 영역 */
 
 .order-number h1 {
     padding-top: 30px
@@ -297,8 +298,12 @@ button:active {
 
 .order-number div {
     padding-left: 5px;
-    height: 60px;
+    height: 30px;
     font-size: 15px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 30px;
+    width: 70%;
+    
 }
 
 .text-align-right {

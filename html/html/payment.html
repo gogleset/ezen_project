@@ -44,6 +44,12 @@
                  <div class="inner-content min-height-payment">
                      <!-- 제목부분입니다. -->
                      <h1 class="cart-title title">주문서 작성</h1>
+                    
+                     <!-- 주문번호 -->
+                     <div class="form-group order-number">
+                        <!-- <h1>결제</h1> -->
+                        <div>주문번호: <span id="orderNumber"></span></div>
+                    </div>
                      <!-- 제목 안쪽 미결제 항목부분입니다. -->
                      <div class="cart-sub-title">
                          <span class="unpaid-count">상품정보</span>
@@ -112,11 +118,6 @@
                              style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1"
                              onclick="foldDaumPostcode()" alt="접기 버튼">
                      </div>
-                 </div>
-                 <hr />
-                 <div class="form-group order-number">
-                     <h1>결제</h1>
-                     <div>주문번호: <span id="orderNumber"></span></div>
                  </div>
                  <!-- 장바구니 합계 부분입니다. -->
                  <div class="box-cart-total">
