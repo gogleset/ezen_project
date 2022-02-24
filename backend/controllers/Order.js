@@ -15,6 +15,7 @@ const regexHelper = require("../helper/regex_helper.js");
 
 module.exports = (app) => {
   let dbcon = null;
+  let sessionInfo = req.session.memberInfo;
   //  저장된 order 전체 데이터 불러오기
   router.get("/order", async (req, res, next) => {
     // 검색어 파라미터 받기
@@ -56,6 +57,12 @@ module.exports = (app) => {
         args2.push(query);
       }
 
+      // 사용자 페이지에서 내 주문 내역 가지고 오기위한 조건문 추가
+      if(sessionInfo != null && sessionInfo.admin != 'Y') {
+        sql2 += " WHERE member_code = ?"
+        args2.push(sessionInfo.member_code);
+      }
+
       sql2 += " LIMIT ?, ?";
       args2.push(pagenation.offset);
       args2.push(pagenation.listCount);
@@ -68,7 +75,7 @@ module.exports = (app) => {
     } finally {
       dbcon.end();
     }
-    res.sendJson({ pagenation: pagenation, item: json });
+    res.sendJson({ 'pagenation': pagenation, 'item': json });
   });
 
   // order테이블에서 order코드로 데이터 조회
@@ -123,7 +130,6 @@ module.exports = (app) => {
 
   // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]
   router.post("/order", async (req, res, next) => {
-    let sessionInfo = req.session.memberInfo;
 
     const merchantUid = req.post("merchant_uid");
     const orderState = req.post("order_state");

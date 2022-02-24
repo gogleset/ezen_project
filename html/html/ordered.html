@@ -40,21 +40,9 @@ cart html 구조 파일입니다.  -->
                 <!-- 박스 부분 -->
                 <a href="#">
                     <!-- 값이 없다면 숨겨질 주문목록 박스입니다. -->
-                    <div class="order-box clearfix">
+                    <div class="order-container">
                         <!-- 박스 안 내용 부분입니다. -->
-                        <img class="pull-left" src="../img/icon_null.png" alt="주문내역">
-                        <div class="order-list pull-left">
-                            <p class="order-list-in pull-left">주문번호 :&nbsp;</p>
-                            <p class="order-number">123123123123122131231231231233121312312321321213213</p>
-                        </div>
-                        <div class="order-list pull-left">
-                            <p class="order-list-in pull-left">주문날짜 :&nbsp;</p>
-                            <p class="order-date">123123123123122131231231231233121312312321312</p>
-                        </div>
-                        <div class="order-list pull-left">
-                            <p class="order-prod pull-left">상품명 :&nbsp;</p>
-                            <p class="order-product">1231231231231221312312312312312331213123123123322132123</p>
-                        </div>
+
                     </div>
                 </a>
                 <!-- 값이 없다면 나올 로고 이미지의 부분입니다. -->
@@ -70,15 +58,50 @@ cart html 구조 파일입니다.  -->
 
 
     <script>
-        // 값을 가져올 데이터 베이스가 필요합니다. 값을 가져오면 실행합니다.
-        // (async () => {
-        //     try{
-        //         const data = await post 
-        //     }
-        //     catch(e){
-        //         console.log(e);
-        //     }
-        // })
+        (async()=>{
+
+            // orders 테이블에서 데이터 가져오기
+            let data = null;
+            try {
+                const response = await axios.get(`/order`)
+                data = response.data.item
+            }catch(e){
+                Swal.fire({
+                    text: "서버와 접속이 실패했습니다.",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            };
+
+            // 데이터 여부에 따라 로고 노출 설정
+            let logo = document.querySelector('.not-value-logo')
+
+            if(data.length == 0){ // 데이터가 없을 경우 로고 노출
+                logo.classList.add('display-on');
+                logo.classList.remove('display-off');
+            } else { // 데이터가 있을 경우 로고 off
+                logo.classList.remove('display-on');
+                logo.classList.add('display-off');
+            } 
+
+            // 데이터 출력
+            let orderBox = document.querySelector(".order-container")
+            data.map((v) => {
+                orderBox.innerHTML += `<div class="order-box clearfix"><img class="pull-left" src="../img/icon_null.png" alt="주문내역">
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">주문번호 :</p>
+                            <p class="order-number">${v.merchant_uid}</p>
+                        </div>
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">주문날짜 :</p>
+                            <p class="order-date">${v.order_date}</p>
+                        </div>
+                        <div class="order-list pull-left">
+                            <p class="order-list-in pull-left">합계금액 : &nbsp;</p>
+                            <p class="order-product">&nbsp;${v.order_total_price} 원</p>
+                        </div></div>`
+            })
+        })();
     </script>
 </body>
 
