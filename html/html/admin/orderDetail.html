@@ -66,7 +66,8 @@
                     <th class="text-center">상품명</th>
                     <th class="text-center">판매가</th>
                     <th class="text-center">수량</th>
-                    <th class="text-center">합계</bold></th>
+                    <th class="text-center">합계</bold>
+                    </th>
                 </tr>
             </thead>
             <tbody class="prodInfo">
@@ -121,6 +122,25 @@
                 });
             };
             console.log(data);
+
+            // 주문 상태
+            switch (data.order_state) {
+                case "Y":
+                    data.order_state = "결제 완료"
+                    break;
+                case "D":
+                    data.order_state = "결제 대기"
+                    break;
+                case "N":
+                    data.order_state = "결제 실패"
+                    break;
+                case "C":
+                    data.order_state = "결제 취소"
+                default:
+                    console.log("--");
+                    break;
+
+            }
 
             const orderInfo = document.querySelector('.orderInfo')
             orderInfo.innerHTML = `<tr>
