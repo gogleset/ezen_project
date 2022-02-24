@@ -11,10 +11,6 @@
     max-width: 1100px;
 }
 
-.title{
-    margin: 0 -5%;
-}
-
 .record{
     width: 100%;
     margin: 10px 0;
@@ -31,13 +27,14 @@
 
 /* 버튼 공통속성 */
 .btn{
-    padding: 3px 11px;
+    padding: 5px 11px;
     font-size: 0.6em;
     font-weight: bold;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.897);
     border-radius: 5px;
-    margin-top: 8px;
+    margin-top: 3px;
+    margin-right: 5px;
 }
 
 /* 글쓰기 버튼에만 별도 적용*/
@@ -46,19 +43,28 @@
     padding: 7px 10px;
 }
 
+/* 게시글 제목 글자 영역 설정 */
 .list-tit{
     font-size: 0.9em;
 }
 
+/* 게시글 내용 글자 영역 설정 */
 .list-desc{
     font-size: 0.7em;
-    margin: 10px 0;
+    margin: 13px 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+/* 게시글 1개 영역당 밑줄 설정 */
+
 li{
     margin-top: 10px;
     border-bottom: 2px solid #ccc;
+}
+
+li:first-child{
+    padding-top: 10px;
+    border-top: 2px solid #ccc;
 }

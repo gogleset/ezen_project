@@ -77,7 +77,7 @@ module.exports = (app) => {
         res.sendJson({ 'pagenation': pagenation, 'item': json });
     });
 
-    // 특정 데이터 조회  
+    // 특정 데이터 조회 
     router.get('/qna/:qnaNm', async (req, res, next) => {
         const qnaNm = req.get('qnaNm')
 
@@ -91,14 +91,15 @@ module.exports = (app) => {
             await dbcon.connect();
 
             // qnas 테이블에서 qna_code 와 일치하는 dt 조회
-            let sql1 = "SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_id FROM qnas q inner join members m on q.member_code = m.member_code where qna_code = ?";
-
-            // 
+            let sql1 = "SELECT qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, member_code FROM qnas where qna_code = ?";
+            let input_data = [qnaNm];
+            
             if (sessionInfo != null) {
-                sql1 += " AND m.member_id = 'woody'";  // 테스트 중인 값....
+                sql1 += " AND member_code = ?";
+                input_data.push(sessionInfo.member_code);
             }
 
-            const [result1] = await dbcon.query(sql1, qnaNm);
+            const [result1] = await dbcon.query(sql1, input_data);
 
             json = result1;
 
@@ -122,23 +123,20 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            // qnas 테이블에서 세션에 저장된 ID와 일치하는 게시글 조회하는 sql문
-            let sql1 = "SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_id FROM qnas q inner join members m on q.member_code = m.member_code where m.member_code = '1'";
 
-            const [result1] = await dbcon.query(sql1); //(sql1, sessionInfo.member_code) 
+            // qnas 테이블에서 세션에 저장된 ID와 일치하는 게시글 조회하는 sql문
+            let sql1 = "SELECT qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date FROM qnas WHERE member_code = ?";
+
+            const [result1] = await dbcon.query(sql1, sessionInfo.member_code);
 
             json = result1;
 
-            logger.debug(json)
 
         } catch (err) {
             return next(err);
         } finally {
             dbcon.end();
         }
-
-        logger.debug(json)
-        logger.debug('연결끄으으읏~!~!~!')
         res.sendJson({ 'item': json });
     });
 

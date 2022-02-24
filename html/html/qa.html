@@ -4,96 +4,97 @@
 @description: qa HTML
  -->
 
- <!DOCTYPE html>
- <html lang="en">
- 
- <head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-     <title>qa</title>
-     <!-- 웹폰트(한글) -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
- 
-     <!-- 폰트어썸 -->
-     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
-         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-     <!-- sweetalert-->
-     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-     <!-- CSS 참조 -->
-     <link rel="stylesheet" href="../css/common.css">
-     <link rel="stylesheet" href="../css/reset.css">
-     <link rel="stylesheet" href="../css/headerfooter.css">
-     <link rel="stylesheet" href="../css/qa.css">
- </head>
- 
- <body>
-     <!-- 전체 콘테이너입니다 -->
-     <div class="container">
-         <div data-init="./inc/header.html"></div>
- 
-         <!-- 내용부분입니다. -->
-         <section class="content">
-             <div class="wrap clearfix">
-                 <div class="title pull-left">
-                     <h1><a href="../html/qa.html">나의 QnA</a></h1>
-                 </div>
-                 <div>
-                     <a href="./write.html" class="clearfix">
-                         <span class="btn pull-right">글쓰기</span></a>
-                 </div>
-                 <ul class="border board-list">
-                     <hr>
-                 </ul>
-             </div>
- 
-             <!-- 값이 없다면 나올 로고입니다. -->
-             <div class="not-value-logo">
-             </div>
- 
-         </section>
-         <!-- 푸터부분입니다. -->
-         <div data-init="./inc/footer.html"></div>
-     </div>
-     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-     <script src="./assets/layout.js"></script>
- 
-     <script>
-         (async () => {
-             // 게시판 전체 영역입니다
-             let content = document.querySelector(".border").length;
-             // 로고 표시입니다.
-             let logo = document.querySelector(".not-value-logo");
- 
-             let json = null
- 
-             try {
-                 const response = await axios.get('/myboard')
-                 json = response.data;
-                 items = json.item
- 
-                 console.log(json)
-             } catch (e) {
-                 console.log(e)
-             };
- 
-             // 게시물이 없다면 logo 추가
-             if (json = null) {
-                 logo.classList.add('display-on');
-                 logo.classList.remove('display-off');
-             } else {// 게시물이 있다면 logo 삭제
-                 logo.classList.remove('display-on');
-                 logo.classList.add('display-off');
- 
-                 let tableBody = document.querySelector(".border");
- 
-                 items.map((v, i) => {
-                     const qnaNm = items[i].qna_code;
- 
-                     console.log(v);
-                     tableBody.innerHTML += `<li class="recoad clearfix"><a href="./article.html?qnaNm=${qnaNm}">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <title>qa</title>
+    <!-- 웹폰트(한글) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- 폰트어썸 -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- sweetalert-->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- CSS 참조 -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/headerfooter.css">
+    <link rel="stylesheet" href="../css/qa.css">
+</head>
+
+<body>
+    <!-- 전체 콘테이너입니다 -->
+    <div class="container">
+        <div data-init="./inc/header.html"></div>
+
+        <!-- 내용부분입니다. -->
+        <section class="content">
+            <div class="wrap clearfix">
+                <!-- 제목 영역 -->
+                <div class="title pull-left">
+                    <h1><a href="../html/qa.html">나의 QnA</a></h1>
+                </div>
+                <!-- 글쓰기 버튼 영역 -->
+                <div class="clearfix">
+                <button type='button' onclick="location.href='./write.html'" id="btn-write" name="write"
+                class="pull-right btn">글쓰기</button></div>
+                <!-- 게시글이 있을 경우 보여질 부분 -->
+                <ul class="border board-list ">
+
+                </ul>
+
+
+            <!-- 값이 없다면 나올 로고입니다. -->
+            <div class="not-value-logo">
+            </div>
+        </div>
+        </section>
+        <!-- 푸터부분입니다. -->
+        <div data-init="./inc/footer.html"></div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./assets/layout.js"></script>
+
+    <script>
+        (async () => {
+
+            let json = null
+
+            try {
+                const response = await axios.get('/myboard')
+                json = response.data;
+                items = json.item
+            } catch (e) {
+                console.log(e)
+            };
+            
+            let logo = document.querySelector(".not-value-logo");
+            // 게시물 여부에 따른 로고 노출
+            if (items.length == 0) {
+                logo.classList.add('display-on');
+                logo.classList.remove('display-off');
+            } else {
+                logo.classList.remove('display-on');
+                logo.classList.add('display-off');
+            } 
+
+            // 게시글이 있을 경우
+            if(json != null){
+                console.log(items)
+                let Border = document.querySelector(".border");
+
+                items.map((v, i) => {
+                    const qnaNm = items[i].qna_code;
+
+                    console.log(v);
+                    Border.innerHTML += `<li class="record clearfix"><a href="./article.html?qnaNm=${qnaNm}">
                                               <div class="summary pull-left">
                                                   <dl id="user-article">
                                                       <dd class="list-tit">${v.qna_title}</dd>
@@ -103,60 +104,60 @@
                                           </a>
                                           <button type="submit" id="btn-delete" name="delete"
                                               class="btn btn-delete pull-right" data-qna_code=${v.qna_code}>삭제</button></li>`
-                 })
- 
-                 let btnDelete = document.querySelectorAll('.btn-delete');
- 
-                 // 삭제 버튼 이벤트 처리
-                 btnDelete.forEach((v) => {
-                     v.addEventListener("click", (e) => {
-                         e.preventDefault();
- 
-                         const current = e.currentTarget;
- 
-                         const qnaNm = current.dataset.qna_code;
-                         console.log(current);
- 
-                         Swal.fire({
-                             title: '정말로 삭제하시겠습니까?',
-                             text: "삭제된 내용은 복원할 수 없습니다.",
-                             icon: 'warning',
-                             showCancelButton: true,
-                             confirmButtonColor: '#3085d6',
-                             cancelButtonColor: '#d33',
-                             confirmButtonText: '확인',
-                             cancelButtonText: '취소',
-                         }).then(async (result) => {
- 
-                             // 확인 버튼 눌렀을 경우
-                             if (result.isConfirmed) {
-                                 // 서버에 전달
-                                 try {
-                                     const response = await axios.delete(`/qna/${qnaNm}`)
-                                 } catch (e) {
-                                     // 실패 alert
-                                     Swal.fire('오류로 인해 삭제되지 않았습니다', '', 'warning')
-                                 };
-                                 // 성공 alert
-                                 Swal.fire({
-                                     title: '삭제되었습니다.',
-                                     icon: 'success',
-                                     confirmButtonText: '확인',
-                                 }).then(() => {
-                                     location.href = '/html/qa.html' // 삭제 성공시 이동할 경로
-                                 })
-                                 // 취소 버튼 클릭
-                             } else if (result.isCancelled) {
-                                 location.reload
-                             }
-                         })
-                     })
-                 })
-             }
-         })();
- 
-     </script>
- 
- </body>
- 
- </html>
+                })
+
+                let btnDelete = document.querySelectorAll('.btn-delete');
+
+                // 삭제 버튼 이벤트 처리
+                btnDelete.forEach((v) => {
+                    v.addEventListener("click", (e) => {
+                        e.preventDefault();
+
+                        const current = e.currentTarget;
+
+                        const qnaNm = current.dataset.qna_code;
+                        console.log(current);
+
+                        Swal.fire({
+                            title: '정말로 삭제하시겠습니까?',
+                            text: "삭제된 내용은 복원할 수 없습니다.",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: '확인',
+                            cancelButtonText: '취소',
+                        }).then(async (result) => {
+
+                            // 확인 버튼 눌렀을 경우
+                            if (result.isConfirmed) {
+                                // 서버에 전달
+                                try {
+                                    const response = await axios.delete(`/qna/${qnaNm}`)
+                                } catch (e) {
+                                    // 실패 alert
+                                    Swal.fire('오류로 인해 삭제되지 않았습니다', '', 'warning')
+                                };
+                                // 성공 alert
+                                Swal.fire({
+                                    title: '삭제되었습니다.',
+                                    icon: 'success',
+                                    confirmButtonText: '확인',
+                                }).then(() => {
+                                    location.href = '/html/qa.html' // 삭제 성공시 이동할 경로
+                                })
+                                // 취소 버튼 클릭
+                            } else if (result.isCancelled) {
+                                location.reload
+                            }
+                        })
+                    })
+                })
+            }
+        })();
+
+    </script>
+
+</body>
+
+</html>
