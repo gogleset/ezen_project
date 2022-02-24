@@ -48,6 +48,14 @@
                             <option class="prodSelect" value="c">쿠키&파이</option>
                             <option class="prodSelect" value="b">베이커리</option>
                         </select>
+                        <div style="margin-top:19px">
+                            <strong>상품 상태 선택 &nbsp;</strong>
+                            <input type="radio" id="contectState1" name="productState" value="Y">
+                            <label for="contectState1">보이기</label>
+
+                            <input type="radio" id="contectState2" name="productState" value="N">
+                            <label for="contectState2">감추기</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -92,7 +100,7 @@
                 <input type="text" class="form-control" name="productAllergy" id="productAllergy"></input>
             </div>
             <button class="btn btn-primary pull-right btn-admin-setting" id="cancel" type="button">취소</button>
-            <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">삭제</button>
+            <!-- <button class="btn btn-primary pull-right btn-admin-setting" id="delete" type="button">삭제</button> -->
             <button class="btn btn-primary pull-right btn-admin-setting" type="submit" id="save">저장</button>
         </form>
     </div>
@@ -116,6 +124,7 @@
             productNutri: null,
             productAllergy: null,
             productImage: null,
+            productState: null,
             productCode: null
         }
 
@@ -136,6 +145,12 @@
                 document.getElementById("productNutri").value = v.product_nutri;
                 document.getElementById("productAllergy").value = v.product_allergy;
                 document.querySelector("#img").setAttribute("src", `../../..${v.product_img}`);
+                // 라디오버튼 동적 할당
+                if(v.product_state == "Y"){
+                    document.getElementById("contectState1").checked = true;
+                } else {
+                    document.getElementById("contectState2").checked = true;
+                }
             })
         }
         // 유효성검사가 실행될 함수입니다.
@@ -149,9 +164,22 @@
             // 선택된 option의 value 및 카테고리 
             let productCategorie = dropdown[choose].value;
 
+            // 선택된 상태 값을 가져옵니다.
+            let productState = document.querySelector("input[name='productState']:checked");
+            console.log(productState);
+
             if (!productCategorie) {
                 Swal.fire({
                     text: "카테고리 값을 입력해주세요",
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return false;
+            }
+
+            if (!productState) {
+                Swal.fire({
+                    text: "상품 상태 값을 입력해주세요",
                     icon: 'error',
                     confirmButtonText: '확인'
                 });
@@ -238,6 +266,7 @@
             values.productDesc = document.querySelector("#productDesc").value;
             values.productNutri = document.querySelector("#productNutri").value;
             values.productAllergy = document.querySelector("#productAllergy").value;
+            values.productState = document.querySelector("input[name='productState']:checked").value;
         }
         // URL을 강제 이동 합니다.
         const goLocation = (url) => {
@@ -301,6 +330,7 @@
                                         productDesc: values.productDesc,
                                         productNutri: values.productNutri,
                                         productAllergy: values.productAllergy,
+                                        productState: values.productState,
                                         prod: values.productCode
                                     });
                                     // 통신이 성공했을 경우
@@ -333,6 +363,7 @@
                                 formData.append('productDesc', values.productDesc);
                                 formData.append('productNutri', values.productNutri);
                                 formData.append('productAllergy', values.productAllergy);
+                                formData.append('productState', values.productState);
                                 formData.append('prod', values.productCode);
                                 formData.append('photo', values.productImage);
                                 // form데이터에 코드 값 추가
@@ -385,6 +416,7 @@
                     formData.append('productCategorie', values.productCategorie);
                     formData.append('productDesc', values.productDesc);
                     formData.append('productNutri', values.productNutri);
+                    formData.append('productState', values.productState);
                     formData.append('productAllergy', values.productAllergy);
                     formData.append('photo', values.productImage);
 
@@ -444,49 +476,49 @@
         });
 
         // 삭제버튼 이벤트
-        document.getElementById("delete").addEventListener("click", e => {
-            Swal.fire({
-                title: '상품을 삭제하시겠습니까?',
-                text: '삭제된 상품은 복구할 수 없습니다.',
-                icon: 'warning',
-                showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-                confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-                cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-                confirmButtonText: '확인', // confirm 버튼 텍스트 지정
-                cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-                reverseButtons: true, // 버튼 순서 거꾸로
-            }).then(async result => {
-                // 확인버튼을 눌렀을시
-                if (result.isConfirmed) {
-                    // 통신에 사용할 값이 담긴 객체
-                    let keys = {
-                        key: [values.productCode]
-                    }
-                    // 통신
-                    try {
-                        const response = await axios.delete('/product', {
-                            data: keys
-                        })
-                        console.log(response);
-                    } catch (err) {
-                        Swal.fire({
-                            title: '서버와 통신이 되지 않았습니다.',
-                            icon: 'warning',
-                            confirmButtonText: '확인', // confirm 버튼 텍스트 지정
-                        });
-                    }
-                    Swal.fire({
-                        title: '삭제되었습니다.',
-                        icon: 'warning',
-                        confirmButtonText: '확인', // confirm 버튼 텍스트 지정
-                    }).then(result => {
-                        // 상품페이지로 강제이동합니다.
-                        goLocation("/html/admin/product.html");
-                    });
-                }
+        // document.getElementById("delete").addEventListener("click", e => {
+        //     Swal.fire({
+        //         title: '상품을 삭제하시겠습니까?',
+        //         text: '삭제된 상품은 복구할 수 없습니다.',
+        //         icon: 'warning',
+        //         showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        //         confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        //         cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        //         confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+        //         cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+        //         reverseButtons: true, // 버튼 순서 거꾸로
+        //     }).then(async result => {
+        //         // 확인버튼을 눌렀을시
+        //         if (result.isConfirmed) {
+        //             // 통신에 사용할 값이 담긴 객체
+        //             let keys = {
+        //                 key: [values.productCode]
+        //             }
+        //             // 통신
+        //             try {
+        //                 const response = await axios.delete('/product', {
+        //                     data: keys
+        //                 })
+        //                 console.log(response);
+        //             } catch (err) {
+        //                 Swal.fire({
+        //                     title: '서버와 통신이 되지 않았습니다.',
+        //                     icon: 'warning',
+        //                     confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+        //                 });
+        //             }
+        //             Swal.fire({
+        //                 title: '삭제되었습니다.',
+        //                 icon: 'warning',
+        //                 confirmButtonText: '확인', // confirm 버튼 텍스트 지정
+        //             }).then(result => {
+        //                 // 상품페이지로 강제이동합니다.
+        //                 goLocation("/html/admin/product.html");
+        //             });
+        //         }
 
-            });
-        });
+        //     });
+        // });
 
         // 취소버튼 이벤트
         document.getElementById("cancel").addEventListener("click", e => {

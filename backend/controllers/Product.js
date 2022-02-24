@@ -42,7 +42,7 @@ module.exports = (app) => {
 
         // 데이터 조회
         let sql =
-          "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products";
+          "SELECT product_code, product_name, product_price, product_stock, product_img, product_categorie, product_desc, product_nutri, product_allergy, product_date, product_state FROM products WHERE product_state = 'Y'";
 
         const [result] = await dbcon.query(sql);
         json = result;
@@ -60,7 +60,7 @@ module.exports = (app) => {
         await dbcon.connect();
         // 데이터 조회
         let sql =
-          "SELECT product_code, product_img, product_name FROM products ORDER BY rand() limit 0,6;";
+          "SELECT product_code, product_img, product_name FROM products WHERE product_state = 'Y' ORDER BY rand() limit 0,6";
         const [result] = await dbcon.query(sql);
         json = result;
       } catch (e) {
@@ -89,7 +89,7 @@ module.exports = (app) => {
         await dbcon.connect();
         // 데이터 조회
         let sql =
-          "SELECT product_code, product_name, product_img, product_price FROM products WHERE product_categorie = ?";
+          "SELECT product_code, product_name, product_img, product_price FROM products WHERE product_state = 'Y' AND product_categorie = ?";
         let args = [];
         args.push(cate);
         const [result] = await dbcon.query(sql, args);
@@ -114,7 +114,7 @@ module.exports = (app) => {
         let args1 = [];
 
         if (query != null && cate != null) {
-          sql1 += " WHERE product_name LIKE concat('%', ?, '%')";
+          sql1 += " AND product_name LIKE concat('%', ?, '%')";
           sql1 += " AND product_categorie LIKE concat('%', ?, '%')";
           args1.push(query);
           args1.push(cate);
@@ -136,7 +136,7 @@ module.exports = (app) => {
         let args2 = [];
         // 검색조건 검색어 + 카테고리가 아니면 검색 안되게
         if (query != null && cate != null) {
-          sql2 += " WHERE product_name LIKE concat('%', ?, '%')";
+          sql2 += " AND product_name LIKE concat('%', ?, '%')";
           sql2 += " AND product_categorie LIKE concat('%', ?, '%')";
           args2.push(query);
           args2.push(cate);
@@ -223,6 +223,7 @@ module.exports = (app) => {
       const product_nutri = req.post("productNutri");
       const product_allergy = req.post("productAllergy");
       const product_img = req.file.url;
+      const product_state = req.post("productState");
       console.log(product_name);
       console.log(
         "***::::::::::::::::::::::::::::::::::::::::::::::::::" + product_img
@@ -238,6 +239,7 @@ module.exports = (app) => {
         regexHelper.value(product_desc, "상세설명 값이 없습니다.");
         regexHelper.value(product_nutri, "영양정보 값이 없습니다.");
         regexHelper.value(product_allergy, "알레르기 값이 없습니다.");
+        regexHelper.value(product_state, "상품 상태 값이 없습니다.");
 
         regexHelper.maxLength(product_name, 30, "아이디가 너무 깁니다.");
         regexHelper.maxLength(product_price, 11, "판매가격이 너무 큽니다.");
@@ -253,9 +255,12 @@ module.exports = (app) => {
           255,
           "알레르기 값이 너무 큽니다."
         );
+        regexHelper.maxLength(product_state, 2, "상품 상태 값이 너무 큽니다.");
 
         regexHelper.num(product_price, "상품 가격을 숫자로 입력해주세요.");
         regexHelper.num(product_stock, "재고 수량을 숫자로 입력해주세요.");
+
+        regexHelper.eng(product_state, "올바른 상태값이 아닙니다.");
       } catch (err) {
         return next(err);
       }
@@ -268,9 +273,9 @@ module.exports = (app) => {
         // 데이터 저장하기
         let sql2 = "INSERT INTO `products` (";
         sql2 +=
-          "product_name, product_price, product_stock, product_categorie, product_img, product_desc, product_nutri, product_allergy";
+          "product_name, product_price, product_stock, product_categorie, product_img, product_desc, product_nutri, product_allergy, product_state";
         sql2 += ") VALUES (";
-        sql2 += "?, ?, ?, ?, ?, ?, ?, ?);";
+        sql2 += "?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         const args2 = [
           product_name,
@@ -281,6 +286,7 @@ module.exports = (app) => {
           product_desc,
           product_nutri,
           product_allergy,
+          product_state,
         ];
         await dbcon.query(sql2, args2);
       } catch (e) {
@@ -303,6 +309,9 @@ module.exports = (app) => {
     const product_desc = req.post("productDesc");
     const product_nutri = req.post("productNutri");
     const product_allergy = req.post("productAllergy");
+    const product_state = req.post("productState");
+    console.log(product_state);
+    console.log(product_code);
     logger.debug("이미지가 없는 경우 실행");
 
     try {
@@ -314,6 +323,7 @@ module.exports = (app) => {
       regexHelper.value(product_desc, "상세설명 값이 없습니다.");
       regexHelper.value(product_nutri, "영양정보 값이 없습니다.");
       regexHelper.value(product_allergy, "알레르기 값이 없습니다.");
+      regexHelper.value(product_state, "상품 상태 값이 없습니다.");
 
       regexHelper.maxLength(product_code, 11, "상품 코드가 너무 깁니다.");
       regexHelper.maxLength(product_name, 30, "아이디가 너무 깁니다.");
@@ -322,9 +332,12 @@ module.exports = (app) => {
       regexHelper.maxLength(product_desc, 255, "상세 설명 값이 너무 큽니다.");
       regexHelper.maxLength(product_nutri, 255, "영양 정보 값이 너무 큽니다.");
       regexHelper.maxLength(product_allergy, 255, "알레르기 값이 너무 큽니다.");
+      regexHelper.maxLength(product_state, 2, "상품 상태 값이 너무 큽니다.");
       regexHelper.num(product_code, "상품 코드를 숫자로 입력해주세요.");
       regexHelper.num(product_price, "상품 가격을 숫자로 입력해주세요.");
       regexHelper.num(product_stock, "재고 수량을 숫자로 입력해주세요.");
+
+      regexHelper.eng(product_state, "올바른 상태값이 아닙니다.");
     } catch (err) {
       return next(err);
     }
@@ -337,7 +350,7 @@ module.exports = (app) => {
 
       // 데이터 저장하기
       let sql =
-        "UPDATE products SET product_name = ?, product_price = ?, product_stock = ?, product_categorie = ?, product_desc = ?, product_nutri = ?, product_allergy= ? WHERE product_code = ?";
+        "UPDATE products SET product_name = ?, product_price = ?, product_stock = ?, product_categorie = ?, product_desc = ?, product_nutri = ?, product_allergy= ?, product_state = ? WHERE product_code = ? ";
 
       const args = [
         product_name,
@@ -347,6 +360,7 @@ module.exports = (app) => {
         product_desc,
         product_nutri,
         product_allergy,
+        product_state,
         product_code,
       ];
       await dbcon.query(sql, args);
@@ -392,6 +406,7 @@ module.exports = (app) => {
       const product_nutri = req.post("productNutri");
       const product_allergy = req.post("productAllergy");
       const product_img = req.file.url;
+      const product_state = req.post("productState");
       logger.debug("이미지 값이 있습니다.");
       try {
         regexHelper.value(product_code, "상품코드의 값이 없습니다.");
@@ -403,6 +418,7 @@ module.exports = (app) => {
         regexHelper.value(product_desc, "상세설명 값이 없습니다.");
         regexHelper.value(product_nutri, "영양정보 값이 없습니다.");
         regexHelper.value(product_allergy, "알레르기 값이 없습니다.");
+        regexHelper.value(product_state, "상품 상태 값이 없습니다.");
 
         regexHelper.maxLength(product_code, 11, "상품 코드가 너무 깁니다.");
         regexHelper.maxLength(product_name, 30, "아이디가 너무 깁니다.");
@@ -419,9 +435,13 @@ module.exports = (app) => {
           255,
           "알레르기 값이 너무 큽니다."
         );
+        regexHelper.maxLength(product_state, 2, "상품 상태 값이 너무 깁니다.");
+
         regexHelper.num(product_code, "상품 코드를 숫자로 입력해주세요.");
         regexHelper.num(product_price, "상품 가격을 숫자로 입력해주세요.");
         regexHelper.num(product_stock, "재고 수량을 숫자로 입력해주세요.");
+
+        regexHelper.eng(product_state, "올바른 상태 값이 아닙니다.");
       } catch (err) {
         return next(err);
       }
@@ -433,7 +453,7 @@ module.exports = (app) => {
 
         // 데이터 저장하기
         let sql =
-          "UPDATE products SET product_name = ?, product_price = ?, product_stock = ?, product_categorie = ?, product_img = ?, product_desc = ?, product_nutri = ?, product_allergy= ? WHERE product_code = ?";
+          "UPDATE products SET product_name = ?, product_price = ?, product_stock = ?, product_categorie = ?, product_img = ?, product_desc = ?, product_nutri = ?, product_allergy= ?, product_state = ? WHERE product_code = ?";
 
         const args = [
           product_name,
@@ -444,6 +464,7 @@ module.exports = (app) => {
           product_desc,
           product_nutri,
           product_allergy,
+          product_state,
           product_code,
         ];
         await dbcon.query(sql, args);
@@ -456,7 +477,7 @@ module.exports = (app) => {
     });
   });
 
-  //   데이터 삭제 --> DELETE
+  // 데이터 비활성화 --> DELETE
   router.delete("/product", async (req, res, next) => {
     const key = req.post("key");
 
@@ -470,19 +491,9 @@ module.exports = (app) => {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
-      // 삭제하고자 하는 원 데이터를 참조하는 자식 데이터를 먼저 삭제해야 한다.
-      // 만약 자식데이터를 유지해야 한다면 참조키 값을 null로 업데이트 해야한다.
-      // 단, 자식 데이터는 결과 행 수가 0이더라도 무시한다.
-
-      // await dbcon.query(
-      //   "ALTER TABLE `student` CHANGE `profno` `profno` INT(11) NULL;"
-      // );
-      // await dbcon.query("UPDATE student SET profno = null WHERE profno = ?", [
-      //   profno,
-      // ]);
-
       //데이터 삭제하기
-      let sql = "DELETE FROM products WHERE product_code IN (";
+      let sql =
+        "UPDATE products SET product_state = 'N' WHERE product_code IN (";
       key.map((v, i) => {
         if (i == key.length - 1) {
           return (sql += "?");
@@ -493,7 +504,7 @@ module.exports = (app) => {
       const [result1] = await dbcon.query(sql, key);
       logger.debug([result1]);
       if (result1.affectedRows < 1) {
-        throw new Error("삭제된 데이터가 없습니다.");
+        throw new Error("비활성화된 데이터가 없습니다.");
       }
     } catch (e) {
       logger.debug(e);
