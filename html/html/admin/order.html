@@ -144,6 +144,8 @@
                     case "N":
                         v.order_state = "결제 실패"
                         break;
+                    case "C":
+                        v.order_state = "취소 완료"
                     default:
                         console.log("값이 없습니다.");
                         break;
@@ -168,7 +170,6 @@
                     <td id="orderDate" style="padding-top: 11px;">${v.order_date}</td>
                     <td id="orderCancel" data-id=${v.order_code} style="padding-top: 11px;"">${v.rq_cancel}</td>
                 </tr>`
-
             });
 
             //정상적인 취소 요청 데이터에만 버튼 표시
@@ -198,7 +199,7 @@
                     default:
                         break;
                 }
-            })
+            });
 
             document.querySelectorAll("#delete").forEach((v) => {
                 v.addEventListener("click", e => {

@@ -16,7 +16,7 @@ module.exports = {
             level: 'error'
         }
     },
-    server_port: 3217,
+    server_port: 3000,
 
     public_path: path.join(__dirname, "../../html"),
     favicon_path: path.join(__dirname, "../../html/img/favicon.png"),

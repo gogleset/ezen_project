@@ -143,7 +143,7 @@ module.exports = (app) => {
         console.log("수정전 카운터:::" + result1[0].count);
         // 전역변수 count에 업데이트 할 숫자값을 넣어줍니다.
         count = result1[0].count + 1;
-
+        console.log(count);
         let sql2 = "UPDATE carts SET product_count = ?";
         sql2 += " WHERE member_code = ? AND product_code = ?";
 
