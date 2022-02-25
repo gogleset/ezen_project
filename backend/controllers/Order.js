@@ -143,7 +143,7 @@ module.exports = (app) => {
     const rcvAddr3 = req.post("receiver_addr3");
     const rcvEmail = req.post("receiver_email");
     const rq_cancel = req.post("rq_cancel");
-    
+
     const impUid = req.post("imp_uid");
 
     const memberCode = sessionInfo.member_code;
@@ -283,12 +283,54 @@ module.exports = (app) => {
     res.sendJson({ item1: json1, item2: json2 });
   });
 
+  //menu에서 주문페이지를 거쳐 진입시
+  router.post("/menu_ordered", async (req, res, next) => {
+
+    const merchant_uid = req.post("merchant_uid");
+    let json1 = null;
+    let json2 = null;
+    let mer = null;
+    //orders테이블 조회
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      const sql4 =
+        "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, receiver_email, member_code, imp_uid FROM orders WHERE merchant_uid = ?";
+      const input_data4 = [merchant_uid];
+      const [result4] = await dbcon.query(sql4, input_data4);
+      json2 = result4;
+      logger.warn(JSON.stringify(json2));
+      //ordered_product 테이블에서 merchant_uid로 검색하기 위해
+      mer = json2[0].merchant_uid;
+      logger.warn(mer);
+      
+    } catch (err) {
+      return next(err);
+    }
+    
+    //ordered_product 테이블 조회
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+      
+      const sql1 =
+        "select merchant_uid, ordered_product_name, ordered_product_img, ordered_product_count, ordered_product_price from ordered_product where merchant_uid = ?";
+      const input_data1 = [mer];
+      const [result1] = await dbcon.query(sql1, input_data1);
+      json1 = result1;
+    } catch (err) {
+      return next(err);
+    }
+    res.sendJson({ item1: json1, item2: json2 });
+  });
+
   // 관리자 결제 취소
   router.delete("/order", async (req, res, next) => {
-     // if (!req.session.memberInfo.admin === "Y") {
+    // if (!req.session.memberInfo.admin === "Y") {
     //   return next(new BadRequestException("관리자가 로그인 중이 아닙니다."));
     // }
-    
+
     const odCode = req.post("data");
     console.log(odCode);
 

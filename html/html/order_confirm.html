@@ -43,7 +43,7 @@
             <!-- 내용 안쪽부분입니다. -->
             <div class="inner-content min-height">
                 <!-- 제목부분입니다. -->
-                <h1 class="cart-title title">주문이 완료되었습니다!</h1>
+                <h1 class="cart-title title">결제완료된 주문입니다.</h1>
                 <!-- 제목 안쪽 미결제 항목부분입니다. -->
                 <div class="cart-sub-title">
                     <span class="unpaid-count">상품 정보 확인</span>
@@ -105,46 +105,52 @@
         <script src="./assets/layout.js"></script>
 
         <script>
-            //http://192.168.55.95:3217/html/order_confirm.html?imp_uid=imp_807998726697&merchant_uid=merchant_1645608980100&imp_success=true
             const url = new URL(window.location.href);
-
             const urlParams = url.searchParams;
             const merchant_uid = urlParams.get('merchant_uid');
             const imp_uid = urlParams.get('imp_uid');
             const imp_success = urlParams.get('imp_success');
 
-            //결제결과가 false면 결제페이지로 돌아간다.
-            if (imp_success == false) {
-                location.href("payment.html");
-            }
+            const mer = urlParams.get('mer');
 
-            let json1 = null;
-            let json2 = null;
-            (async () => {
-                try {
-                    const response = await axios.post(`/order_confirm`, {
-                        merchant_uid: merchant_uid,
-                        imp_uid: imp_uid
-                    })
-                    json1 = response.data.item1;
-                    [json2] = response.data.item2;
-                } catch (e) {
-                    console.log(e)
+
+            //URL에 변수값이 존재하는걸로 실행 방식을 나눈다(메뉴에서 주문내역확인 페이지진입 or 결제후 주문내역확인 페이지 진입을 위해)
+            if (imp_success) {
+                //http://192.168.55.95:3217/html/order_confirm.html?imp_uid=imp_807998726697&merchant_uid=merchant_1645608980100&imp_success=true
+                let json1 = null;
+                let json2 = null;
+                //결제페이지에서 결재 후 주문확인페이지로 넘어갔을경우
+                //결제결과가 false면 결제페이지로 돌아간다.
+                if (imp_success == false) {
+                    location.href("payment.html");
                 }
 
-                console.log(json2)
 
-                console.log(json2.receiver_phone);
-                //배송 정보 확인
-                document.getElementById("orderer_phone").innerHTML = json2.receiver_phone;
-                document.getElementById("orderer_name").innerHTML = json2.receiver_name;
-                document.getElementById("orderer_addr").innerHTML = json2.receiver_addr1 + " " + json2.receiver_addr2 + " " + json2.receiver_addr3;
-                document.getElementById("orderer_email").innerHTML = json2.receiver_email;
+                (async () => {
+                    try {
+                        const response = await axios.post(`/order_confirm`, {
+                            merchant_uid: merchant_uid,
+                            imp_uid: imp_uid
+                        })
+                        json1 = response.data.item1;
+                        [json2] = response.data.item2;
+                    } catch (e) {
+                        console.log(e)
+                    }
 
-                json1.map((v) => {
-                    console.log(v);
-                    let BoxCart = document.querySelector('.box-cart-content')
-                    BoxCart.innerHTML += `<div class="box-cart div-center clearfix"><a href="#">
+                    console.log(json2)
+
+                    console.log(json2.receiver_phone);
+                    //배송 정보 확인
+                    document.getElementById("orderer_phone").innerHTML = json2.receiver_phone;
+                    document.getElementById("orderer_name").innerHTML = json2.receiver_name;
+                    document.getElementById("orderer_addr").innerHTML = json2.receiver_addr1 + " " + json2.receiver_addr2 + " " + json2.receiver_addr3;
+                    document.getElementById("orderer_email").innerHTML = json2.receiver_email;
+
+                    json1.map((v) => {
+                        console.log(v);
+                        let BoxCart = document.querySelector('.box-cart-content')
+                        BoxCart.innerHTML += `<div class="box-cart div-center clearfix"><a href="#">
                                   <img class="pull-left" src="${v.ordered_product_img}" alt="#">
                               </a>
                               <div class="box-cart-inner pull-right">
@@ -152,9 +158,58 @@
                                   <span class="box-cart-money pull-right">${v.ordered_product_price}원</span>
                                   <span class="cart-count">${v.ordered_product_count}개</span>
                               </div></div>`
-                })
-                startPayment()
-            })()
+                    })
+                    startPayment()
+                })()
+
+            } else {
+                //메뉴에서 주문내역을 거쳐 주문확인페이지로 넘어갔을경우
+
+                let json1 = null;
+                let json2 = null;
+
+                (async () => {
+                    try {
+                        //post로 merchant_uid넘겨줘야됨
+                        const response = await axios.post(`/menu_ordered`, {
+                            merchant_uid: mer
+                        })
+                        json1 = response.data.item1;
+                        [json2] = response.data.item2;
+                    } catch (e) {
+                        console.log(e)
+                    }
+
+                    console.log(json1);
+                    // Y = 주문완료, N = 주문실패, D = 결제 대기
+                    if (json2.order_state == "N") {
+                        document.querySelector(".cart-title").innerHTML = "취소된 주문입니다."
+                    }
+                    //배송 정보 확인
+                    document.getElementById("orderer_phone").innerHTML = json2.receiver_phone;
+                    document.getElementById("orderer_name").innerHTML = json2.receiver_name;
+                    document.getElementById("orderer_addr").innerHTML = json2.receiver_addr1 + " " + json2.receiver_addr2 + " " + json2.receiver_addr3;
+                    document.getElementById("orderer_email").innerHTML = json2.receiver_email;
+
+                    json1.map((v) => {
+
+                        console.log(v);
+                        let BoxCart = document.querySelector('.box-cart-content')
+                        BoxCart.innerHTML += `
+                            <div class="box-cart div-center clearfix">
+                                <a href="#">
+                                    <img class="pull-left" src="${v.ordered_product_img}" alt="#">
+                                </a>
+                                <div class="box-cart-inner pull-right">
+                                    <span class="box-cart-prod-name">${v.ordered_product_name}</span>
+                                    <span class="box-cart-money pull-right">${v.ordered_product_price}원</span>
+                                    <span class="cart-count">${v.ordered_product_count}개</span>
+                                </div>
+                            </div>`
+                    })
+                    startPayment()
+                })()
+            }
 
             function startPayment() {
                 // box-cart가 있는지 없는지 감지하는 변수입니다.
