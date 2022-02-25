@@ -18,6 +18,10 @@ const multer = require("multer");
 module.exports = (app) => {
   let dbcon = null;
   router.get("/product", async (req, res, next) => {
+    // if (!req.session.memberInfo) {
+    //   return next(new BadRequestException("로그인 중이 아닙니다."));
+    // }
+
     // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
     const query = req.get("query");
     // 카테고리 파라미터 받기
@@ -102,6 +106,11 @@ module.exports = (app) => {
       // 모든 처리에 성공했으므로 정상 조회 결과를 구성
       res.sendJson({ item: json });
     } else {
+      // if (!req.session.memberInfo.admin === "Y") {
+      //   return next(new BadRequestException("관리자가 로그인 중이 아닙니다."));
+      // }
+      console.log("관리자입니다.");
+
       try {
         // 데이터베이스 접속
         dbcon = await mysql2.createConnection(config.database);
@@ -161,6 +170,10 @@ module.exports = (app) => {
   });
 
   router.get("/product/:prod", async (req, res, next) => {
+    // if (!req.session.memberInfo) {
+    //   return next(new BadRequestException("로그인 중이 아닙니다."));
+    // }
+
     // 검색어 파라미터 받기 -> 검색어가 없을 경우 전체 목록 조회이므로 유효성 검사 안함
     const query = req.get("prod");
 
@@ -192,8 +205,8 @@ module.exports = (app) => {
 
   // 데이터 넣어주기
   router.post("/product", async (req, res, next) => {
-    // if (!req.session.memberInfo) {
-    //     return next(new BadRequestException("로그인 중이 아닙니다."));
+    // if (!req.session.memberInfo.admin === "Y") {
+    //   return next(new BadRequestException("관리자가 로그인 중이 아닙니다."));
     // }
 
     // webhelper에 추가된 기능을 활용하여 업로드 객체 반환받기
@@ -301,6 +314,9 @@ module.exports = (app) => {
 
   // 이미지는 수정하지 않는 경우 수정
   router.put("/product", async (req, res, next) => {
+    // if (!req.session.memberInfo.admin === "Y") {
+    //   return next(new BadRequestException("관리자가 로그인 중이 아닙니다."));
+    // }
     const product_code = req.post("prod");
     const product_name = req.post("productName");
     const product_price = req.post("productPrice");
@@ -375,8 +391,8 @@ module.exports = (app) => {
 
   //이미지까지 수정하기
   router.put("/productImg", async (req, res, next) => {
-    // if (!req.session.memberInfo) {
-    //     return next(new BadRequestException("로그인 중이 아닙니다."));
+    // if (!req.session.memberInfo.admin === "Y") {
+    //   return next(new BadRequestException("관리자가 로그인 중이 아닙니다."));
     // }
 
     // webhelper에 추가된 기능을 활용하여 업로드 객체 반환받기
@@ -479,6 +495,10 @@ module.exports = (app) => {
 
   // 데이터 비활성화 --> DELETE
   router.delete("/product", async (req, res, next) => {
+    // if (!req.session.memberInfo.admin === "Y") {
+    //   return next(new BadRequestException("관리자가 로그인 중이 아닙니다."));
+    // }
+
     const key = req.post("key");
 
     if (key === undefined) {

@@ -87,7 +87,7 @@ cart html 구조 파일입니다.  -->
             // 데이터 출력
             let orderBox = document.querySelector(".order-container")
             data.map((v) => {
-                orderBox.innerHTML += `<div class="order-box clearfix"><img class="pull-left" src="../img/icon_null.png" alt="주문내역">
+                orderBox.innerHTML += `<div class="order-box clearfix" onclick="location.href ='http://${window.location.host}?mer=${v.merchant_uid}'"><img class="pull-left" src="../img/icon_null.png" alt="주문내역">
                         <div class="order-list pull-left">
                             <p class="order-list-in pull-left">주문번호 :</p>
                             <p class="order-number">${v.merchant_uid}</p>
