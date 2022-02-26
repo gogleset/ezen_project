@@ -174,7 +174,7 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `order_code` int NOT NULL AUTO_INCREMENT COMMENT '주문일련번호',
   `merchant_uid` varchar(45) DEFAULT NULL COMMENT '주문번호',
-  `order_state` enum('Y','N','D') DEFAULT 'D' COMMENT '주문상태 ( Y = 주문완료, N = 주문실패, D = 결제 대기)',
+  `order_state` enum('Y','N','D', 'C') DEFAULT 'D' COMMENT '주문상태 ( Y = 주문완료, N = 주문실패, D = 결제 대기, C = "취소완료")',
   `order_date` datetime NOT NULL COMMENT '주문날짜',
   `order_total_price` int DEFAULT NULL COMMENT '총가격',
   `receiver_name` varchar(30) DEFAULT NULL COMMENT '수령자이름',

@@ -191,13 +191,19 @@
                         console.log(e)
                     }
                     
-                    // Y = 주문완료, N = 주문실패, D = 결제 대기  
+                    // Y = 주문완료, N = 주문실패, D = 결제 대기, C = 주문취소
                     // 주문실패 상태 시 취소된 주문입니다 문구 출력 및 주문 취소하기 버튼 숨김처리
-                    if (orders.order_state == "N") {
+                    if (orders.order_state == "C") {
                         document.querySelector(".cart-title").innerHTML = "취소된 주문입니다."
                         document.querySelector(".form-group").style.display = "none";
                     } else if (orders.rq_cancel == "Y") {
                         document.querySelector(".cart-title").innerHTML = "취소 요청중 입니다"
+                        document.querySelector(".form-group").style.display = "none";
+                    } else if (orders.rq_cancel == "D"){
+                        document.querySelector(".cart-title").innerHTML = "결제 대기중인 주문입니다."
+                        document.querySelector(".form-group").style.display = "none";
+                    } else if (orders.rq_cancel == "N"){
+                        document.querySelector(".cart-title").innerHTML = "주문이 실패하였습니다."
                         document.querySelector(".form-group").style.display = "none";
                     }
 
@@ -313,7 +319,7 @@
                         (async () => {
                             try {
                                 const response = await axios.put(`/order_cancle`, {
-                                    merchant_uid: mer
+                                    merchant_uid: merchant_uid
                                 });
                             } catch (error) {
                                 console.log(error);
