@@ -43,7 +43,7 @@
             <!-- 내용 안쪽부분입니다. -->
             <div class="inner-content min-height">
                 <!-- 제목부분입니다. -->
-                <h1 class="cart-title title">결제완료된 주문입니다.</h1>
+                <h1 class="cart-title title">상품이 결제되었습니다.</h1>
                 <!-- 제목 안쪽 미결제 항목부분입니다. -->
                 <div class="cart-sub-title">
                     <span class="unpaid-count">상품 정보 확인</span>
@@ -59,19 +59,19 @@
                     <hr>
                     <div class="delivery-info-name">
                         <div class="delivery-form">
-                            <span class="text-indent">주문자 전화번호:</span>
+                            <span class="text-indent">전화번호:</span>
                             <span id="orderer_phone" class="flex-grow">000-0000-0000</span>
                         </div>
                         <div class="delivery-form">
-                            <span class="text-indent">주문자 이름:</span>
+                            <span class="text-indent">성함:</span>
                             <span id="orderer_name" class="flex-grow">홍길동</span>
                         </div>
                         <div class="delivery-form">
-                            <span class="text-indent">주문자 주소:</span>
+                            <span class="text-indent">주소:</span>
                             <span id="orderer_addr" class="flex-grow">서울 특별시 00구 00동 00번지 000아파트 000동 000호</span>
                         </div>
                         <div class="delivery-form">
-                            <span class="text-indent">주문자 이메일 주소:</span>
+                            <span class="text-indent">이메일 주소:</span>
                             <span id="orderer_email" class="flex-grow">ezen@gmail.com</span>
                         </div>
                     </div>
@@ -120,12 +120,12 @@
 
             //주문내역페이지에서 넘어온 merchant_uid값
             const mer = urlParams.get('mer');
-
-
+           
+           
             //메뉴에서 주문내역확인 페이지진입 or 결제후 주문내역확인 페이지 진입을 위해
             //URL에 변수값이 존재하는걸로 실행 방식을 나눈다
             if (imp_success) {
-                
+
                 //JSON데이터를 담을 빈 변수
                 let ordered_product = null;
                 let orders = null;
@@ -190,8 +190,9 @@
                     } catch (e) {
                         console.log(e)
                     }
-                    
-                    // Y = 주문완료, N = 주문실패, D = 결제 대기, C = 주문취소
+
+                    // order_state : Y = 주문완료, N = 주문실패, D = 결제 대기, C = 주문취소
+                    // rq_cancel : Y = 취소요청, N = 취소요청 안함
                     // 주문실패 상태 시 취소된 주문입니다 문구 출력 및 주문 취소하기 버튼 숨김처리
                     if (orders.order_state == "C") {
                         document.querySelector(".cart-title").innerHTML = "취소된 주문입니다."
@@ -199,10 +200,10 @@
                     } else if (orders.rq_cancel == "Y") {
                         document.querySelector(".cart-title").innerHTML = "취소 요청중 입니다"
                         document.querySelector(".form-group").style.display = "none";
-                    } else if (orders.rq_cancel == "D"){
+                    } else if (orders.rq_cancel == "D") {
                         document.querySelector(".cart-title").innerHTML = "결제 대기중인 주문입니다."
                         document.querySelector(".form-group").style.display = "none";
-                    } else if (orders.rq_cancel == "N"){
+                    } else if (orders.order_state == "N") {
                         document.querySelector(".cart-title").innerHTML = "주문이 실패하였습니다."
                         document.querySelector(".form-group").style.display = "none";
                     }

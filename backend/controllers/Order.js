@@ -111,7 +111,7 @@ module.exports = (app) => {
   // ordered_product 테이블에서 주문번호로 데이터 조회
   router.get("/prod/:getData", async (req, res, next) => {
     const merchantUID = req.get("getData");
-  
+
     let json = null;
 
     try {
@@ -237,7 +237,7 @@ module.exports = (app) => {
     const imp_uid = req.get("imp_uid");
     // 세션에 저장되어있는 회원번호코드
     const member_code = req.session.memberInfo.member_code;
-    
+
     let ordered_product = null;
     let orders = null;
 
@@ -253,7 +253,7 @@ module.exports = (app) => {
 
       //ordered_product JSON저장
       ordered_product = result1;
-      
+
       //orders테이블의 imp_uid컬럼을 업데이트하며 동시에 order_state값을 Y로 바꿔준다
       const sql2 =
         "update orders set order_state = 'Y', imp_uid = ? where merchant_uid = ?";
@@ -268,7 +268,7 @@ module.exports = (app) => {
 
       //orders JSON저장
       orders = result3;
-      
+
       //장바구니 데이터 삭제
       const sql4 = "delete from carts where member_code = ?";
       const input_data4 = [member_code];
@@ -298,10 +298,10 @@ module.exports = (app) => {
       const input_data1 = [merchant_uid];
       const [result1] = await dbcon.query(sql1, input_data1);
       orders = result1;
-     
+
       //ordered_product 테이블에서 merchant_uid로 조회하기 위해 mer 변수에 merchant_uid를 담아준다.
       mer = orders[0].merchant_uid;
-      
+
 
       //ordered_product 테이블 조회
       const sql2 =
