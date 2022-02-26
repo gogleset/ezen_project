@@ -97,7 +97,13 @@
                     <span class="paid-money">결제 금액</span>
                     <span class="paid-money-number pull-right">0원</span>
                 </div>
-                <hr style="margin-bottom: 0;">
+
+            </div>
+
+            <div class="form-group">
+                <div class="text-center">
+                    <button type="button" class="order_cancel">주문 취소하기</button>
+                </div>
             </div>
         </section>
 
@@ -105,49 +111,52 @@
         <script src="./assets/layout.js"></script>
 
         <script>
+            //URL 파라미터값
             const url = new URL(window.location.href);
             const urlParams = url.searchParams;
             const merchant_uid = urlParams.get('merchant_uid');
             const imp_uid = urlParams.get('imp_uid');
             const imp_success = urlParams.get('imp_success');
 
+            //주문내역페이지에서 넘어온 merchant_uid값
             const mer = urlParams.get('mer');
 
 
-            //URL에 변수값이 존재하는걸로 실행 방식을 나눈다(메뉴에서 주문내역확인 페이지진입 or 결제후 주문내역확인 페이지 진입을 위해)
+            //메뉴에서 주문내역확인 페이지진입 or 결제후 주문내역확인 페이지 진입을 위해
+            //URL에 변수값이 존재하는걸로 실행 방식을 나눈다
             if (imp_success) {
-                //http://192.168.55.95:3217/html/order_confirm.html?imp_uid=imp_807998726697&merchant_uid=merchant_1645608980100&imp_success=true
-                let json1 = null;
-                let json2 = null;
+                
+                //JSON데이터를 담을 빈 변수
+                let ordered_product = null;
+                let orders = null;
+
                 //결제페이지에서 결재 후 주문확인페이지로 넘어갔을경우
                 //결제결과가 false면 결제페이지로 돌아간다.
                 if (imp_success == false) {
                     location.href("payment.html");
                 }
 
-
                 (async () => {
                     try {
-                        const response = await axios.post(`/order_confirm`, {
-                            merchant_uid: merchant_uid,
-                            imp_uid: imp_uid
+                        const response = await axios.get(`/order_confirm`, {
+                            params: {
+                                merchant_uid: merchant_uid,
+                                imp_uid: imp_uid
+                            }
                         })
-                        json1 = response.data.item1;
-                        [json2] = response.data.item2;
+                        ordered_product = response.data.ordered_product;
+                        [orders] = response.data.orders;
                     } catch (e) {
                         console.log(e)
                     }
 
-                    console.log(json2)
+                    //받아온 orders테이블의 데이터로 배송 정보 확인 데이터 삽입
+                    document.getElementById("orderer_phone").innerHTML = orders.receiver_phone;
+                    document.getElementById("orderer_name").innerHTML = orders.receiver_name;
+                    document.getElementById("orderer_addr").innerHTML = orders.receiver_addr1 + " " + orders.receiver_addr2 + " " + orders.receiver_addr3;
+                    document.getElementById("orderer_email").innerHTML = orders.receiver_email;
 
-                    console.log(json2.receiver_phone);
-                    //배송 정보 확인
-                    document.getElementById("orderer_phone").innerHTML = json2.receiver_phone;
-                    document.getElementById("orderer_name").innerHTML = json2.receiver_name;
-                    document.getElementById("orderer_addr").innerHTML = json2.receiver_addr1 + " " + json2.receiver_addr2 + " " + json2.receiver_addr3;
-                    document.getElementById("orderer_email").innerHTML = json2.receiver_email;
-
-                    json1.map((v) => {
+                    ordered_product.map((v) => {
                         console.log(v);
                         let BoxCart = document.querySelector('.box-cart-content')
                         BoxCart.innerHTML += `<div class="box-cart div-center clearfix"><a href="#">
@@ -165,34 +174,41 @@
             } else {
                 //메뉴에서 주문내역을 거쳐 주문확인페이지로 넘어갔을경우
 
-                let json1 = null;
-                let json2 = null;
+                let ordered_product = null;
+                let orders = null;
 
                 (async () => {
                     try {
-                        //post로 merchant_uid넘겨줘야됨
-                        const response = await axios.post(`/menu_ordered`, {
-                            merchant_uid: mer
+                        //get으로 merchant_uid넘겨줘야됨
+                        const response = await axios.get('/menu_ordered', {
+                            params: {
+                                merchant_uid: mer
+                            }
                         })
-                        json1 = response.data.item1;
-                        [json2] = response.data.item2;
+                        ordered_product = response.data.ordered_product;
+                        [orders] = response.data.orders;
                     } catch (e) {
                         console.log(e)
                     }
-
-                    console.log(json1);
-                    // Y = 주문완료, N = 주문실패, D = 결제 대기
-                    if (json2.order_state == "N") {
+                    
+                    // Y = 주문완료, N = 주문실패, D = 결제 대기  
+                    // 주문실패 상태 시 취소된 주문입니다 문구 출력 및 주문 취소하기 버튼 숨김처리
+                    if (orders.order_state == "N") {
                         document.querySelector(".cart-title").innerHTML = "취소된 주문입니다."
+                        document.querySelector(".form-group").style.display = "none";
+                    } else if (orders.rq_cancel == "Y") {
+                        document.querySelector(".cart-title").innerHTML = "취소 요청중 입니다"
+                        document.querySelector(".form-group").style.display = "none";
                     }
-                    //배송 정보 확인
-                    document.getElementById("orderer_phone").innerHTML = json2.receiver_phone;
-                    document.getElementById("orderer_name").innerHTML = json2.receiver_name;
-                    document.getElementById("orderer_addr").innerHTML = json2.receiver_addr1 + " " + json2.receiver_addr2 + " " + json2.receiver_addr3;
-                    document.getElementById("orderer_email").innerHTML = json2.receiver_email;
 
-                    json1.map((v) => {
+                    //받아온 orders테이블의 데이터로 배송 정보 확인 데이터 삽입
+                    document.getElementById("orderer_phone").innerHTML = orders.receiver_phone;
+                    document.getElementById("orderer_name").innerHTML = orders.receiver_name;
+                    document.getElementById("orderer_addr").innerHTML = orders.receiver_addr1 + " " + orders.receiver_addr2 + " " + orders.receiver_addr3;
+                    document.getElementById("orderer_email").innerHTML = orders.receiver_email;
 
+                    //ordered_product 테이블 데이터의 갯수만큼 반복을 돌려 화면에 뿌려줌
+                    ordered_product.map((v) => {
                         console.log(v);
                         let BoxCart = document.querySelector('.box-cart-content')
                         BoxCart.innerHTML += `
@@ -285,7 +301,42 @@
                 }
             }
 
+            //버튼 클릭시 orders테이블의 rq_cancle컬럼을 "Y"로 수정 
+            document.querySelector(".order_cancel").addEventListener("click", e => {
+                Swal.fire({
+                    icon: "warning",
+                    text: "주문을 취소 하시겠습니까?",
+                    confirmButtonText: '주문취소'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 주문취소 버튼 클릭시
+                        (async () => {
+                            try {
+                                const response = await axios.put(`/order_cancle`, {
+                                    merchant_uid: mer
+                                });
+                            } catch (error) {
+                                console.log(error);
+                                const errorMsg = "[" + error.response.status + "] " + error.response.statusText;
+                                Swal.fire({
+                                    text: errorMsg,
+                                    icon: "error"
+                                })
+                                return;
+                            }
 
+                            Swal.fire({
+                                text: "주문을 취소했습니다.",
+                                icon: "success"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.href = "ordered.html"
+                                }
+                            })
+                        })();
+                    }
+                });
+            });
 
 
 

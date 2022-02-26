@@ -98,3 +98,40 @@
     color: rgb(88, 88, 88);
     flex-grow: 1;
 }
+
+.form-group:after {
+  content: "";
+  display: block;
+  clear: both;
+  float: none;
+}
+.form-group {
+  padding-top: 10px;
+ 
+}
+
+.form-control {
+  width: 100%;
+  height: 30px;
+  padding: 5px 0;
+  font-size: 14px;
+  border: 1px solid rgb(175, 175, 175);
+}
+
+.text-center {
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  color: #eee;
+  background: #000;
+  border-radius: 6px;
+  border: #000;
+}
+
+button:active {
+  background-color: rgb(85, 85, 85);
+}

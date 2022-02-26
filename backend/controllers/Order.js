@@ -111,8 +111,7 @@ module.exports = (app) => {
   // ordered_product 테이블에서 주문번호로 데이터 조회
   router.get("/prod/:getData", async (req, res, next) => {
     const merchantUID = req.get("getData");
-    console.log(merchantUID);
-
+  
     let json = null;
 
     try {
@@ -131,21 +130,33 @@ module.exports = (app) => {
 
   // orders 테이블 데이터 추가 [ 주문 결제 성공 시 저장 될 DT ]
   router.post("/order", async (req, res, next) => {
+    // 세션정보
     let sessionInfo = req.session.memberInfo;
+    // 상점의 주문번호
     const merchantUid = req.post("merchant_uid");
+    // 주문상태
     const orderState = req.post("order_state");
+    // 주문날짜
     const orderDate = req.post("order_date");
+    // 결제금액
     const orderTtPrice = req.post("order_total_price");
+    // 받는 사람이름
     const rcvNm = req.post("receiver_name");
+    // 받는 사람 전화번호
     const rcvPhone = req.post("receiver_phone");
+    // 받는 사람 우편번호
     const rcvAddr1 = req.post("receiver_addr1");
+    // 받는 사람 주소
     const rcvAddr2 = req.post("receiver_addr2");
+    // 받는 사람 상세주소
     const rcvAddr3 = req.post("receiver_addr3");
+    // 받는 사람 이메일
     const rcvEmail = req.post("receiver_email");
+    // 취소요청 여부
     const rq_cancel = req.post("rq_cancel");
-
+    // 아임포트 주문번호
     const impUid = req.post("imp_uid");
-
+    // 세션에 저장되어있는 회원코드번호
     const memberCode = sessionInfo.member_code;
     let json = null;
     try {
@@ -169,29 +180,28 @@ module.exports = (app) => {
         memberCode,
         impUid,
       ];
-      const [result1] = await dbcon.query(sql1, input_data1);
+      await dbcon.query(sql1, input_data1);
 
-      // 저장한 데이터를 출력
-      let sql3 =
-        "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, member_code, imp_uid FROM orders WHERE member_code = ?";
-      const [result3] = await dbcon.query(sql3, sessionInfo.member_code);
-
-      json = result3;
     } catch (err) {
       return next(err);
     } finally {
       dbcon.end();
     }
 
-    res.sendJson({ item: json });
+    res.sendJson();
   });
 
   // 주문번호를 키값으로한 장바구니 데이터 저장
   router.post("/cart/save", async (req, res, next) => {
+    // 상점 주문번호
     const merchant_uid = req.post("merchant_uid");
+    // 주문한 상품 이름
     const orderedProductName = req.post("ordered_product_name");
+    // 주문한 상품 이미지
     const orderedProductImg = req.post("ordered_product_img");
+    // 주문한 상품의 총량
     const orderedProductCount = req.post("ordered_product_count");
+    // 주문한 상품의 총가격
     const orderedProductPrice = req.post("ordered_product_price");
 
     let json = null;
@@ -209,7 +219,7 @@ module.exports = (app) => {
         orderedProductCount,
         orderedProductPrice,
       ];
-      const [result] = await dbcon.query(sql, input_data);
+      await dbcon.query(sql, input_data);
     } catch (err) {
       return next(err);
     } finally {
@@ -219,111 +229,112 @@ module.exports = (app) => {
   });
 
   //order_confirm.html에 ordered_product 테이블을 전송하고 기존 장바구니 내역들을 삭제
-  router.post("/order_confirm", async (req, res, next) => {
-    const merchant_uid = req.post("merchant_uid");
-    const imp_uid = req.post("imp_uid");
-
+  //order_confirm.html이 페이지 로드시 동작하는 라우터
+  router.get("/order_confirm", async (req, res, next) => {
+    // get파라미터로 받은 상점의 주문번호
+    const merchant_uid = req.get("merchant_uid");
+    // get파라미터로 받은 아임포트 주문번호
+    const imp_uid = req.get("imp_uid");
+    // 세션에 저장되어있는 회원번호코드
     const member_code = req.session.memberInfo.member_code;
-    let json1 = null;
-    let json2 = null;
+    
+    let ordered_product = null;
+    let orders = null;
 
-    //ordered_product 테이블 조회
     try {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
+      //ordered_product 테이블 조회
       const sql1 =
         "select merchant_uid, ordered_product_name, ordered_product_img, ordered_product_count, ordered_product_price from ordered_product where merchant_uid = ?";
       const input_data1 = [merchant_uid];
       const [result1] = await dbcon.query(sql1, input_data1);
-      json1 = result1;
-    } catch (err) {
-      return next(err);
-    }
 
-    //orders테이블의 imp_uid컬럼을 업데이트하며 동시에 order_state값을 Y로 바꿔준다
-    try {
-      dbcon = await mysql2.createConnection(config.database);
-      await dbcon.connect();
-
+      //ordered_product JSON저장
+      ordered_product = result1;
+      
+      //orders테이블의 imp_uid컬럼을 업데이트하며 동시에 order_state값을 Y로 바꿔준다
       const sql2 =
         "update orders set order_state = 'Y', imp_uid = ? where merchant_uid = ?";
       const input_data2 = [imp_uid, merchant_uid];
-      const [result2] = await dbcon.query(sql2, input_data2);
-    } catch (err) {
-      return next(err);
-    }
+      await dbcon.query(sql2, input_data2);
 
-    //orders테이블 조회
-    try {
-      dbcon = await mysql2.createConnection(config.database);
-      await dbcon.connect();
-
-      const sql4 =
+      //orders테이블 조회
+      const sql3 =
         "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, receiver_email, member_code, imp_uid FROM orders WHERE merchant_uid = ?";
-      const input_data4 = [merchant_uid];
-      const [result4] = await dbcon.query(sql4, input_data4);
-      json2 = result4;
+      const input_data3 = [merchant_uid];
+      const [result3] = await dbcon.query(sql3, input_data3);
+
+      //orders JSON저장
+      orders = result3;
+      
+      //장바구니 데이터 삭제
+      const sql4 = "delete from carts where member_code = ?";
+      const input_data4 = [member_code];
+      await dbcon.query(sql4, input_data4);
     } catch (err) {
       return next(err);
     }
 
-    //장바구니 데이터 삭제
-    try {
-      dbcon = await mysql2.createConnection(config.database);
-      await dbcon.connect();
-
-      const sql5 = "delete from carts where member_code = ?";
-      const input_data5 = [member_code];
-      const [result5] = await dbcon.query(sql5, input_data5);
-    } catch (err) {
-      return next(err);
-    }
-
-    res.sendJson({ item1: json1, item2: json2 });
+    res.sendJson({ ordered_product: ordered_product, orders: orders });
   });
 
-  //menu에서 주문페이지를 거쳐 진입시
-  router.post("/menu_ordered", async (req, res, next) => {
+  //menu.html에서 ordered.html을 거쳐 order_confirm.html 진입시
+  router.get("/menu_ordered", async (req, res, next) => {
 
-    const merchant_uid = req.post("merchant_uid");
-    let json1 = null;
-    let json2 = null;
+    const merchant_uid = req.get("merchant_uid");
+    let ordered_product = null;
+    let orders = null;
     let mer = null;
+
     //orders테이블 조회
     try {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
 
-      const sql4 =
-        "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, receiver_email, member_code, imp_uid FROM orders WHERE merchant_uid = ?";
-      const input_data4 = [merchant_uid];
-      const [result4] = await dbcon.query(sql4, input_data4);
-      json2 = result4;
-      logger.warn(JSON.stringify(json2));
-      //ordered_product 테이블에서 merchant_uid로 검색하기 위해
-      mer = json2[0].merchant_uid;
-      logger.warn(mer);
+      const sql1 =
+        "select merchant_uid, order_state, order_date, order_total_price, receiver_name, receiver_phone, receiver_addr1, receiver_addr2, receiver_addr3, receiver_email, rq_cancel, member_code, imp_uid FROM orders WHERE merchant_uid = ?";
+      const input_data1 = [merchant_uid];
+      const [result1] = await dbcon.query(sql1, input_data1);
+      orders = result1;
+     
+      //ordered_product 테이블에서 merchant_uid로 조회하기 위해 mer 변수에 merchant_uid를 담아준다.
+      mer = orders[0].merchant_uid;
       
+
+      //ordered_product 테이블 조회
+      const sql2 =
+        "select merchant_uid, ordered_product_name, ordered_product_img, ordered_product_count, ordered_product_price from ordered_product where merchant_uid = ?";
+      const input_data2 = [mer];
+      const [result2] = await dbcon.query(sql2, input_data2);
+      ordered_product = result2;
+
     } catch (err) {
       return next(err);
     }
-    
-    //ordered_product 테이블 조회
+
+    res.sendJson({ ordered_product: ordered_product, orders: orders });
+  });
+
+  //order_confirm.html에서 주문취소 버튼을 눌렀을 때 orders테이블 rq_cancel을 "Y"로 업데이트하는 라우터
+  router.put("/order_cancle", async (req, res, next) => {
+    const merchant_uid = req.post("merchant_uid");
+
     try {
       dbcon = await mysql2.createConnection(config.database);
       await dbcon.connect();
-      
-      const sql1 =
-        "select merchant_uid, ordered_product_name, ordered_product_img, ordered_product_count, ordered_product_price from ordered_product where merchant_uid = ?";
-      const input_data1 = [mer];
-      const [result1] = await dbcon.query(sql1, input_data1);
-      json1 = result1;
+
+      const sql = "update orders set rq_cancel = 'Y' WHERE merchant_uid = ?";
+      const input_data = [merchant_uid];
+      const [result] = await dbcon.query(sql, input_data);
     } catch (err) {
       return next(err);
     }
-    res.sendJson({ item1: json1, item2: json2 });
+
+    res.sendJson();
   });
+
 
   // 관리자 결제 취소
   router.delete("/order", async (req, res, next) => {

@@ -230,17 +230,19 @@
          <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
          <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
          <script>
-             // 단일 상품 결제
+             // 단일 상품 결제할때 쓸 변수들
              const params = new URLSearchParams(window.location.search);
+             // 상품번호
              const prod = params.get('prod');
  
              let data = null;
- 
+            
+             // URL에 prod파라미터값이 존재하면 단일 상품 결제이므로 
+             // if문으로 단일상품 결제인지 장바구니에서 결제한 것인지를 판별
              if (prod) {
                  (async () => {
                      try {
                          const response = await axios.get(`/product/${prod}`)
- 
                          data = response.data.item[0];
                      } catch (e) {
                          console.log(e)
@@ -263,6 +265,7 @@
  
                  })();
              } else {
+                 // 장바구니처럼 여러개의 상품이 존재할경우
                  (async () => {
                      try {
                          const response = await axios.get(`/cart`)
@@ -410,11 +413,10 @@
                      result();
                  }
  
- 
- 
+                 //상점의 주문번호를 생성한다.
                  const merchant_uid = 'merchant_' + new Date().getTime();
  
-                 //주문번호
+                 //주문번호를 UI에 나타내준다.
                  document.getElementById("orderNumber").innerHTML = merchant_uid
  
                  document.querySelector("#payment_form").addEventListener("submit", e => {
@@ -498,14 +500,17 @@
                              return;
                          }
                      })();
+
+                     // 장바구니에서 넘어온 상품갯수를 최종적으로 ordered_product에 
+                     // 전송하기 위해 productNum변수에 담음
+                     // payment.html 페이지에서도 수량변경이 가능하므로 꼭 넣어줘야한다. 
                      let productNum = Array.from(document.querySelectorAll(".cart-count")).map((v) => {
                          return parseInt(v.innerHTML);
                      });
-                     console.log(productNum);
-                     console.log(data);
  
-                     //주문번호를 키값으로 데이터 갯수만큼 상품저장
-                     //단일상품일 경우
+                     
+                     // 요청이 같은대 두 개로 나눈 이유는 위에서 저장한 data의 JSON데이터를 재활용하기 위함
+                     // 단일상품일 경우
                      if(prod){
                          (async () => {
                              let json = null;
@@ -514,6 +519,7 @@
                                      merchant_uid: merchant_uid,
                                      ordered_product_name: data.product_name,
                                      ordered_product_img: data.product_img,
+                                     // 전달할 상품이 단일상품이기 때문에 첫 번째 인덱스의 상품갯수를 전송한다.
                                      ordered_product_count: productNum[0],
                                      ordered_product_price: data.product_price
                                  });
@@ -528,7 +534,8 @@
                              }
                          })();
                      }
-                     //장바구니에서 데이터를 불러올 경우
+                     // 장바구니에서 결제페이지로 넘어와 결제해야할 경우
+                     // 장바구니 데이터의 갯수만큼 반복을 돌아 orderd_product에 데이터를 만들어준다.
                      else{
                          data.map((v, i) => {
                          (async () => {
@@ -538,6 +545,7 @@
                                      merchant_uid: merchant_uid,
                                      ordered_product_name: v.product_name,
                                      ordered_product_img: v.product_img,
+                                     // 데이터가 여러개일 경우 상품 갯수도 여러개
                                      ordered_product_count: productNum[i],
                                      ordered_product_price: v.product_price
                                  });
