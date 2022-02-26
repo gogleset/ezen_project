@@ -327,7 +327,7 @@ module.exports = (app) => {
 
       const sql = "update orders set rq_cancel = 'Y' WHERE merchant_uid = ?";
       const input_data = [merchant_uid];
-      const [result] = await dbcon.query(sql, input_data);
+      await dbcon.query(sql, input_data);
     } catch (err) {
       return next(err);
     }
@@ -335,6 +335,22 @@ module.exports = (app) => {
     res.sendJson();
   });
 
+  //imp_sucess가 false일 경우 주문테이블의 order_state의 값을 N=주문실패로 바꾸기 위한 라우터
+  router.put("/order_confirm/false", async (req, res, next)=>{
+    const merchant_uid = req.post("merchant_uid");
+
+    try {
+      dbcon = await mysql2.createConnection(config.database);
+      await dbcon.connect();
+
+      const sql = "update orders set order_state = 'N' WHERE merchant_uid = ?";
+      const input_data = [merchant_uid];
+      await dbcon.query(sql, input_data);
+    } catch (err) {
+      return next(err);
+    }
+    res.sendJson();
+  });
 
   // 관리자 결제 취소
   router.delete("/order", async (req, res, next) => {
