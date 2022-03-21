@@ -50,6 +50,7 @@
          <!-- menu-list 영역 -->
          <ul class="menu-list">
            <li class="menu1">
+             <button type="button" class="logout">LogOut</button>
              <span class="title">Brand</span>
              <ul>
                <li>
@@ -148,7 +149,24 @@
          }
  
        })();
-     })
+     });
+
+     document.querySelector(".logout").addEventListener("click", e=>{
+      (async () => {
+         // ajax 요청
+         try {
+           const response = await axios.delete('/members/logout');
+           location.href = "signin.html";
+         } catch {
+           Swal.fire({
+             text: 'error',
+             icon: 'error'
+           });
+           return;
+         }
+ 
+       })();
+     });
    </script>
  </body>
  
