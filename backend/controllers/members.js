@@ -18,50 +18,43 @@ module.exports = (app) => {
 
     //회원가입에 대한 처리
     router.post("/members/signup", async (req, res, next) => {
-        const member_id = req.post("member_id");
-        const member_email = req.post("member_email");
-        const member_pw = req.post("member_pw");
-        const member_name = req.post("member_name");
-        const member_phone = req.post("member_phone");
-        const member_postcode = req.post("member_postcode");
-        const member_addr1 = req.post("member_addr1");
-        const member_addr2 = req.post("member_addr2");
-        const member_birth = req.post("member_birth");
+        const memberId = req.post("member_id");
+        const memberEmail = req.post("member_email");
+        const memberPw = req.post("member_pw");
+        const memberName = req.post("member_name");
+        const memberPhone = req.post("member_phone");
+        const memberPostcode = req.post("member_postcode");
+        const memberAddr1 = req.post("member_addr1");
+        const memberAddr2 = req.post("member_addr2");
+        const memberBirth = req.post("member_birth");
         const admin = req.post("admin");
 
-        const is_out = req.post("is_out");
+        const isOut = req.post("is_out");
 
         let json = null;
-
-        //회원가입에 대한 유효성 검사
-        /*try{
-            regexHelper.value();
-        }catch(err){
-            return next(err);
-        }*/
 
         try {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            let sql1 = "select count(*) as cnt from members where member_id=?";
-            let arg1 = [member_id];
+            let sql1 = "SELECT count(*) as cnt FROM members WHERE member_id=?";
+            let arg1 = [memberId];
 
             const [result1] = await dbcon.query(sql1, arg1);
             const totalCount = result1[0].cnt;
 
             if (totalCount > 0) {
                 throw new BadRequestException("이미 사용중인 아이디 입니다.");
-               
+
             }
 
-            let sql = "insert into members (";
+            let sql = "INSERT INTO members (";
             sql += "member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
             sql += "member_birth, admin, reg_date, is_out";
-            sql += ") value (";
+            sql += ") VALUE (";
             sql += "?,?,?,?,?,?,?,?,?,?,now(),?);";
 
-            const args = [member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, member_birth, admin, is_out];
+            const args = [memberId, memberEmail, memberPw, memberName, memberPhone, memberPostcode, memberAddr1, memberAddr2, memberBirth, admin, isOut];
 
             await dbcon.query(sql, args);
         } catch (err) {
@@ -70,9 +63,9 @@ module.exports = (app) => {
             dbcon.end();
         }
 
-        const receiver = `${member_name} <${member_email}>`;
-        const subject = `${member_name}님의 회원가입을 환영합니다.`;
-        const html = `<p><strong>${member_name}</strong>님, 회원가입해 주셔서 감사합니다.</p><p>앞으로 많은 이용 바랍니다.</p>`;
+        const receiver = `${memberName} <${memberEmail}>`;
+        const subject = `${memberName}님의 회원가입을 환영합니다.`;
+        const html = `<p><strong>${memberName}</strong>님, 회원가입해 주셔서 감사합니다.</p><p>앞으로 많은 이용 바랍니다.</p>`;
 
         res.sendJson({ "item": json });
 
@@ -80,12 +73,12 @@ module.exports = (app) => {
 
     //회원 로그인
     router.post("/members/login", async (req, res, next) => {
-        const member_id = req.post("member_id");
-        const member_pw = req.post("member_pw");
+        const memberId = req.post("member_id");
+        const memberPw = req.post("member_pw");
 
         try {
-            regexHelper.value(member_id, "아이디를 입력하세요");
-            regexHelper.value(member_pw, "비밀번호를 입력하세요");
+            regexHelper.value(memberId, "아이디를 입력하세요");
+            regexHelper.value(memberPw, "비밀번호를 입력하세요");
         } catch (e) {
             return next(e);
         }
@@ -96,10 +89,10 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            let sql = "select member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
+            let sql = "SELECT member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
             sql += "member_birth, admin, reg_date, is_out ";
-            sql += "from members where member_id =? and member_pw =?"
-            let args1 = [member_id, member_pw];
+            sql += "FROM members WHERE member_id =? AND member_pw =?"
+            let args1 = [memberId, memberPw];
 
             const [result] = await dbcon.query(sql, args1);
 
@@ -140,9 +133,9 @@ module.exports = (app) => {
             await dbcon.connect();
 
 
-            let sql = "select member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
+            let sql = "SELECT member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
             sql += "member_birth, admin, reg_date, is_out ";
-            sql += "from members where member_id =? and member_pw =?"
+            sql += "FROM members WHERE member_id =? AND member_pw =?"
             const [result] = await dbcon.query(sql, [sessionInfo.member_id, sessionInfo.member_pw]);
 
             json = result;
@@ -155,9 +148,9 @@ module.exports = (app) => {
 
     //회원정보 수정시 받은 세션데이터에서 뽑아낸 회원아이디로 검색
     router.get("/members/set/:member_id", async (req, res, next) => {
-        const member_id = req.get("member_id");
+        const memberId = req.get("member_id");
 
-        if (member_id === undefined) {
+        if (memberId === undefined) {
             return next(new Error(400));
         }
 
@@ -166,11 +159,11 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            let sql = "select member_id, member_email, member_pw, member_name, member_phone, ";
+            let sql = "SELECT member_id, member_email, member_pw, member_name, member_phone, ";
             sql += "member_postcode, member_addr1, member_addr2, member_birth ";
-            sql += "from members where member_id =?";
+            sql += "FROM members WHERE member_id =?";
 
-            const [result] = await dbcon.query(sql, [member_id]);
+            const [result] = await dbcon.query(sql, [memberId]);
 
             json = result;
         } catch (err) {
@@ -184,17 +177,17 @@ module.exports = (app) => {
 
     //회원정보수정
     router.put('/members/edit/:member_id', async (req, res, next) => {
-        const member_id = req.get("member_id");
-        const member_email = req.post("member_email");
-        const member_pw = req.post("member_pw");
-        const member_name = req.post("member_name");
-        const member_phone = req.post("member_phone");
-        const member_postcode = req.post("member_postcode");
-        const member_addr1 = req.post("member_addr1");
-        const member_addr2 = req.post("member_addr2");
-        const member_birth = req.post("member_birth");
+        const memberId = req.get("member_id");
+        const memberEmail = req.post("member_email");
+        const memberPw = req.post("member_pw");
+        const memberName = req.post("member_name");
+        const memberPhone = req.post("member_phone");
+        const memberPostcode = req.post("member_postcode");
+        const memberAddr1 = req.post("member_addr1");
+        const memberAddr2 = req.post("member_addr2");
+        const memberBirth = req.post("member_birth");
 
-        if (member_id == null) {
+        if (memberId == null) {
             return next(new Error(400));
         }
 
@@ -207,8 +200,8 @@ module.exports = (app) => {
             let sql = "UPDATE members SET member_email = ?, member_pw = ?, member_name = ?, member_phone = ?, member_postcode =?, "
             sql += "member_addr1 =?, member_addr2 =?, member_birth =? WHERE member_id=?"
 
-            const input_data = [member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, member_birth, member_id]
-            const [result] = await dbcon.query(sql, input_data);
+            const inputData = [memberEmail, memberPw, memberName, memberPhone, memberPostcode, memberAddr1, memberAddr2, memberBirth, memberId]
+            const [result] = await dbcon.query(sql, inputData);
 
             if (result.affectedRows < 1) {
                 throw new Error("수정된 데이터가 없습니다.");
@@ -227,12 +220,12 @@ module.exports = (app) => {
 
     //관리자 로그인
     router.post("/admin/login", async (req, res, next) => {
-        const member_id = req.post("member_id");
-        const member_pw = req.post("member_pw");
+        const memberId = req.post("member_id");
+        const memberPw = req.post("member_pw");
 
         try {
-            regexHelper.value(member_id, "아이디를 입력하세요");
-            regexHelper.value(member_pw, "비밀번호를 입력하세요");
+            regexHelper.value(memberId, "아이디를 입력하세요");
+            regexHelper.value(memberPw, "비밀번호를 입력하세요");
         } catch (e) {
             return next(e);
         }
@@ -243,10 +236,10 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            let sql = "select member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
+            let sql = "SELECT member_code, member_id, member_email, member_pw, member_name, member_phone, member_postcode, member_addr1, member_addr2, ";
             sql += "member_birth, admin, reg_date, is_out ";
-            sql += "from members where member_id =? and member_pw =? and admin=?"
-            let args1 = [member_id, member_pw, "Y"];
+            sql += "FROM members WHERE member_id =? AND member_pw =? AND admin=?"
+            let args1 = [memberId, memberPw, "Y"];
 
             const [result] = await dbcon.query(sql, args1);
 
@@ -294,13 +287,13 @@ module.exports = (app) => {
             }
 
             // 원하는 쿠키값을 가져온다
-            const my_id_signed = req.signedCookies.my_id_signed;
+            const myIdSigned = req.signedCookies.my_id_signed;
 
-            const result_data = {
-                my_id_signed: my_id_signed,
+            const resultData = {
+                my_id_signed: myIdSigned,
             };
 
-            res.status(200).send(result_data);
+            res.status(200).send(resultData);
         })
 
     //관리자 페이지 멤버목록조회
@@ -323,12 +316,12 @@ module.exports = (app) => {
             dbcon = await mysql2.createConnection(config.database);
             await dbcon.connect();
 
-            let sql1 = "select count(*) as cnt from members ";
+            let sql1 = "SELECT count(*) as cnt FROM members ";
 
             let args1 = [];
 
             if (query != null) {
-                sql1 += "where member_name like concat('%', ?, '%')";
+                sql1 += "WHERE member_name LIKE concat('%', ?, '%')";
                 args1.push(query);
             }
             const [result1] = await dbcon.query(sql1, args1);
@@ -363,39 +356,60 @@ module.exports = (app) => {
             dbcon.end();
         }
 
-        res.sendJson({pagenation: pagenation, item: json});
+        res.sendJson({ pagenation: pagenation, item: json });
     });
 
     //회원정보 이름으로 검색하기
     router.get("/admin/list/:member_name", async (req, res, next) => {
-        const member_name = req.get("member_name");
-    
-        if (member_name == null) {
-          // 400 Bad Request -> 잘못된 요청
-          return next(new Error(400));
+        const memberName = req.get("member_name");
+
+        if (memberName == null) {
+            // 400 Bad Request -> 잘못된 요청
+            return next(new Error(400));
         }
-    
+
         // 데이터 조회 결과가 저장될 빈 변수
         let json = null;
         try {
-          // 데이터 베이스 접속
-          dbcon = await mysql2.createConnection(config.database);
-          await dbcon.connect();
-    
-          // 데이터 조회
-          const sql = "SELECT * FROM members WHERE member_name=?";
-          const [result] = await dbcon.query(sql, [member_name]);
-    
-          // 조회 결과를 미리 준비한 변수에 저장함
-          json = result;
+            // 데이터 베이스 접속
+            dbcon = await mysql2.createConnection(config.database);
+            await dbcon.connect();
+
+            // 데이터 조회
+            const sql = "SELECT * FROM members WHERE member_name=?";
+            const [result] = await dbcon.query(sql, [memberName]);
+
+            // 조회 결과를 미리 준비한 변수에 저장함
+            json = result;
         } catch (e) {
-          return next(e);
+            return next(e);
         } finally {
-          dbcon.end();
+            dbcon.end();
         }
         // 모든 처리에 성공했으므로 정상 조회 결과 구성
         res.sendJson({ item: json });
-      });
+    });
+
+    //로그아웃 기능
+    router.delete("/members/logout", async (req, res, next) => {
+
+        let sessionInfo = req.session.memberInfo;
+
+        try {
+            // 데이터 베이스 접속
+            dbcon = await mysql2.createConnection(config.database);
+            await dbcon.connect();
+
+            // 데이터 삭제
+            const sql = "DELETE FROM sessions";
+            const [result] = await dbcon.query(sql);
+        } catch (e) {
+            return next(e);
+        } finally {
+            dbcon.end();
+        }
+        res.sendJson();
+    });
 
     return router;
 }
