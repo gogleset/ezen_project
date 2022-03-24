@@ -52,14 +52,16 @@ module.exports = (app) => {
             logger.debug(JSON.stringify(pagenation));
 
 
-            // 전체 데이터 조회
-            let sql2 = 'SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, m.member_code, m.member_id FROM qnas q inner join members m on q.member_code=m.member_code';
+            // 전체 데이터 조회  -> 최근 글 순으로 정렬 (작성일 기준 역순정렬)
+            let sql2 = 'SELECT q.qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date, DATEDIFF(qna_date, now()) AS diff, m.member_code, m.member_id FROM qnas q inner join members m on q.member_code=m.member_code ';
             let args2 = [];
 
             if (query != null) {
                 sql2 += " WHERE qna_desc Like concat('%', ?, '%')";
                 args2.push(query);
             }
+
+            sql2 += ' ORDER BY diff desc';
 
             sql2 += " LIMIT ?, ?";
             args2.push(pagenation.offset);
@@ -124,8 +126,8 @@ module.exports = (app) => {
             await dbcon.connect();
 
 
-            // qnas 테이블에서 세션에 저장된 ID와 일치하는 게시글 조회하는 sql문
-            let sql1 = "SELECT qna_code, qna_title, qna_desc, qna_answer, qna_state, qna_date FROM qnas WHERE member_code = ?";
+            // qnas 테이블에서 세션에 저장된 ID와 일치하는 게시글 조회하는 sql문 -> 최근 글 순으로 정렬 (작성일 기준 역순정렬)
+            let sql1 = "SELECT qna_code, qna_title, qna_desc, qna_answer, qna_state, DATEDIFF(qna_date, now()) AS diff FROM qnas WHERE member_code = ? ORDER BY diff desc ";
 
             const [result1] = await dbcon.query(sql1, sessionInfo.member_code);
 

@@ -49,6 +49,7 @@
         <table class="table table-bordered table-hover table-condensed table-striped text-center">
             <thead>
                 <tr>
+                    <th class="qna-content-header col-xs-5 text-center">제목</th>
                     <th class="qna-content-header col-xs-5 text-center">내용</th>
                     <th class="qna-date-header col-xs-1 text-center">답변 상태</th>
                     <th class="qna-writer-header col-xs-2 text-center">작성자</th>
@@ -112,8 +113,19 @@
 
                 json.item.map((v, i) => {
 
+                    // diff가 0일경우 당일 작성한 글이란 의미이므로 new 이미지를 넣어준다.
+                    const diff = v.diff;
+
+                    let diffHtml = '';
+                    if (diff == 0) {
+                        diffHtml += `<img src="../../img/new.svg" />`
+                    }
+
                     console.log(v);
                     tableBody.innerHTML += `<tr>
+                        <td class="qna-title table-short-discription">
+                            ${v.qna_title}${diffHtml}
+                        </td>
                     <td class="qna-content table-short-discription">
                             ${v.qna_desc}
                         </td>
